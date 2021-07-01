@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <title>Тета Курсы</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+  <main class="container">
+    <div class="row">
+      <div class="col-12 col-lg-8 offset-2 offset-lg-12">
+        <form class="form-signin pt-5" enctype="multipart/form-data">
+          <div class="text-center mt-5 b-1">
+
+            <h1 class="h3 mb-3 font-weight-normal">Информация о пользователе</h1>
+
+          </div>
+          <div class="mt-5 form-label-group">
+            <p class="text">Имя пользователя</p>
+            <input type="text" id="inputFullName" class="form-control" required autofocus>
+            <label for="inputFullName"></label>
+          </div>
+
+          <div class="form-label-group">
+            <p class="text"> Пароль</p>
+            <input type="password" id="inputPassword" class="form-control" required>
+            <p class="text-muted"> Пароль не может быть пустым</p>
+            <label for="inputPassword"></label>
+
+          </div>
+
+          <div class=" form-label-group">
+            <label for="inputInfo">Дополнительная инфо</label>
+            <textarea class="form-control" rows="4" id="inputInfo"></textarea>
+
+          </div>
+
+          <div class="checkbox mb-3"></div>
+          <button class="btn btn-success btn-lg btn-block" type="submit">Создать</button>
+        </form>
+
+         <div class="mt-4 text-center"><p>Есть аккаунт? <a href="/login">Войдите!</a></p></div>
+
+
+
+      </div>
+    </div>
+  </main>
+</body>
+</html>
