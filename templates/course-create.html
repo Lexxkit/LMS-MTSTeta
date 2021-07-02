@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Создание курса | Тета Курсы</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+  <header class="container mt-3">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand mr-4 font-weight-bold" href="#">Тета Курсы</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+        <ul class="navbar-nav col-10">
+          <li class="nav-item">
+            <a class="nav-link" href="#">О нас</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Курсы</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Контакты</a>
+          </li>
+
+        </ul>
+        <ul class="navbar-nav col-2 justify-content-end">
+          <li class="nav-item active">
+            <div class="btn-group">
+              <button type="button" class="btn dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Иван Иванов
+              </button>
+              <div class="dropdown-menu dropdown-menu-right mt-3">
+                <a href="#" class="dropdown-item py-2">Выйти</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container mt-3 pb-5">
+    <div class="row">
+      <div class="col-12 col-lg-12">
+        <div class="card">
+          <div class="card-body px-4 pb-4">
+            <!-- Tab -->
+            <section class="tab-pane fade show active">
+              <h1 class="h1 mb-3 font-weight-normal text-center">Создать курс</h1>
+              <img class="mx-auto d-block" src="https://place-hold.it/80x80" width="80" height="80" alt="">
+
+              <form action="/echo" enctype="multipart/form-data">
+                <div class="row">
+                  <div class="col-12">
+                    <label class="mb-2 text-dark" for="coursePictureSelector">Выберите обложку курса</label>
+                    <div class="input-group pb-2">
+                      <label class="input-group-btn">
+                          <span class="btn btn-light">
+                              Выберите файл <input id="coursePictureSelector" type="file" style="display:none;" onchange="$('#coursePictureUpload').val($(this).val());">
+                          </span>
+                      </label>
+                      <input type="text" class="form-control" id="coursePictureUpload" readonly>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="submit" class="btn btn-success" value="Обновить">
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group pb-2">
+                      <label class="mb-2 text-dark" for="courseName">Название курса</label>
+                      <input class="form-control" type="text" value="Название курса" id="courseName" required autofocus>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group pb-2">
+                      <label class="mb-2 text-dark" for="courseAuthor">Автор курса</label>
+                      <input class="form-control" type="text" value="Иван Иванов" id="courseAuthor" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="submit" class="btn btn-success" value="Сохранить">
+                </div>
+                <section class="mt-5 pt-3">
+                  <p>Новый урок</p>
+                  <table class="table table-striped table-success">
+                    <thead>
+                      <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Действие</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Название курса</td>
+                        <td>
+                          <div class="form-group col-2 col-md-10 pl-0">
+                            <button class="btn btn-danger" type="submit">Удалить</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Нет данных</th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+                <section class="mt-5 pt-3">
+                  <p>Пользователи связанные с курсом</p>
+                  <table class="table table-striped table-success">
+                    <thead>
+                      <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Имя пользователя</th>
+                        <th scope="col">Действие</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Имя пользователя</td>
+                        <td>
+                          <div class="form-group col-2 col-md-10 pl-0">
+                            <button class="btn btn-warning" type="submit">Снять с курса</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Нет данных</th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+
+              </form>
+            </section>
+            <!-- END Tab -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
