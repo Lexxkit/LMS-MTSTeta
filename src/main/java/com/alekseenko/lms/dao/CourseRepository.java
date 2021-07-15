@@ -13,6 +13,4 @@ public interface CourseRepository {
     void save(Course course);
 
     void delete(long id);
-
-    List<Course> findByTitleWithPrefix(String prefix);
 }

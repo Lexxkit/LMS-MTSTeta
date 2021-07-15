@@ -4,11 +4,13 @@ import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.domain.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class CourseLister {
     private final CourseRepository repository;
 
@@ -17,8 +19,22 @@ public class CourseLister {
         this.repository = repository;
     }
 
-    public List<Course> coursesByAuthor(String name) {
-        List<Course> allCourses = repository.findAll();
-        return allCourses.stream().filter(course -> course.getAuthor().equals(name)).collect(Collectors.toList());
+
+    public Optional<Course> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    public void save(Course course) {
+        repository.save(course);
+    }
+
+    public void delete(Long id) {
+        repository.delete(id);
+    }
+
+    public List<Course> findCourseByTitleWithPrefix(String prefix) {
+        return repository.findAll()
+                .stream().filter(course -> course.getTitle().toLowerCase().startsWith(prefix.toLowerCase()))
+                .collect(Collectors.toList());
     }
 }
