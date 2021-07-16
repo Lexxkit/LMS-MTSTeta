@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CourseRepository {
+
     List<Course> findAll();
 
     Optional<Course> findById(long id);
@@ -14,5 +15,5 @@ public interface CourseRepository {
 
     void delete(long id);
 
-    List<Course> findByTitleWithPrefix(String prefix);
+    List<Course> getByTitleWithPrefix(String prefix);
 }
