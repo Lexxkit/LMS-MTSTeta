@@ -1,7 +1,7 @@
 package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.domain.Course;
-import com.alekseenko.lms.service.CourseLister;
+import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.StatisticsCounter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,15 +17,20 @@ import java.util.List;
 @Controller
 @RequestMapping("/course")
 public class CourseController {
+
+    private final CourseService courseService;
+    private final StatisticsCounter statisticsCounter;
+
     @Autowired
-    private CourseLister courseLister;
-    @Autowired
-    private StatisticsCounter statisticsCounter;
+    public CourseController(CourseService courseService, StatisticsCounter statisticsCounter) {
+        this.courseService = courseService;
+        this.statisticsCounter = statisticsCounter;
+    }
 
     @GetMapping
     public String courseTable(Model model, @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
         statisticsCounter.countHandlerCall();
-        List<Course> coursesList = courseLister.findCourseByTitleWithPrefix(titlePrefix == null ? "" : titlePrefix);
+        List<Course> coursesList = courseService.getCoursesByTitleWithPrefix(titlePrefix == null ? "" : titlePrefix);
         model.addAttribute("courses", coursesList);
         model.addAttribute("activePage", "courses");
         return "index";
@@ -36,26 +41,26 @@ public class CourseController {
         if (bindingResult.hasErrors()) {
             return "course-form";
         }
-        courseLister.save(course);
+        courseService.saveCourse(course);
         return "redirect:/course";
     }
 
     @RequestMapping("/{id}")
     public String courseForm(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("course", courseLister.findById(id)
+        model.addAttribute("course", courseService.getCourseById(id)
                 .orElseThrow(NotFoundException::new));
         return "course-form";
     }
 
     @DeleteMapping("/{id}")
     public String deleteCourse(@PathVariable("id") Long id) {
-        courseLister.delete(id);
+        courseService.deleteCourse(id);
         return "redirect:/course";
     }
 
     @GetMapping("/new")
     public String courseForm(Model model) {
-        model.addAttribute("course", new Course());
+        model.addAttribute("course", courseService.createCourse());
         return "course-form";
     }
 
