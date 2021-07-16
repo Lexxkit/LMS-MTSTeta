@@ -60,7 +60,7 @@ public class CourseController {
 
     @GetMapping("/new")
     public String courseForm(Model model) {
-        model.addAttribute("course", courseService.createCourse());
+        model.addAttribute("course", courseService.getCourseTemplate());
         return "course-form";
     }
 

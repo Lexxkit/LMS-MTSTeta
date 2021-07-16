@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface CourseService {
 
-    Course createCourse();
+    Course getCourseTemplate();
 
     Optional<Course> getCourseById(Long id);
 

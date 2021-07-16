@@ -19,7 +19,7 @@ public class CourseServiceImplementation implements CourseService {
     }
 
     @Override
-    public Course createCourse() {
+    public Course getCourseTemplate() {
         return new Course();
     }
 
