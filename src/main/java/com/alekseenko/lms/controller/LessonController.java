@@ -8,7 +8,6 @@ import com.alekseenko.lms.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -61,13 +60,11 @@ public class LessonController {
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
-    public String deleteLesson(@PathVariable("id") Long id) {
-        Course currentCourse = lessonService.getLessonById(id)
-                .orElseThrow(NotFoundException::new)
-                .getCourse();
+    public String deleteLesson(@PathVariable("id") Long id,
+                               @RequestParam("courseId") Long courseId) {
+
         lessonService.deleteLesson(id);
-        return String.format("redirect:/course/%d", currentCourse.getId());
+        return String.format("redirect:/course/%d", courseId);
     }
 
     @ExceptionHandler

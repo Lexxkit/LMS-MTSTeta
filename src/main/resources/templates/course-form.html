@@ -85,6 +85,7 @@
                         <td>
                           <div class="form-group col-2 col-md-10 pl-0">
                             <form th:method="delete" th:action="@{/lesson/{id}(id = ${lesson.id})}">
+                              <input type="hidden" name="courseId" id="courseId" th:value="${course.id}">
                               <button class="btn btn-danger" type="submit">Удалить</button>
                             </form>
                           </div>

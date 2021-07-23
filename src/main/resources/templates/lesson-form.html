@@ -13,7 +13,7 @@
           <div class="card-body px-4 pb-4">
             <!-- Tab -->
             <section class="tab-pane fade show active">
-              <h1 class="h1 mb-3 font-weight-normal text-center">Создать урок</h1>
+              <h1 class="h1 mb-3 font-weight-normal text-center">Создать или отредактировать урок</h1>
 
               <form th:object="${lessonDto}" method="post" th:action="@{/lesson}">
                 <input type="hidden" th:field="*{id}">

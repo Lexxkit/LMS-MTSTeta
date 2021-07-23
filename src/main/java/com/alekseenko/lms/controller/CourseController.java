@@ -9,7 +9,6 @@ import com.alekseenko.lms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +59,6 @@ public class CourseController {
     }
 
     @RequestMapping("/{id}")
-    @Transactional
     public String courseForm(Model model, @PathVariable("id") Long id) {
         Course currentCourse = courseService.getCourseById(id)
                 .orElseThrow(NotFoundException::new);
