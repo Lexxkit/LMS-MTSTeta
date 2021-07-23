@@ -8,3 +8,8 @@
     * create a new course at /course/new;
     * delete the chosen course;
     * search a course by its title's prefix.
+   
+4. Add Spring-data-jpa support
+   * add Lesson and User entities, repos, services and controllers;
+   * assign/unassign Users to/from course;
+   * create/delete lessons for courses.

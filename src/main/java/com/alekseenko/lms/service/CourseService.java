@@ -9,6 +9,8 @@ public interface CourseService {
 
     Course getCourseTemplate();
 
+    List<Course> getAllCourses();
+
     Optional<Course> getCourseById(Long id);
 
     void saveCourse(Course course);
