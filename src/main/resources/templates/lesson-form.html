@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="fragments/head :: head"></head>
+
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+  <main class="container mt-3 pb-5">
+    <div class="row">
+      <div class="col-12 col-lg-12">
+        <div class="card">
+          <div class="card-body px-4 pb-4">
+            <!-- Tab -->
+            <section class="tab-pane fade show active">
+              <h1 class="h1 mb-3 font-weight-normal text-center">Создать или отредактировать урок</h1>
+
+              <form th:object="${lessonDto}" method="post" th:action="@{/lesson}">
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{courseId}">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group pb-2">
+                      <label class="mb-2 text-dark" for="lessonTitle">Title</label>
+                      <input class="form-control" type="text" value="Title" id="lessonTitle"
+                             th:field="*{title}" autofocus>
+                      <small class="validation-error text-danger" th:if="${#fields.hasErrors('title')}"
+                             th:errors="*{title}">
+                        Lesson title has to be filled
+                      </small>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group pb-2">
+                      <label class="mb-2 text-dark" for="lessonContent">Lesson content</label>
+                      <textarea class="form-control" rows="20" id="lessonContent" th:field="*{text}">Здесь должен быть текст урока.
+                      </textarea>
+                      <small class="validation-error text-danger" th:if="${#fields.hasErrors('text')}"
+                             th:errors="*{text}">
+                        Lesson title has to be filled
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="submit" class="btn btn-success float-right" value="Сохранить">
+                </div>
+
+              </form>
+            </section>
+            <!-- END Tab -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,68 +1,27 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-  <meta charset="UTF-8">
-  <title>Профиль | Тета Курсы</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <!--<style>
-    body {
-      background-color: #F6F2E6;
-    }
-  </style>-->
-</head>
+<head th:replace="fragments/head :: head"></head>
 
 <body>
-  <header class="container mt-3">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand mr-4 font-weight-bold" href="#">Тета Курсы</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-        <ul class="navbar-nav col-10">
-          <li class="nav-item">
-            <a class="nav-link" href="#">О нас</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Курсы</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Контакты</a>
-          </li>
-
-        </ul>
-        <ul class="navbar-nav col-2 justify-content-end">
-          <li class="nav-item active">
-            <div class="btn-group">
-              <button type="button" class="btn dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Иван Иванов
-              </button>
-              <div class="dropdown-menu dropdown-menu-right mt-3">
-                <a href="#" class="dropdown-item py-2">Выйти</a>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </header>
+<header th:replace="fragments/header :: header"></header>
 
   <main class="container mt-3 pb-5">
     <div class="col-12 col-lg-8 offset-2 offset-lg-12">
-      <form class="form-signin pt-5" enctype="multipart/form-data">
-        <div class="text-center mt-5 b-1">
+      <div class="text-center mt-5 b-1">
+        <h1 class="h1 mb-3 font-weight-normal">Назначить курс пользователю</h1>
+      </div>
+      <form class="form-signin pt-5" th:method="post" th:action="@{/course/{courseId}/assign(courseId = ${courseId})}"
+            th:unless="${users.empty}">
 
-          <h1 class="h1 mb-3 font-weight-normal">Назначить курс</h1>
-
-        </div>
         <div class="mt-5 form-label-group">
-          <label class="mb-2" for="chooseUser">Выберите пользователя:</label>
-          <select class="custom-select mr-sm-2" id="userQualification">
-            <option selected>Пользователь 1</option>
-            <option value="1">Пользователь 2</option>
-            <option value="2">Пользователь 3</option>
+          <label class="mb-2" for="userId">Выберите пользователя:</label>
+          <select class="custom-select mr-sm-2" id="userId" name="userId">
+            <option th:each="user : ${users}"
+                    th:value="${user.id}"
+                    th:text="${user.username}">
+              User name
+            </option>
           </select>
 
         </div>
@@ -70,6 +29,9 @@
           <input type="submit" class="btn btn-success float-right" value="Назначить">
         </div>
       </form>
+      <div class="text-center mt-5 b-1" th:if="${users.empty}">
+        <p>Все доступные для этого курса пользователи уже назначены!</p>
+      </div>
     </div>
   </main>
 
