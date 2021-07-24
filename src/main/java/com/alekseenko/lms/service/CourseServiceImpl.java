@@ -2,6 +2,7 @@ package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.domain.Course;
+import com.alekseenko.lms.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,19 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getCoursesByTitleWithPrefix(String prefix) {
         return courseRepository.findByTitleLike(prefix);
+    }
+
+    @Override
+    public void setUserCourseConnection(User user, Course course) {
+        user.getCourses().add(course);
+        course.getUsers().add(user);
+        courseRepository.save(course);
+    }
+
+    @Override
+    public void removeUserCourseConnection(User user, Course course) {
+        user.getCourses().remove(course);
+        course.getUsers().remove(user);
+        courseRepository.save(course);
     }
 }

@@ -77,19 +77,7 @@ public class CourseController {
     @GetMapping("/{id}/assign")
     public String assignCourseToUser(Model model, @PathVariable("id") Long id) {
 
-        // Пока отсутствует метод создания пользователей в БД,
-        // создаю двух тестовых (если таблица пользователей пустая) для проверки функционала задания недели.
-        // Будет удалено в дальнейшем
-        List<User> users = userService.getAllUsers();
-        if (users.isEmpty()){
-            User user1 = new User("Test1");
-            User user2 = new User("Test2");
-            userService.saveUser(user1);
-            userService.saveUser(user2);
-            users = userService.getAllUsers();
-        }
-
-        users = userService.getUsersNotAssignedToCourse(id);
+        List<User> users = userService.getUsersNotAssignedToCourse(id);
 
         model.addAttribute("users", users);
         model.addAttribute("courseId", id);
@@ -103,9 +91,8 @@ public class CourseController {
                 .orElseThrow(NotFoundException::new);
         Course course = courseService.getCourseById(courseId)
                 .orElseThrow(NotFoundException::new);
-        course.getUsers().add(user);
-        user.getCourses().add(course);
-        courseService.saveCourse(course);
+
+        courseService.setUserCourseConnection(user, course);
         return "redirect:/course";
     }
 
@@ -116,9 +103,8 @@ public class CourseController {
                 .orElseThrow(NotFoundException::new);
         Course course = courseService.getCourseById(courseId)
                 .orElseThrow(NotFoundException::new);
-        user.getCourses().remove(course);
-        course.getUsers().remove(user);
-        courseService.saveCourse(course);
+
+        courseService.removeUserCourseConnection(user, course);
         return String.format("redirect:/course/%d", courseId);
     }
 
