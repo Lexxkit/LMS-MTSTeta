@@ -1,12 +1,13 @@
 package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.domain.Role;
+import com.alekseenko.lms.dto.RoleDto;
 
 import java.util.List;
 
 public interface RoleService {
 
-    List<Role> findAllRoles();
+    List<RoleDto> findAllRoles();
 
-    Role getRoleByName(String name);
+    RoleDto getRoleByName(String name);
 }

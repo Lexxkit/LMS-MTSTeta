@@ -5,12 +5,14 @@ import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Course;
+import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.dto.CourseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,11 +20,16 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final RoleService roleService;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, UserRepository userRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository,
+                             UserRepository userRepository,
+                             RoleService roleService,
+                             UserService userService) {
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.domain.Role;
+import com.alekseenko.lms.dto.RoleDto;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.service.RoleService;
 import com.alekseenko.lms.service.UserService;
@@ -27,7 +28,7 @@ public class AdminUserController {
     }
 
     @ModelAttribute("roles")
-    public List<Role> rolesAttribute() {
+    public List<RoleDto> rolesAttribute() {
         return roleService.findAllRoles();
     }
 

@@ -1,5 +1,6 @@
  package com.alekseenko.lms.service;
 
+ import com.alekseenko.lms.dao.RoleRepository;
  import com.alekseenko.lms.dto.UserDto;
  import org.springframework.beans.factory.annotation.Autowired;
  import org.springframework.context.event.ContextRefreshedEvent;
@@ -13,15 +14,13 @@
  @Component
  public class MyEventListener {
 
-     private final RoleService roleService;
+     private final RoleRepository roleRepository;
      private final UserService userService;
-     private final PasswordEncoder passwordEncoder;
 
      @Autowired
-     public MyEventListener(RoleService roleService, UserService userService, PasswordEncoder passwordEncoder) {
-         this.roleService = roleService;
+     public MyEventListener(RoleRepository roleRepository, UserService userService, PasswordEncoder passwordEncoder) {
+         this.roleRepository = roleRepository;
          this.userService = userService;
-         this.passwordEncoder = passwordEncoder;
      }
 
 
@@ -37,10 +36,10 @@
 
              UserDto user1 = new UserDto("Test_admin");
              user1.setPassword("123");
-             user1.setRoles(Set.of(roleService.getRoleByName("ROLE_ADMIN")));
+             user1.setRoles(Set.of(roleRepository.findRoleByName("ROLE_ADMIN").get()));
              UserDto user2 = new UserDto("Test_student");
              user2.setPassword("123");
-             user2.setRoles(Set.of(roleService.getRoleByName("ROLE_STUDENT")));
+             user2.setRoles(Set.of(roleRepository.findRoleByName("ROLE_STUDENT").get()));
              userService.saveUser(user1);
              userService.saveUser(user2);
          }
