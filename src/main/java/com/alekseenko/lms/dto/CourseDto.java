@@ -1,39 +1,40 @@
-package com.alekseenko.lms.domain;
+package com.alekseenko.lms.dto;
 
-import javax.persistence.*;
+import com.alekseenko.lms.domain.Lesson;
+import com.alekseenko.lms.domain.User;
+
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-@Table(name="courses")
-public class Course {
+public class CourseDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
 
-    @Column
+    @NotBlank(message = "Course author has to be filled")
     private String author;
 
-    @Column
+    @NotBlank(message = "Course title has to be filled")
     private String title;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    @OrderBy("id")
     private List<Lesson> lessons;
 
-    @ManyToMany
     private Set<User> users;
 
-    public Course() {
+    public CourseDto() {
     }
 
-    public Course(Long id, String author, String title) {
+    public CourseDto(Long id, String author, String title) {
         this.id = id;
         this.author = author;
         this.title = title;
+    }
+
+    public CourseDto(Long id, String author, String title, Set<User> users) {
+        this.id = id;
+        this.author = author;
+        this.title = title;
+        this.users = users;
     }
 
     public Long getId() {

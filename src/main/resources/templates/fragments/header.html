@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
   <header class="container mt-3" th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -14,7 +15,8 @@
             <a class="nav-link" th:href="@{/course}">Курсы</a>
           </li>
           <li class="nav-item" th:classappend="${activePage == 'users'} ? active">
-            <a class="nav-link" href="#">Пользователи</a>
+            <a sec:authorize="hasRole('ADMIN')" class="nav-link" href="/admin/user">Пользователи</a>
+            <a sec:authorize="hasRole('STUDENT')" class="nav-link" href="/user">Пользователь</a>
           </li>
           <li class="nav-item" th:classappend="${activePage == 'contacts'} ? active">
             <a class="nav-link" href="#">Контакты</a>
@@ -26,7 +28,12 @@
 
         <ul class="navbar-nav col-2 justify-content-end">
           <li class="nav-item active">
-            <a href="#" class="nav-link font-weight-bold">Вход</a>
+            <a class="nav-link font-weight-bold" sec:authorize="!isAuthenticated()" th:href="@{/login}">Вход</a>
+            <form sec:authorize="isAuthenticated()" th:method="post" th:action="@{/logout}">
+              <button class="btn success">
+                Logout <span sec:authentication="principal.username">Username</span>
+              </button>
+            </form>
           </li>
         </ul>
 

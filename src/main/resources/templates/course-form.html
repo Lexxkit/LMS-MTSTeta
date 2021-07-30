@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:insert="fragments/head :: head"></head>
 
@@ -16,7 +17,7 @@
               <h1 class="h1 mb-3 font-weight-normal text-center">Просмотр и редактирование курса</h1>
               <img class="mx-auto d-block" src="https://place-hold.it/80x80" width="80" height="80" alt="">
 
-              <form>
+              <form sec:authorize="hasRole('ADMIN')">
                 <div class="row">
                   <div class="col-12">
                     <label class="mb-2 text-dark" for="coursePictureSelector">Выберите обложку курса</label>
@@ -61,12 +62,12 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <input type="submit" class="btn btn-success" value="Сохранить">
+                  <input sec:authorize="hasRole('ADMIN')" type="submit" class="btn btn-success" value="Сохранить">
                 </div>
               </form>
                 <section class="mt-5 pt-3" th:unless="${lessons == null}">
                   <div>
-                    <a th:href="@{/lesson/new(course_id = ${course.id})}">Добавить новый урок</a>
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/lesson/new(course_id = ${course.id})}">Добавить новый урок</a>
                   </div>
                   <table class="table table-striped table-success">
                     <thead>
@@ -86,7 +87,7 @@
                           <div class="form-group col-2 col-md-10 pl-0">
                             <form th:method="delete" th:action="@{/lesson/{id}(id = ${lesson.id})}">
                               <input type="hidden" name="courseId" id="courseId" th:value="${course.id}">
-                              <button class="btn btn-danger" type="submit">Удалить</button>
+                              <button sec:authorize="hasRole('ADMIN')" class="btn btn-danger" type="submit">Удалить</button>
                             </form>
                           </div>
                         </td>

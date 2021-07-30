@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/head :: head"></head>
 
@@ -26,7 +27,10 @@
 
     <section>
       <div>
-        <a th:href="@{course/new}">Добавить новый курс</a>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{course/new}">Добавить новый курс</a>
+      </div>
+      <div>
+        <a sec:authorize="!isAuthenticated()" th:href="@{user/registration}">Регистрация нового пользователя</a>
       </div>
     </section>
 
@@ -49,12 +53,12 @@
             <td th:text="${course.author}">Автор курса</td>
             <td class="row">
               <div class="col-6 previous">
-                <form th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
+                <form sec:authorize="isAuthenticated()" th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
                   <button class="btn btn-success" type="submit">Назначить пользователя</button>
                 </form>
               </div>
               <div class="col-6 next">
-                <form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
+                <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
                   <button class="btn btn-danger" type="submit">Удалить курс</button>
                 </form>
               </div>
