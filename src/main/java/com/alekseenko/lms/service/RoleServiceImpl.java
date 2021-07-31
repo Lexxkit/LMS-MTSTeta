@@ -2,7 +2,6 @@ package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.RoleRepository;
-import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.dto.RoleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleDto> findAllRoles() {
         return roleRepository.findAll().stream()
-                .map(role -> new RoleDto(role.getName()))
+                .map(role -> new RoleDto(role.getId(), role.getName(), role.getUsers()))
                 .collect(Collectors.toList());
     }
 

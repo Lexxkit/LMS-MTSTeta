@@ -5,14 +5,12 @@ import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Course;
-import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.dto.CourseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,16 +18,12 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
-    private final RoleService roleService;
 
     @Autowired
     public CourseServiceImpl(CourseRepository courseRepository,
-                             UserRepository userRepository,
-                             RoleService roleService,
-                             UserService userService) {
+                             UserRepository userRepository) {
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
-        this.roleService = roleService;
     }
 
     @Override
@@ -81,8 +75,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void removeUserCourseConnection(Long userId, Long courseId, String username) {
-        if (userRepository.getById(userId).getUsername().equals(username)) {
+    public void removeUserCourseConnection(Long userId, Long courseId, String username, boolean isAdmin) {
+
+        if (userRepository.getById(userId).getUsername().equals(username) || isAdmin) {
             Course course = courseRepository.findById(courseId).orElseThrow(NotFoundException::new);
             course.getUsers().remove(userRepository.getById(userId));
             courseRepository.save(course);

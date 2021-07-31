@@ -1,6 +1,5 @@
 package com.alekseenko.lms.service;
 
-import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.dto.RoleDto;
 
 import java.util.List;

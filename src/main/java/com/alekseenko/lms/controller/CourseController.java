@@ -1,6 +1,6 @@
 package com.alekseenko.lms.controller;
 
-import com.alekseenko.lms.domain.Course;
+import com.alekseenko.lms.RoleConstants;
 import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.LessonService;
@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -72,7 +71,7 @@ public class CourseController {
         return "course-form";
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured(RoleConstants.ROLE_ADMIN)
     @DeleteMapping("/{id}")
     public String deleteCourse(@PathVariable("id") Long id) {
         courseService.deleteCourse(id);
@@ -84,7 +83,7 @@ public class CourseController {
     public String assignCourseToUser(Model model, HttpServletRequest request, @PathVariable("id") Long id) {
         model.addAttribute("activePage", "courses");
         model.addAttribute("courseId", id);
-        if (request.isUserInRole("ROLE_ADMIN")) {
+        if (request.isUserInRole(RoleConstants.ROLE_ADMIN)) {
             model.addAttribute("users", userService.getUsersNotAssignedToCourse(id));
         } else {
             model.addAttribute("users", userService.assignSingleUserToCourse(request.getRemoteUser()));
@@ -104,13 +103,18 @@ public class CourseController {
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{courseId}/unassign")
     public String unassignUserFromCourse(@PathVariable("courseId") Long courseId,
-                                         @RequestParam("userId") Long userId, Principal principal) {
+                                         @RequestParam("userId") Long userId,
+                                         Principal principal,
+                                         HttpServletRequest request) {
 
-        courseService.removeUserCourseConnection(userId, courseId, principal.getName());
+        courseService.removeUserCourseConnection(userId,
+                                                courseId,
+                                                principal.getName(),
+                                                request.isUserInRole(RoleConstants.ROLE_ADMIN));
         return String.format("redirect:/course/%d", courseId);
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured(RoleConstants.ROLE_ADMIN)
     @GetMapping("/new")
     public String courseForm(Model model) {
         model.addAttribute("course", courseService.getCourseTemplate());

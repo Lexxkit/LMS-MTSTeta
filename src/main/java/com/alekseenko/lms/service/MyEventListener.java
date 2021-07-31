@@ -1,5 +1,6 @@
  package com.alekseenko.lms.service;
 
+ import com.alekseenko.lms.RoleConstants;
  import com.alekseenko.lms.dao.RoleRepository;
  import com.alekseenko.lms.dto.UserDto;
  import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,10 @@
 
              UserDto user1 = new UserDto("Test_admin");
              user1.setPassword("123");
-             user1.setRoles(Set.of(roleRepository.findRoleByName("ROLE_ADMIN").get()));
+             user1.setRoles(Set.of(roleRepository.findRoleByName(RoleConstants.ROLE_ADMIN).get()));
              UserDto user2 = new UserDto("Test_student");
              user2.setPassword("123");
-             user2.setRoles(Set.of(roleRepository.findRoleByName("ROLE_STUDENT").get()));
+             user2.setRoles(Set.of(roleRepository.findRoleByName(RoleConstants.ROLE_STUDENT).get()));
              userService.saveUser(user1);
              userService.saveUser(user2);
          }

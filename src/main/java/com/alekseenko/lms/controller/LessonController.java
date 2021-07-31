@@ -1,5 +1,6 @@
 package com.alekseenko.lms.controller;
 
+import com.alekseenko.lms.RoleConstants;
 import com.alekseenko.lms.dto.LessonDto;
 import com.alekseenko.lms.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
-@Secured("ROLE_ADMIN")
+@Secured(RoleConstants.ROLE_ADMIN)
 @RequestMapping("/lesson")
 public class LessonController {
 

@@ -1,6 +1,5 @@
 package com.alekseenko.lms.controller;
 
-import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.dto.RoleDto;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.service.RoleService;

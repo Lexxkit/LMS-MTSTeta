@@ -25,8 +25,9 @@
         <td>
           <a th:text="${user.username}" th:href="@{/admin/user/{id}(id = ${user.id})}">Username</a>
         </td>
-        <td th:each="role : ${user.roles}">
-          <p th:text="${role.name}">User roles</p></td>
+        <td>
+          <div th:each="role : ${user.roles}">
+          <p th:text="${role.name}">User roles</p></div></td>
       </tr>
       <tr th:if="${users.empty}" >
         <td colspan="4">No users to display</td>

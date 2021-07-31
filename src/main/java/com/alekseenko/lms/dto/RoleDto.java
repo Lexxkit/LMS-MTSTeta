@@ -16,6 +16,12 @@ public class RoleDto {
         this.name = name;
     }
 
+    public RoleDto(Long id, String name, Set<User> users) {
+        this.id = id;
+        this.name = name;
+        this.users = users;
+    }
+
     public Long getId() {
         return id;
     }

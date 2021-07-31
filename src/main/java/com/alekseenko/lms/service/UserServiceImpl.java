@@ -1,5 +1,6 @@
 package com.alekseenko.lms.service;
 
+import com.alekseenko.lms.RoleConstants;
 import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dao.UserRepository;
@@ -17,14 +18,17 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService{
 
     private final RoleRepository roleRepository;
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(RoleRepository roleRepository,
+                           UserMapper userMapper,
                            UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
+        this.userMapper = userMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -32,28 +36,28 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserDto> findAllUsers() {
         return userRepository.findAll().stream()
-                .map(usr -> new UserDto(usr.getId(), usr.getUsername(), "", usr.getRoles()))
+                .map(userMapper::mapToUserDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<UserDto> getUsersNotAssignedToCourse(Long id) {
         return userRepository.findUsersNotAssignedToCourse(id).stream()
-                .map(usr -> new UserDto(usr.getId(), usr.getUsername(), "", usr.getRoles()))
+                .map(userMapper::mapToUserDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public UserDto getUserById(Long id) {
         return userRepository.findById(id)
-                .map(usr -> new UserDto(usr.getId(), usr.getUsername(), "", usr.getRoles()))
+                .map(userMapper::mapToUserDto)
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
     public UserDto getUserByUsername(String username) {
         return userRepository.findUserByUsername(username)
-                .map(usr -> new UserDto(usr.getId(), usr.getUsername(), "", usr.getRoles()))
+                .map(userMapper::mapToUserDto)
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -67,7 +71,7 @@ public class UserServiceImpl implements UserService{
     public void saveUser(UserDto userDto) {
         // New users get ROLE_STUDENT upon registration
         if (userDto.getRoles() == null) {
-            Role studentRole = roleRepository.findRoleByName("ROLE_STUDENT").get();
+            Role studentRole = roleRepository.findRoleByName(RoleConstants.ROLE_STUDENT).get();
             userDto.setRoles(Set.of(studentRole));
         }
         userRepository.save(new User(userDto.getId(),
@@ -80,7 +84,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserDto> assignSingleUserToCourse(String username) {
         UserDto userDto = userRepository.findUserByUsername(username)
-                .map(usr -> new UserDto(usr.getId(), usr.getUsername(), "", usr.getRoles()))
+                .map(userMapper::mapToUserDto)
                 .orElseThrow(NotFoundException::new);
         return Collections.singletonList(userDto);
     }
