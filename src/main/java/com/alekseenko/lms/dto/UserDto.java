@@ -1,42 +1,33 @@
-package com.alekseenko.lms.domain;
+package com.alekseenko.lms.dto;
 
-import javax.persistence.*;
+import com.alekseenko.lms.domain.Course;
+import com.alekseenko.lms.domain.Role;
+
 import javax.validation.constraints.NotBlank;
-import java.util.Objects;
 import java.util.Set;
 
-@Entity
-@Table(name = "users")
-public class User {
+public class UserDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @NotBlank(message = "Username shouldn't be empty")
     private String username;
 
-    @Column
+    @NotBlank(message = "User password shouldn't be empty")
     private String password;
 
-    @ManyToMany(mappedBy = "users")
     private Set<Course> courses;
 
-    @ManyToMany
     private Set<Role> roles;
 
-    public User() {
+    public UserDto() {
     }
 
-    public User(Long id) {
-        this.id = id;
-    }
-
-    public User(String username) {
+    public UserDto(String username) {
         this.username = username;
     }
 
-    public User(Long id, String username, String password, Set<Role> roles) {
+    public UserDto(Long id, String username, String password, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -83,16 +74,4 @@ public class User {
         this.roles = roles;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

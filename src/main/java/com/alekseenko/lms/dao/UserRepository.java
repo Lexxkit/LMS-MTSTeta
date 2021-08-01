@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -18,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 "inner join u.courses c " +
                 "where c.id = :courseId)")
     List<User> findUsersNotAssignedToCourse(@Param("courseId") Long courseId);
+
+    Optional<User> findUserByUsername(String username);
 }
