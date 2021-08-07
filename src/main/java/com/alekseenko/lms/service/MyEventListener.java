@@ -1,4 +1,4 @@
- package com.alekseenko.lms.service;
+package com.alekseenko.lms.service;
 
  import com.alekseenko.lms.RoleConstants;
  import com.alekseenko.lms.dao.RoleRepository;
