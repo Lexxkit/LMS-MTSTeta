@@ -13,3 +13,12 @@
    * add Lesson and User entities, repos, services and controllers;
    * assign/unassign Users to/from course;
    * create/delete lessons for courses.
+   
+5. Add Authentication and Authorization
+   * add registration and login functionality;
+   * add roles for users;
+   * access to pages based on user's role.
+   
+6. Add Unit tests with JaCoCo report
+   * Services' layer tests with H2 DB;
+   * Controllers' layer tests with Mockito and MockMvc
