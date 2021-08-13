@@ -33,7 +33,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseDto getCourseTemplate() {
         return new CourseDto();
     }
-    
+
     @Override
     public List<CourseDto> getAllCourses() {
         return  courseRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
