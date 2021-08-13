@@ -17,12 +17,15 @@ import java.util.stream.Collectors;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
     private final UserRepository userRepository;
 
     @Autowired
     public CourseServiceImpl(CourseRepository courseRepository,
+                             CourseMapper courseMapper,
                              UserRepository userRepository) {
         this.courseRepository = courseRepository;
+        this.courseMapper = courseMapper;
         this.userRepository = userRepository;
     }
 
@@ -30,19 +33,26 @@ public class CourseServiceImpl implements CourseService {
     public CourseDto getCourseTemplate() {
         return new CourseDto();
     }
-
+    
     @Override
     public List<CourseDto> getAllCourses() {
         return  courseRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
-                .map(course -> new CourseDto(course.getId(), course.getAuthor(), course.getTitle()))
+                .map(courseMapper::mapToCourseDtoWithoutUser)
                 .collect(Collectors.toList());
     }
 
     @Override
     public CourseDto getCourseById(Long id) {
         return courseRepository.findById(id)
-                .map(course -> new CourseDto(course.getId(), course.getAuthor(), course.getTitle(), course.getUsers()))
+                .map(courseMapper::mapToCourseDtoWithoutImage)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public List<CourseDto> getCoursesForUser(String username) {
+        return courseRepository.findByUsername(username).stream()
+                .map(courseMapper::mapToCourseDtoWithoutUser)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -50,7 +60,8 @@ public class CourseServiceImpl implements CourseService {
         Course course = new Course(
                 courseDto.getId(),
                 courseDto.getAuthor(),
-                courseDto.getTitle()
+                courseDto.getTitle(),
+                courseDto.getCourseImage()
         );
         courseRepository.save(course);
     }
@@ -63,7 +74,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<CourseDto> getCoursesByTitleWithPrefix(String prefix) {
         return courseRepository.findByTitleLike(prefix).stream()
-                .map(course -> new CourseDto(course.getId(), course.getAuthor(), course.getTitle()))
+                .map(courseMapper::mapToCourseDtoWithoutUser)
                 .collect(Collectors.toList());
     }
 

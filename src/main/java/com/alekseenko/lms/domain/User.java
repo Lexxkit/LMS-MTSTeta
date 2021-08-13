@@ -1,7 +1,6 @@
 package com.alekseenko.lms.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 import java.util.Set;
 
@@ -25,6 +24,9 @@ public class User {
     @ManyToMany
     private Set<Role> roles;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private AvatarImage avatarImage;
+
     public User() {
     }
 
@@ -34,6 +36,11 @@ public class User {
 
     public User(String username) {
         this.username = username;
+    }
+
+    public User(Long id, AvatarImage avatarImage) {
+        this.id = id;
+        this.avatarImage = avatarImage;
     }
 
     public User(Long id, String username, String password, Set<Role> roles) {
@@ -81,6 +88,14 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public AvatarImage getAvatarImage() {
+        return avatarImage;
+    }
+
+    public void setAvatarImage(AvatarImage avatarImage) {
+        this.avatarImage = avatarImage;
     }
 
     @Override

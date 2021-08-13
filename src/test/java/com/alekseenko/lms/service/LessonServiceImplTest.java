@@ -35,7 +35,7 @@ public class LessonServiceImplTest {
 
     @BeforeAll
     void setUp() {
-        Course course1 = new Course(1L, "Oleg", "Learning test");
+        Course course1 = new Course(1L, "Oleg", "Learning test", null);
         courseRepository.save(course1);
         Lesson lesson = new Lesson(1L, "Title", "Text", course1);
         lessonRepository.save(lesson);

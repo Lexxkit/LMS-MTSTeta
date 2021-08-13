@@ -2,17 +2,19 @@ package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.RoleConstants;
 import com.alekseenko.lms.dto.CourseDto;
-import com.alekseenko.lms.service.CourseService;
-import com.alekseenko.lms.service.LessonService;
-import com.alekseenko.lms.service.StatisticsCounter;
-import com.alekseenko.lms.service.UserService;
+import com.alekseenko.lms.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -23,16 +25,20 @@ import java.security.Principal;
 public class CourseController {
 
     private final CourseService courseService;
+    private final CourseImageService courseImageService;
     private final LessonService lessonService;
     private final UserService userService;
     private final StatisticsCounter statisticsCounter;
+    private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
 
     @Autowired
     public CourseController(CourseService courseService,
+                            CourseImageService courseImageService,
                             LessonService lessonService,
                             UserService userService,
                             StatisticsCounter statisticsCounter) {
         this.courseService = courseService;
+        this.courseImageService = courseImageService;
         this.lessonService = lessonService;
         this.userService = userService;
         this.statisticsCounter = statisticsCounter;
@@ -119,5 +125,33 @@ public class CourseController {
     public String courseForm(Model model) {
         model.addAttribute("course", courseService.getCourseTemplate());
         return "course-form";
+    }
+
+    @GetMapping("/{id}/picture")
+    @ResponseBody
+    public ResponseEntity<byte[]> courseImage(@PathVariable("id") Long courseId) {
+        String contentType = courseImageService.getContentTypeByCourse(courseId);
+        byte[] data = courseImageService.getCourseImageByCourse(courseId)
+                .orElseThrow(NotFoundException::new);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(data);
+    }
+
+    @Secured(RoleConstants.ROLE_ADMIN)
+    @PostMapping("/{id}/picture")
+    public String updateCourseImage(@PathVariable("id") Long courseId,
+                                    @RequestParam("courseImage") MultipartFile courseImage) {
+        if (!courseImage.isEmpty()) {
+            logger.info("File name {}, file content type {}, file size {}", courseImage.getOriginalFilename(), courseImage.getContentType(), courseImage.getSize());
+            try {
+                courseImageService.saveCourseImage(courseId, courseImage.getContentType(), courseImage.getInputStream());
+            } catch (Exception ex) {
+                logger.info("", ex);
+                throw new InternalServerError();
+            }
+        }
+        return String.format("redirect:/course/%d", courseId);
     }
 }

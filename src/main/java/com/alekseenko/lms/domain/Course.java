@@ -1,7 +1,6 @@
 package com.alekseenko.lms.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Set;
 
@@ -27,13 +26,17 @@ public class Course {
     @ManyToMany
     private Set<User> users;
 
+    @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
+    private CourseImage courseImage;
+
     public Course() {
     }
 
-    public Course(Long id, String author, String title) {
+    public Course(Long id, String author, String title, CourseImage courseImage) {
         this.id = id;
         this.author = author;
         this.title = title;
+        this.courseImage = courseImage;
     }
 
     public Long getId() {
@@ -74,5 +77,13 @@ public class Course {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public CourseImage getCourseImage() {
+        return courseImage;
+    }
+
+    public void setCourseImage(CourseImage courseImage) {
+        this.courseImage = courseImage;
     }
 }

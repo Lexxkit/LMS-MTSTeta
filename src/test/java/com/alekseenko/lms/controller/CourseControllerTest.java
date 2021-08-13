@@ -1,12 +1,10 @@
 package com.alekseenko.lms.controller;
 
+import com.alekseenko.lms.domain.CourseImage;
 import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.dto.LessonDto;
 import com.alekseenko.lms.dto.UserDto;
-import com.alekseenko.lms.service.CourseService;
-import com.alekseenko.lms.service.LessonService;
-import com.alekseenko.lms.service.StatisticsCounter;
-import com.alekseenko.lms.service.UserService;
+import com.alekseenko.lms.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -29,6 +28,8 @@ public class CourseControllerTest {
     @MockBean
     private CourseService courseService;
     @MockBean
+    private CourseImageService courseImageService;
+    @MockBean
     private LessonService lessonService;
     @MockBean
     private UserService userService;
@@ -39,7 +40,7 @@ public class CourseControllerTest {
 
     @Test
     void testIndexPage() throws Exception{
-        CourseDto course = new CourseDto(1L, "Test user", "New course");
+        CourseDto course = new CourseDto(1L, "Test user", "New course", (CourseImage) null);
         List<CourseDto> allCourses = Arrays.asList(course);
 
         when(courseService.getAllCourses()).thenReturn(allCourses);
@@ -50,7 +51,7 @@ public class CourseControllerTest {
 
     @Test
     void testIndexPageWithPrefix() throws Exception {
-        CourseDto course = new CourseDto(1L, "Test user", "New course");
+        CourseDto course = new CourseDto(1L, "Test user", "New course", (CourseImage) null );
         List<CourseDto> allCourses = Arrays.asList(course);
 
         when(courseService.getCoursesByTitleWithPrefix("New" + "%")).thenReturn(allCourses);
@@ -62,7 +63,7 @@ public class CourseControllerTest {
 
     @Test
     void testCoursePage() throws Exception {
-        CourseDto course = new CourseDto(1L, "Test user", "New course");
+        CourseDto course = new CourseDto(1L, "Test user", "New course", (CourseImage) null);
         LessonDto lesson = new LessonDto(1L, "New course", 1L);
 
         when(courseService.getCourseById(1L)).thenReturn(course);
@@ -86,7 +87,7 @@ public class CourseControllerTest {
     void testSubmitValidCourseForm() throws Exception {
        mockMvc.perform(post("/course")
                .with(csrf())
-               .flashAttr("course", new CourseDto(1L, "Author", "Title")))
+               .flashAttr("course", new CourseDto(1L, "Author", "Title", (CourseImage) null)))
                .andExpect(model().hasNoErrors())
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/course"));
@@ -96,7 +97,7 @@ public class CourseControllerTest {
     void testSubmitInvalidCourseForm() throws Exception {
         mockMvc.perform(post("/course")
                 .with(csrf())
-                .flashAttr("course", new CourseDto(1L, "", "")))
+                .flashAttr("course", new CourseDto(1L, "", "", (CourseImage) null)))
                 .andExpect(model().attributeHasFieldErrors("course", "author", "title"))
                 .andExpect(view().name("course-form"));
     }

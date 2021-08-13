@@ -1,6 +1,5 @@
 package com.alekseenko.lms.service;
 
-import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.dto.CourseDto;
 
 import java.util.List;
@@ -12,6 +11,8 @@ public interface CourseService {
     List<CourseDto> getAllCourses();
 
     CourseDto getCourseById(Long id);
+
+    List<CourseDto> getCoursesForUser(String username);
 
     void saveCourse(CourseDto courseDto);
 
