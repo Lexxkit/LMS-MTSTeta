@@ -49,7 +49,7 @@ public class UserServiceImplTest {
         Role roleAdmin = new Role("ROLE_ADMIN");
         Role roleStudent = new Role("ROLE_STUDENT");
         roleRepository.saveAll(List.of(roleAdmin, roleStudent));
-        Course course = new Course(1L, "Oleg", "New course");
+        Course course = new Course(1L, "Oleg", "New course", null);
         courseRepository.save(course);
         User testUser = new User(1L, "Test", "", Set.of());
         userRepository.save(testUser);

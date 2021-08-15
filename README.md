@@ -21,4 +21,8 @@
    
 6. Add Unit tests with JaCoCo report
    * Services' layer tests with H2 DB;
-   * Controllers' layer tests with Mockito and MockMvc
+   * Controllers' layer tests with Mockito and MockMvc.
+   
+7. Add pictures for User Profile and Courses
+   * OneToOne DB connection between Images tables and User/Course tables;
+   * custom Internal Server Error exceptions handling;

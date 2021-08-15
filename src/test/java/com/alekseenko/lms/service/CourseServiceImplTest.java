@@ -5,6 +5,7 @@ import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Course;
+import com.alekseenko.lms.domain.CourseImage;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.CourseDto;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,8 +39,8 @@ public class CourseServiceImplTest {
 
     @BeforeAll
     void setUp() {
-        Course course1 = new Course(1L, "Oleg", "Learning test");
-        Course course2 = new Course(2L, "Test", "Programming for beginners");
+        Course course1 = new Course(1L, "Oleg", "Learning test", null);
+        Course course2 = new Course(2L, "Test", "Programming for beginners", null);
         courseRepository.saveAll(List.of(course1, course2));
     }
 
@@ -68,8 +69,19 @@ public class CourseServiceImplTest {
     }
 
     @Test
+    void shouldFindCoursesForUsername() {
+        userRepository.save(new User("Test_user"));
+        final var testUser = userRepository.findUserByUsername("Test_user").get();
+        courseService.setUserCourseConnection(testUser.getId(), courseService.getCourseById(1L).getId());
+
+        final var coursesForUser = courseService.getCoursesForUser("Test_user");
+
+        assertThat(coursesForUser.size()).isEqualTo(1);
+    }
+
+    @Test
     void shouldSaveOneCourse() {
-        final var courseToSave = new CourseDto(null, "Test2", "Work with DB");
+        final var courseToSave = new CourseDto(null, "Test2", "Work with DB", (CourseImage) null);
         courseService.saveCourse(courseToSave);
         final var courses = courseService.getAllCourses();
 

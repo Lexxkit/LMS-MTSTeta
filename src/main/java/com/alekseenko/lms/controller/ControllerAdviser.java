@@ -21,4 +21,19 @@ public class ControllerAdviser {
         modelAndView.setStatus(HttpStatus.FORBIDDEN);
         return modelAndView;
     }
+
+    @ExceptionHandler(InternalServerError.class)
+    public ModelAndView internalServerErrorHandler(InternalServerError ex) {
+        ModelAndView modelAndView = new ModelAndView("internal_error");
+        modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        return modelAndView;
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ModelAndView illegalStateExceptionHandler(IllegalStateException ex) {
+        ModelAndView modelAndView = new ModelAndView("internal_error");
+        modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        return modelAndView;
+    }
+
 }

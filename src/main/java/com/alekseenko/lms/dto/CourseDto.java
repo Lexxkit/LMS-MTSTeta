@@ -1,5 +1,6 @@
 package com.alekseenko.lms.dto;
 
+import com.alekseenko.lms.domain.CourseImage;
 import com.alekseenko.lms.domain.Lesson;
 import com.alekseenko.lms.domain.User;
 
@@ -21,13 +22,16 @@ public class CourseDto {
 
     private Set<User> users;
 
+    private CourseImage courseImage;
+
     public CourseDto() {
     }
 
-    public CourseDto(Long id, String author, String title) {
+    public CourseDto(Long id, String author, String title, CourseImage courseImage) {
         this.id = id;
         this.author = author;
         this.title = title;
+        this.courseImage = courseImage;
     }
 
     public CourseDto(Long id, String author, String title, Set<User> users) {
@@ -75,5 +79,13 @@ public class CourseDto {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public CourseImage getCourseImage() {
+        return courseImage;
+    }
+
+    public void setCourseImage(CourseImage courseImage) {
+        this.courseImage = courseImage;
     }
 }

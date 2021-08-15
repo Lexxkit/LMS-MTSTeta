@@ -27,6 +27,12 @@
         </ul>
 
         <ul class="navbar-nav col-2 justify-content-end">
+          <li class="nav-item" th:classappend="${activePage == 'profile'} ? active">
+            <a class="nav-link font-weight-bold" sec:authorize="isAuthenticated()" th:href="@{/profile}">
+              <img th:src="@{/profile/avatar}" alt="User profile" width="15">
+              Профиль
+            </a>
+          </li>
           <li class="nav-item active">
             <a class="nav-link font-weight-bold" sec:authorize="!isAuthenticated()" th:href="@{/login}">Вход</a>
             <form sec:authorize="isAuthenticated()" th:method="post" th:action="@{/logout}">

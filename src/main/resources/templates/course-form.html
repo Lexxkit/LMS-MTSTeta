@@ -15,19 +15,14 @@
             <!-- Tab -->
             <section class="tab-pane fade show active">
               <h1 class="h1 mb-3 font-weight-normal text-center">Просмотр и редактирование курса</h1>
-              <img class="mx-auto d-block" src="https://place-hold.it/80x80" width="80" height="80" alt="">
+              <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt="">
 
-              <form sec:authorize="hasRole('ADMIN')">
+              <form sec:authorize="hasRole('ADMIN')" th:object="${course}" th:method="post" th:action="@{/course/{id}/picture(id = ${course.id})}" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-12">
-                    <label class="mb-2 text-dark" for="coursePictureSelector">Выберите обложку курса</label>
+                    <label class="mb-2 text-dark" for="courseImage">Выберите обложку курса</label>
                     <div class="input-group pb-2">
-                      <label class="input-group-btn">
-                          <span class="btn btn-light">
-                              Выберите файл <input id="coursePictureSelector" type="file" style="display:none;" onchange="$('#coursePictureUpload').val($(this).val());">
-                          </span>
-                      </label>
-                      <input type="text" class="form-control" id="coursePictureUpload" readonly>
+                      <input id="courseImage" name="courseImage" type="file"/>
                     </div>
                   </div>
                 </div>
