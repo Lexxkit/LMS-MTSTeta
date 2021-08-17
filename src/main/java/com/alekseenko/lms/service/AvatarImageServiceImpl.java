@@ -1,17 +1,15 @@
 package com.alekseenko.lms.service;
 
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
+
 import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.AvatarImageRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.AvatarImage;
 import com.alekseenko.lms.domain.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,8 +17,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
-
-import static java.nio.file.StandardOpenOption.*;
+import javax.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AvatarImageServiceImpl implements AvatarImageService {
@@ -29,7 +31,7 @@ public class AvatarImageServiceImpl implements AvatarImageService {
     private final AvatarImageRepository avatarImageRepository;
     private final UserRepository userRepository;
 
-    @Value("${file.storage.path}")
+    @Value("${file.storage.avatar.path}")
     private String path;
 
     @Autowired
@@ -65,10 +67,15 @@ public class AvatarImageServiceImpl implements AvatarImageService {
         Optional<AvatarImage> opt = avatarImageRepository.findByUsername(username);
         AvatarImage avatarImage;
         String filename;
+
+        if (Files.notExists(Path.of(path))) {
+            new File(path).mkdir();
+        }
+
         if (opt.isEmpty()) {
             filename = UUID.randomUUID().toString();
             User user = userRepository.findUserByUsername(username)
-                    .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(IllegalArgumentException::new);
             avatarImage = new AvatarImage(null, contentType, filename, user);
         } else {
             avatarImage = opt.get();
