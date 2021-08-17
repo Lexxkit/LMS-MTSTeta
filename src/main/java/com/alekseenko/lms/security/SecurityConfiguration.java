@@ -22,21 +22,6 @@ public class SecurityConfiguration {
     this.userDetailsService = userDetailsService;
   }
 
-  @Autowired
-  public void authConfigure(AuthenticationManagerBuilder auth, PasswordEncoder passwordEncoder)
-      throws Exception {
-    auth.inMemoryAuthentication()
-        .withUser("student")
-        .password(passwordEncoder.encode("123"))
-        .roles("STUDENT")
-        .and()
-        .withUser("admin")
-        .password(passwordEncoder.encode("123"))
-        .roles("ADMIN");
-
-    auth.userDetailsService(userDetailsService);
-  }
-
   @Configuration
   public static class UiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
