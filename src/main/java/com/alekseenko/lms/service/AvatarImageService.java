@@ -5,9 +5,9 @@ import java.util.Optional;
 
 public interface AvatarImageService {
 
-    String getContentTypeByUser(String username);
+  String getContentTypeByUser(String username);
 
-    Optional<byte[]> getAvatarImageByUser(String username);
+  Optional<byte[]> getAvatarImageByUser(String username);
 
-    void saveAvatarImage(String username, String contentType, InputStream is);
+  void saveAvatarImage(String username, String contentType, InputStream is);
 }

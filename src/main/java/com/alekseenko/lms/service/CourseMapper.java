@@ -7,25 +7,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseMapper {
 
-    public CourseDto mapToCourseDtoWithoutUser(Course course) {
-        CourseDto courseDto = new CourseDto();
+  public CourseDto mapToCourseDtoWithoutUser(Course course) {
+    CourseDto courseDto = new CourseDto();
 
-        courseDto.setId(course.getId());
-        courseDto.setAuthor(course.getAuthor());
-        courseDto.setTitle(course.getTitle());
-        courseDto.setCourseImage(course.getCourseImage());
+    courseDto.setId(course.getId());
+    courseDto.setAuthor(course.getAuthor());
+    courseDto.setTitle(course.getTitle());
+    courseDto.setCourseImage(course.getCourseImage());
 
-        return courseDto;
-    }
+    return courseDto;
+  }
 
-    public CourseDto mapToCourseDtoWithoutImage(Course course) {
-        CourseDto courseDto = new CourseDto();
+  public CourseDto mapToCourseDtoWithoutImage(Course course) {
+    CourseDto courseDto = new CourseDto();
 
-        courseDto.setId(course.getId());
-        courseDto.setAuthor(course.getAuthor());
-        courseDto.setTitle(course.getTitle());
-        courseDto.setUsers(course.getUsers());
+    courseDto.setId(course.getId());
+    courseDto.setAuthor(course.getAuthor());
+    courseDto.setTitle(course.getTitle());
+    courseDto.setUsers(course.getUsers());
 
-        return courseDto;
-    }
+    return courseDto;
+  }
 }
