@@ -1,4 +1,5 @@
 package com.alekseenko.lms.controller;
 
-public class AccessDeniedException extends RuntimeException{
+public class AccessDeniedException extends RuntimeException {
+
 }

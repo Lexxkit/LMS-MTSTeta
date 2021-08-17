@@ -5,9 +5,9 @@ import java.util.Optional;
 
 public interface CourseImageService {
 
-    String getContentTypeByCourse(Long courseId);
+  String getContentTypeByCourse(Long courseId);
 
-    Optional<byte[]> getCourseImageByCourse(Long courseId);
+  Optional<byte[]> getCourseImageByCourse(Long courseId);
 
-    void saveCourseImage(Long courseId, String contentType, InputStream is);
+  void saveCourseImage(Long courseId, String contentType, InputStream is);
 }

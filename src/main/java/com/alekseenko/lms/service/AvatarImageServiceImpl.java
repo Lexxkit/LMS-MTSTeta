@@ -27,39 +27,40 @@ import org.springframework.stereotype.Service;
 @Service
 public class AvatarImageServiceImpl implements AvatarImageService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AvatarImageServiceImpl.class);
-    private final AvatarImageRepository avatarImageRepository;
-    private final UserRepository userRepository;
+  private static final Logger logger = LoggerFactory.getLogger(AvatarImageServiceImpl.class);
+  private final AvatarImageRepository avatarImageRepository;
+  private final UserRepository userRepository;
 
     @Value("${file.storage.avatar.path}")
     private String path;
 
-    @Autowired
-    public AvatarImageServiceImpl(AvatarImageRepository avatarImageRepository, UserRepository userRepository) {
-        this.avatarImageRepository = avatarImageRepository;
-        this.userRepository = userRepository;
-    }
+  @Autowired
+  public AvatarImageServiceImpl(AvatarImageRepository avatarImageRepository,
+      UserRepository userRepository) {
+    this.avatarImageRepository = avatarImageRepository;
+    this.userRepository = userRepository;
+  }
 
-    @Override
-    public String getContentTypeByUser(String username) {
-        return avatarImageRepository.findByUsername(username)
-                .map(AvatarImage::getContentType)
-                .orElseThrow(NotFoundException::new);
-    }
+  @Override
+  public String getContentTypeByUser(String username) {
+    return avatarImageRepository.findByUsername(username)
+        .map(AvatarImage::getContentType)
+        .orElseThrow(NotFoundException::new);
+  }
 
-    @Override
-    public Optional<byte[]> getAvatarImageByUser(String username) {
-        return avatarImageRepository.findByUsername(username)
-                .map(AvatarImage::getFilename)
-                .map(filename -> {
-                    try {
-                        return Files.readAllBytes(Path.of(path, filename));
-                    } catch (IOException ex) {
-                        logger.error("Can't read file {}", filename, ex);
-                        throw new IllegalStateException(ex);
-                    }
-                });
-    }
+  @Override
+  public Optional<byte[]> getAvatarImageByUser(String username) {
+    return avatarImageRepository.findByUsername(username)
+        .map(AvatarImage::getFilename)
+        .map(filename -> {
+          try {
+            return Files.readAllBytes(Path.of(path, filename));
+          } catch (IOException ex) {
+            logger.error("Can't read file {}", filename, ex);
+            throw new IllegalStateException(ex);
+          }
+        });
+  }
 
     @Override
     @Transactional
@@ -84,11 +85,12 @@ public class AvatarImageServiceImpl implements AvatarImageService {
         }
         avatarImageRepository.save(avatarImage);
 
-        try (OutputStream os = Files.newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
-            is.transferTo(os);
-        } catch (Exception ex) {
-            logger.error("Can't write to file {}", filename, ex);
-            throw new IllegalStateException(ex);
-        }
+    try (OutputStream os = Files
+        .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
+      is.transferTo(os);
+    } catch (Exception ex) {
+      logger.error("Can't write to file {}", filename, ex);
+      throw new IllegalStateException(ex);
     }
+  }
 }

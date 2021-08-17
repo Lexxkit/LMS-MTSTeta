@@ -27,39 +27,40 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseImageServiceImpl implements CourseImageService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AvatarImageServiceImpl.class);
-    private final CourseImageRepository courseImageRepository;
-    private final CourseRepository courseRepository;
+  private static final Logger logger = LoggerFactory.getLogger(AvatarImageServiceImpl.class);
+  private final CourseImageRepository courseImageRepository;
+  private final CourseRepository courseRepository;
 
-    @Autowired
-    public CourseImageServiceImpl(CourseImageRepository courseImageRepository, CourseRepository courseRepository) {
-        this.courseImageRepository = courseImageRepository;
-        this.courseRepository = courseRepository;
-    }
+  @Autowired
+  public CourseImageServiceImpl(CourseImageRepository courseImageRepository,
+      CourseRepository courseRepository) {
+    this.courseImageRepository = courseImageRepository;
+    this.courseRepository = courseRepository;
+  }
 
     @Value("${file.storage.logo.path}")
     private String path;
 
-    @Override
-    public String getContentTypeByCourse(Long courseId) {
-        return courseImageRepository.findByCourseId(courseId)
-                .map(CourseImage::getContentType)
-                .orElseThrow(NotFoundException::new);
-    }
+  @Override
+  public String getContentTypeByCourse(Long courseId) {
+    return courseImageRepository.findByCourseId(courseId)
+        .map(CourseImage::getContentType)
+        .orElseThrow(NotFoundException::new);
+  }
 
-    @Override
-    public Optional<byte[]> getCourseImageByCourse(Long courseId) {
-        return courseImageRepository.findByCourseId(courseId)
-                .map(CourseImage::getFilename)
-                .map(filename -> {
-                    try {
-                        return Files.readAllBytes(Path.of(path, filename));
-                    } catch (IOException ex) {
-                        logger.error("Can't read file {}", filename, ex);
-                        throw new IllegalStateException(ex);
-                    }
-                });
-    }
+  @Override
+  public Optional<byte[]> getCourseImageByCourse(Long courseId) {
+    return courseImageRepository.findByCourseId(courseId)
+        .map(CourseImage::getFilename)
+        .map(filename -> {
+          try {
+            return Files.readAllBytes(Path.of(path, filename));
+          } catch (IOException ex) {
+            logger.error("Can't read file {}", filename, ex);
+            throw new IllegalStateException(ex);
+          }
+        });
+  }
 
     @Override
     @Transactional
@@ -84,11 +85,12 @@ public class CourseImageServiceImpl implements CourseImageService {
         }
         courseImageRepository.save(courseImage);
 
-        try (OutputStream os = Files.newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
-            is.transferTo(os);
-        } catch (Exception ex) {
-            logger.error("Can't write to file {}", filename, ex);
-            throw new IllegalStateException(ex);
-        }
+    try (OutputStream os = Files
+        .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
+      is.transferTo(os);
+    } catch (Exception ex) {
+      logger.error("Can't write to file {}", filename, ex);
+      throw new IllegalStateException(ex);
     }
+  }
 }
