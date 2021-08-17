@@ -67,6 +67,6 @@ public class UserController {
   public String currentUserForm(Model model, @PathVariable("id") Long id) {
     model.addAttribute("user", userService.getUserById(id));
     model.addAttribute("activePage", "users");
-    return "user-edit";
+    return "user-create";
   }
 }
