@@ -9,6 +9,7 @@ import com.alekseenko.lms.dao.CourseImageRepository;
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.domain.CourseImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,8 +38,8 @@ public class CourseImageServiceImpl implements CourseImageService {
     this.courseRepository = courseRepository;
   }
 
-  @Value("${file.storage.path}")
-  private String path;
+    @Value("${file.storage.logo.path}")
+    private String path;
 
   @Override
   public String getContentTypeByCourse(Long courseId) {
@@ -61,23 +62,28 @@ public class CourseImageServiceImpl implements CourseImageService {
         });
   }
 
-  @Override
-  @Transactional
-  public void saveCourseImage(Long courseId, String contentType, InputStream is) {
-    Optional<CourseImage> opt = courseImageRepository.findByCourseId(courseId);
-    CourseImage courseImage;
-    String filename;
-    if (opt.isEmpty()) {
-      filename = UUID.randomUUID().toString();
-      Course course = courseRepository.findById(courseId)
-          .orElseThrow(NotFoundException::new);
-      courseImage = new CourseImage(null, contentType, filename, course);
-    } else {
-      courseImage = opt.get();
-      filename = courseImage.getFilename();
-      courseImage.setContentType(contentType);
-    }
-    courseImageRepository.save(courseImage);
+    @Override
+    @Transactional
+    public void saveCourseImage(Long courseId, String contentType, InputStream is) {
+        Optional<CourseImage> opt = courseImageRepository.findByCourseId(courseId);
+        CourseImage courseImage;
+        String filename;
+
+        if (Files.notExists(Path.of(path))) {
+            new File(path).mkdir();
+        }
+
+        if (opt.isEmpty()) {
+            filename = UUID.randomUUID().toString();
+            Course course = courseRepository.findById(courseId)
+                .orElseThrow(NotFoundException::new);
+            courseImage = new CourseImage(null, contentType, filename, course);
+        } else {
+            courseImage = opt.get();
+            filename = courseImage.getFilename();
+            courseImage.setContentType(contentType);
+        }
+        courseImageRepository.save(courseImage);
 
     try (OutputStream os = Files
         .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {

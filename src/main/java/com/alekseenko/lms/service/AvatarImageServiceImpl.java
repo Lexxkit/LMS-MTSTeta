@@ -9,6 +9,7 @@ import com.alekseenko.lms.dao.AvatarImageRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.AvatarImage;
 import com.alekseenko.lms.domain.User;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,8 +31,8 @@ public class AvatarImageServiceImpl implements AvatarImageService {
   private final AvatarImageRepository avatarImageRepository;
   private final UserRepository userRepository;
 
-  @Value("${file.storage.path}")
-  private String path;
+    @Value("${file.storage.avatar.path}")
+    private String path;
 
   @Autowired
   public AvatarImageServiceImpl(AvatarImageRepository avatarImageRepository,
@@ -61,23 +62,28 @@ public class AvatarImageServiceImpl implements AvatarImageService {
         });
   }
 
-  @Override
-  @Transactional
-  public void saveAvatarImage(String username, String contentType, InputStream is) {
-    Optional<AvatarImage> opt = avatarImageRepository.findByUsername(username);
-    AvatarImage avatarImage;
-    String filename;
-    if (opt.isEmpty()) {
-      filename = UUID.randomUUID().toString();
-      User user = userRepository.findUserByUsername(username)
-          .orElseThrow(IllegalArgumentException::new);
-      avatarImage = new AvatarImage(null, contentType, filename, user);
-    } else {
-      avatarImage = opt.get();
-      filename = avatarImage.getFilename();
-      avatarImage.setContentType(contentType);
-    }
-    avatarImageRepository.save(avatarImage);
+    @Override
+    @Transactional
+    public void saveAvatarImage(String username, String contentType, InputStream is) {
+        Optional<AvatarImage> opt = avatarImageRepository.findByUsername(username);
+        AvatarImage avatarImage;
+        String filename;
+
+        if (Files.notExists(Path.of(path))) {
+            new File(path).mkdir();
+        }
+
+        if (opt.isEmpty()) {
+            filename = UUID.randomUUID().toString();
+            User user = userRepository.findUserByUsername(username)
+                .orElseThrow(IllegalArgumentException::new);
+            avatarImage = new AvatarImage(null, contentType, filename, user);
+        } else {
+            avatarImage = opt.get();
+            filename = avatarImage.getFilename();
+            avatarImage.setContentType(contentType);
+        }
+        avatarImageRepository.save(avatarImage);
 
     try (OutputStream os = Files
         .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
