@@ -9,12 +9,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,22 @@ public class User {
 
   @Column
   private String password;
+
+  @Column
+  private String firstName;
+
+  @Column
+  private String lastName;
+
+  @Column(unique = true)
+  @Email
+  private String email;
+
+  @OneToMany(mappedBy = "createdByUser", cascade = CascadeType.REMOVE)
+  private Set<Course> createdCourses;
+
+  @OneToMany(mappedBy = "updatedByUser", cascade = CascadeType.REMOVE)
+  private Set<Course> updatedCourses;
 
   @ManyToMany(mappedBy = "users")
   private Set<Course> courses;
@@ -58,6 +76,23 @@ public class User {
     this.roles = roles;
   }
 
+  public User(Long id, String username, String password, String firstName, String lastName,
+      String email, Set<Course> createdCourses,
+      Set<Course> updatedCourses, Set<Course> courses,
+      Set<Role> roles, AvatarImage avatarImage) {
+    this.id = id;
+    this.username = username;
+    this.password = password;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.createdCourses = createdCourses;
+    this.updatedCourses = updatedCourses;
+    this.courses = courses;
+    this.roles = roles;
+    this.avatarImage = avatarImage;
+  }
+
   public Long getId() {
     return id;
   }
@@ -80,6 +115,46 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public Set<Course> getCreatedCourses() {
+    return createdCourses;
+  }
+
+  public void setCreatedCourses(Set<Course> createdCourses) {
+    this.createdCourses = createdCourses;
+  }
+
+  public Set<Course> getUpdatedCourses() {
+    return updatedCourses;
+  }
+
+  public void setUpdatedCourses(Set<Course> updatedCourses) {
+    this.updatedCourses = updatedCourses;
   }
 
   public Set<Course> getCourses() {

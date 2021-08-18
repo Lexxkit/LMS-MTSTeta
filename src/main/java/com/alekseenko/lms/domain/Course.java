@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "courses")
-public class Course {
+public class Course extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +29,19 @@ public class Course {
 
   @Column
   private String title;
+
+  @Column
+  @Lob
+  private String description;
+
+  @Column
+  private Integer durationWeeks;
+
+  @Column
+  private String tag;
+
+  @Column
+  private Double avgRating;
 
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
   @OrderBy("id")
@@ -46,6 +60,21 @@ public class Course {
     this.id = id;
     this.author = author;
     this.title = title;
+    this.courseImage = courseImage;
+  }
+
+  public Course(Long id, String author, String title, String description,
+      Integer durationWeeks, String tag, Double avgRating,
+      List<Lesson> lessons, Set<User> users, CourseImage courseImage) {
+    this.id = id;
+    this.author = author;
+    this.title = title;
+    this.description = description;
+    this.durationWeeks = durationWeeks;
+    this.tag = tag;
+    this.avgRating = avgRating;
+    this.lessons = lessons;
+    this.users = users;
     this.courseImage = courseImage;
   }
 
@@ -73,6 +102,38 @@ public class Course {
     this.title = title;
   }
 
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Integer getDurationWeeks() {
+    return durationWeeks;
+  }
+
+  public void setDurationWeeks(Integer durationWeeks) {
+    this.durationWeeks = durationWeeks;
+  }
+
+  public String getTag() {
+    return tag;
+  }
+
+  public void setTag(String tag) {
+    this.tag = tag;
+  }
+
+  public Double getAvgRating() {
+    return avgRating;
+  }
+
+  public void setAvgRating(Double avgRating) {
+    this.avgRating = avgRating;
+  }
+
   public List<Lesson> getLessons() {
     return lessons;
   }
@@ -96,4 +157,5 @@ public class Course {
   public void setCourseImage(CourseImage courseImage) {
     this.courseImage = courseImage;
   }
+
 }
