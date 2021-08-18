@@ -53,6 +53,10 @@ public class User extends BaseEntity {
   @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
   private AvatarImage avatarImage;
 
+  // TODO: 18.08.2021 При удалении юзера - его новости удаляем?
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private Set<News> news;
+
   public User() {
   }
 
@@ -79,7 +83,7 @@ public class User extends BaseEntity {
   public User(Long id, String username, String password, String firstName, String lastName,
       String email, Set<Course> createdCourses,
       Set<Course> updatedCourses, Set<Course> courses,
-      Set<Role> roles, AvatarImage avatarImage) {
+      Set<Role> roles, AvatarImage avatarImage, Set<News> news) {
     this.id = id;
     this.username = username;
     this.password = password;
@@ -91,6 +95,7 @@ public class User extends BaseEntity {
     this.courses = courses;
     this.roles = roles;
     this.avatarImage = avatarImage;
+    this.news = news;
   }
 
   public Long getId() {
@@ -179,6 +184,14 @@ public class User extends BaseEntity {
 
   public void setAvatarImage(AvatarImage avatarImage) {
     this.avatarImage = avatarImage;
+  }
+
+  public Set<News> getNews() {
+    return news;
+  }
+
+  public void setNews(Set<News> news) {
+    this.news = news;
   }
 
   @Override

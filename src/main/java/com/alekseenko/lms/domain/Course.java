@@ -43,9 +43,9 @@ public class Course extends BaseEntity {
   @Column
   private Double avgRating;
 
-  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-  @OrderBy("id")
-  private List<Lesson> lessons;
+  @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE) // TODO: 18.08.2021 Уточнить тип удаления 
+  @OrderBy("id") 
+  private List<Module> modules;
 
   @ManyToMany
   private Set<User> users;
@@ -65,7 +65,7 @@ public class Course extends BaseEntity {
 
   public Course(Long id, String author, String title, String description,
       Integer durationWeeks, String tag, Double avgRating,
-      List<Lesson> lessons, Set<User> users, CourseImage courseImage) {
+      List<Module> modules, Set<User> users, CourseImage courseImage) {
     this.id = id;
     this.author = author;
     this.title = title;
@@ -73,7 +73,7 @@ public class Course extends BaseEntity {
     this.durationWeeks = durationWeeks;
     this.tag = tag;
     this.avgRating = avgRating;
-    this.lessons = lessons;
+    this.modules = modules;
     this.users = users;
     this.courseImage = courseImage;
   }
@@ -134,12 +134,12 @@ public class Course extends BaseEntity {
     this.avgRating = avgRating;
   }
 
-  public List<Lesson> getLessons() {
-    return lessons;
+  public List<Module> getModules() {
+    return modules;
   }
 
-  public void setLessons(List<Lesson> lessons) {
-    this.lessons = lessons;
+  public void setModules(List<Module> modules) {
+    this.modules = modules;
   }
 
   public Set<User> getUsers() {

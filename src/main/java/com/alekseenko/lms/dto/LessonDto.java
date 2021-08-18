@@ -10,28 +10,28 @@ public class LessonDto {
   private String title;
 
   @NotBlank(message = "Text shouldn't be empty")
-  private String text;
+  private String content;
 
-  private Long courseId;
+  private Long moduleId;
 
   public LessonDto() {
   }
 
-  public LessonDto(Long courseId) {
-    this.courseId = courseId;
+  public LessonDto(Long moduleId) {
+    this.moduleId = moduleId;
   }
 
-  public LessonDto(Long id, String title, Long courseId) {
+  public LessonDto(Long id, String title, Long moduleId) {
     this.id = id;
     this.title = title;
-    this.courseId = courseId;
+    this.moduleId = moduleId;
   }
 
-  public LessonDto(Long id, String title, String text, Long courseId) {
+  public LessonDto(Long id, String title, String content, Long moduleId) {
     this.id = id;
     this.title = title;
-    this.text = text;
-    this.courseId = courseId;
+    this.content = content;
+    this.moduleId = moduleId;
   }
 
   public Long getId() {
@@ -50,20 +50,20 @@ public class LessonDto {
     this.title = title;
   }
 
-  public String getText() {
-    return text;
+  public String getContent() {
+    return content;
   }
 
-  public void setText(String text) {
-    this.text = text;
+  public void setContent(String content) {
+    this.content = content;
   }
 
-  public Long getCourseId() {
-    return courseId;
+  public Long getModuleId() {
+    return moduleId;
   }
 
-  public void setCourseId(Long courseId) {
-    this.courseId = courseId;
+  public void setModuleId(Long moduleId) {
+    this.moduleId = moduleId;
   }
 }
 

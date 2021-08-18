@@ -40,7 +40,7 @@ public class LessonController {
       return "lesson-form";
     }
     lessonService.saveLesson(lessonDto);
-    return String.format("redirect:/course/%d", lessonDto.getCourseId());
+    return String.format("redirect:/course/%d", lessonDto.getModuleId());
   }
 
 
