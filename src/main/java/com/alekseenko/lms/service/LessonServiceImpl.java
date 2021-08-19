@@ -1,10 +1,10 @@
 package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.controller.NotFoundException;
-import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.LessonRepository;
-import com.alekseenko.lms.domain.Course;
+import com.alekseenko.lms.dao.ModuleRepository;
 import com.alekseenko.lms.domain.Lesson;
+import com.alekseenko.lms.domain.Module;
 import com.alekseenko.lms.dto.LessonDto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +14,19 @@ import org.springframework.stereotype.Service;
 public class LessonServiceImpl implements LessonService {
 
   private final LessonRepository lessonRepository;
-  private final CourseRepository courseRepository;
+  private final ModuleRepository moduleRepository;
 
   @Autowired
-  public LessonServiceImpl(LessonRepository lessonRepository, CourseRepository courseRepository) {
+  public LessonServiceImpl(LessonRepository lessonRepository, ModuleRepository moduleRepository) {
     this.lessonRepository = lessonRepository;
-    this.courseRepository = courseRepository;
+    this.moduleRepository = moduleRepository;
   }
 
   @Override
   public LessonDto getLessonById(Long id) {
     return lessonRepository.findById(id)
-        .map(lsn -> new LessonDto(lsn.getId(), lsn.getTitle(), lsn.getText(),
-            lsn.getCourse().getId()))
+        .map(lsn -> new LessonDto(lsn.getId(), lsn.getTitle(), lsn.getDescription(),
+            lsn.getModule().getId()))
         .orElseThrow(NotFoundException::new);
   }
 
@@ -37,13 +37,13 @@ public class LessonServiceImpl implements LessonService {
 
   @Override
   public void saveLesson(LessonDto lessonDto) {
-    Course currentCourse = courseRepository.findById(lessonDto.getCourseId())
+    Module currentModule = moduleRepository.findById(lessonDto.getModuleId())
         .orElseThrow(NotFoundException::new);
     Lesson lesson = new Lesson(
         lessonDto.getId(),
         lessonDto.getTitle(),
-        lessonDto.getText(),
-        currentCourse
+        lessonDto.getContent(),
+        currentModule
     );
     lessonRepository.save(lesson);
   }

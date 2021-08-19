@@ -1,59 +1,50 @@
 package com.alekseenko.lms.domain;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "lessons")
-public class Lesson extends BaseEntity {
+@Table(name = "modules")
+public class Module extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column
   private Long id;
 
-  @NotBlank(message = "Lesson title has to be filled")
   @Column
   private String title;
 
-  @Lob
   @Column
   private String description;
 
-  @NotBlank(message = "Lesson test has to be filled")
-  @Lob
-  @Column
-  private String content;
+  @ManyToOne
+  private Course course;
 
-  @ManyToOne(optional = false)
-  private Module module;
+  @OneToMany(mappedBy = "module", cascade = CascadeType.REMOVE)
+  @OrderBy("id")
+  private List<Lesson> lessons;
 
-  public Lesson() {
+  public Module() {
   }
 
-  public Lesson(Long id, String title, String content, Module module) {
-    this.id = id;
-    this.title = title;
-    this.content = content;
-    this.module = module;
-  }
-
-  public Lesson(Long id, String title, String description, String content,
-      Module module) {
+  public Module(Long id, String title, String description, Course course,
+      List<Lesson> lessons) {
     this.id = id;
     this.title = title;
     this.description = description;
-    this.content = content;
-    this.module = module;
+    this.course = course;
+    this.lessons = lessons;
   }
-
 
   public Long getId() {
     return id;
@@ -79,19 +70,19 @@ public class Lesson extends BaseEntity {
     this.description = description;
   }
 
-  public String getContent() {
-    return content;
+  public Course getCourse() {
+    return course;
   }
 
-  public void setContent(String content) {
-    this.content = content;
+  public void setCourse(Course course) {
+    this.course = course;
   }
 
-  public Module getModule() {
-    return module;
+  public List<Lesson> getLessons() {
+    return lessons;
   }
 
-  public void setModule(Module module) {
-    this.module = module;
+  public void setLessons(List<Lesson> lessons) {
+    this.lessons = lessons;
   }
 }

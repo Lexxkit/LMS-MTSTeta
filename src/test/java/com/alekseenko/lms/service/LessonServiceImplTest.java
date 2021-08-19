@@ -3,8 +3,10 @@ package com.alekseenko.lms.service;
 import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.LessonRepository;
+import com.alekseenko.lms.dao.ModuleRepository;
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.domain.Lesson;
+import com.alekseenko.lms.domain.Module;
 import com.alekseenko.lms.dto.LessonDto;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,8 @@ public class LessonServiceImplTest {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
+    private ModuleRepository moduleRepository;
+    @Autowired
     private LessonService lessonService;
     @MockBean
     private MyEventListener myEventListener;
@@ -37,7 +41,9 @@ public class LessonServiceImplTest {
     void setUp() {
         Course course1 = new Course(1L, "Oleg", "Learning test", null);
         courseRepository.save(course1);
-        Lesson lesson = new Lesson(1L, "Title", "Text", course1);
+        Module module1 = new Module(1L, "Learning test", "Desc", course1, null);
+        moduleRepository.save(module1);
+        Lesson lesson = new Lesson(1L, "Title", "Text", module1);
         lessonRepository.save(lesson);
     }
 
@@ -45,7 +51,7 @@ public class LessonServiceImplTest {
     void shouldFindLessonById() throws Exception{
         final var lesson = lessonService.getLessonById(1L);
         assertThat(lesson.getTitle()).isEqualTo("Title");
-        assertThat(lesson.getText()).isEqualTo("Text");
+        assertThat(lesson.getContent()).isEqualTo("Text");
         assertThatThrownBy(() -> {
             lessonService.getLessonById(999L);
         }).isInstanceOf(NotFoundException.class);
@@ -55,7 +61,7 @@ public class LessonServiceImplTest {
     void shouldFindAllForLessonIdWithoutText() {
         final var lessons = lessonService.getAllForLessonIdWithoutText(1L);
         assertThat(lessons.size()).isEqualTo(1);
-        assertThat(lessons.get(0).getText()).isNull();
+        assertThat(lessons.get(0).getContent()).isNull();
     }
 
     @Test

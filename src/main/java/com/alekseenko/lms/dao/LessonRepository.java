@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
-  @Query("select new com.alekseenko.lms.dto.LessonDto(l.id, l.title, l.course.id) " +
-      "from Lesson l where l.course.id = :id")
+  @Query("select new com.alekseenko.lms.dto.LessonDto(l.id, l.title, l.module.id) " +
+      "from Lesson l where l.module.id = :id")
   List<LessonDto> findAllForLessonIdWithoutText(@Param("id") Long id);
 }
