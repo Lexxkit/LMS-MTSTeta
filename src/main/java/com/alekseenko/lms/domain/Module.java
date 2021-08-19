@@ -30,7 +30,7 @@ public class Module extends BaseEntity {
   @ManyToOne
   private Course course;
 
-  @OneToMany(mappedBy = "module", cascade = CascadeType.REMOVE) // TODO: 18.08.2021 Уточнить тип удаления
+  @OneToMany(mappedBy = "module", cascade = CascadeType.REMOVE)
   @OrderBy("id")
   private List<Lesson> lessons;
 

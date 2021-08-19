@@ -48,7 +48,7 @@ public class MyEventListener {
       Role role_admin = new Role(ROLE_ADMIN);
       Role role_tutor = new Role(ROLE_TUTOR);
       Role role_student = new Role(ROLE_STUDENT);
-      roleRepository.saveAll(List.of(role_admin, role_student));
+      roleRepository.saveAll(List.of(role_owner, role_admin, role_tutor, role_student));
     }
 
     List<UserDto> users = userService.findAllUsers();

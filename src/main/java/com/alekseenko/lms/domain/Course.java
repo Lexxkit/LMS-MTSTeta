@@ -53,6 +53,9 @@ public class Course extends BaseEntity {
   @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
   private CourseImage courseImage;
 
+  @OneToMany(mappedBy = "course")
+  private Set<CourseRating> courseRatings;
+
   public Course() {
   }
 
@@ -65,7 +68,8 @@ public class Course extends BaseEntity {
 
   public Course(Long id, String author, String title, String description,
       Integer durationWeeks, String tag, Double avgRating,
-      List<Module> modules, Set<User> users, CourseImage courseImage) {
+      List<Module> modules, Set<User> users, CourseImage courseImage,
+      Set<CourseRating> courseRatings) {
     this.id = id;
     this.author = author;
     this.title = title;
@@ -76,6 +80,7 @@ public class Course extends BaseEntity {
     this.modules = modules;
     this.users = users;
     this.courseImage = courseImage;
+    this.courseRatings = courseRatings;
   }
 
   public Long getId() {
@@ -158,4 +163,11 @@ public class Course extends BaseEntity {
     this.courseImage = courseImage;
   }
 
+  public Set<CourseRating> getCourseRatings() {
+    return courseRatings;
+  }
+
+  public void setCourseRatings(Set<CourseRating> courseRatings) {
+    this.courseRatings = courseRatings;
+  }
 }

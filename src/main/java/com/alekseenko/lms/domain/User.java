@@ -38,11 +38,36 @@ public class User extends BaseEntity {
   @Email
   private String email;
 
+  @Column
+  private String phone;
+
+  @Column
+  private String socialNetworkLink;
+
+  // TODO: 19.08.2021 Не понимаю, нужно ли прописывать эти поля или unidirectional связи из BaseEntity достаточно
   @OneToMany(mappedBy = "createdByUser", cascade = CascadeType.REMOVE)
   private Set<Course> createdCourses;
 
   @OneToMany(mappedBy = "updatedByUser", cascade = CascadeType.REMOVE)
   private Set<Course> updatedCourses;
+
+  @OneToMany(mappedBy = "createdByUser", cascade = CascadeType.REMOVE)
+  private Set<Module> createdModules;
+
+  @OneToMany(mappedBy = "updatedByUser", cascade = CascadeType.REMOVE)
+  private Set<Module> updatedModules;
+
+  @OneToMany(mappedBy = "createdByUser", cascade = CascadeType.REMOVE)
+  private Set<Lesson> createdLessons;
+
+  @OneToMany(mappedBy = "updatedByUser", cascade = CascadeType.REMOVE)
+  private Set<Lesson> updatedLessons;
+
+  @OneToMany(mappedBy = "createdByUser", cascade = CascadeType.REMOVE)
+  private Set<News> createdNews;
+
+  @OneToMany(mappedBy = "updatedByUser", cascade = CascadeType.REMOVE)
+  private Set<News> updatedNews;
 
   @ManyToMany(mappedBy = "users")
   private Set<Course> courses;
@@ -53,9 +78,11 @@ public class User extends BaseEntity {
   @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
   private AvatarImage avatarImage;
 
-  // TODO: 18.08.2021 При удалении юзера - его новости удаляем?
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
   private Set<News> news;
+
+  @OneToMany(mappedBy = "user")
+  private Set<CourseRating> courseRatings;
 
   public User() {
   }
@@ -81,21 +108,34 @@ public class User extends BaseEntity {
   }
 
   public User(Long id, String username, String password, String firstName, String lastName,
-      String email, Set<Course> createdCourses,
-      Set<Course> updatedCourses, Set<Course> courses,
-      Set<Role> roles, AvatarImage avatarImage, Set<News> news) {
+      String email, String phone, String socialNetworkLink,
+      Set<Course> createdCourses, Set<Course> updatedCourses,
+      Set<Module> createdModules, Set<Module> updatedModules,
+      Set<Lesson> createdLessons, Set<Lesson> updatedLessons,
+      Set<News> createdNews, Set<News> updatedNews,
+      Set<Course> courses, Set<Role> roles, AvatarImage avatarImage,
+      Set<News> news, Set<CourseRating> courseRatings) {
     this.id = id;
     this.username = username;
     this.password = password;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
+    this.phone = phone;
+    this.socialNetworkLink = socialNetworkLink;
     this.createdCourses = createdCourses;
     this.updatedCourses = updatedCourses;
+    this.createdModules = createdModules;
+    this.updatedModules = updatedModules;
+    this.createdLessons = createdLessons;
+    this.updatedLessons = updatedLessons;
+    this.createdNews = createdNews;
+    this.updatedNews = updatedNews;
     this.courses = courses;
     this.roles = roles;
     this.avatarImage = avatarImage;
     this.news = news;
+    this.courseRatings = courseRatings;
   }
 
   public Long getId() {
@@ -146,6 +186,22 @@ public class User extends BaseEntity {
     this.email = email;
   }
 
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public String getSocialNetworkLink() {
+    return socialNetworkLink;
+  }
+
+  public void setSocialNetworkLink(String socialNetworkLink) {
+    this.socialNetworkLink = socialNetworkLink;
+  }
+
   public Set<Course> getCreatedCourses() {
     return createdCourses;
   }
@@ -160,6 +216,54 @@ public class User extends BaseEntity {
 
   public void setUpdatedCourses(Set<Course> updatedCourses) {
     this.updatedCourses = updatedCourses;
+  }
+
+  public Set<Module> getCreatedModules() {
+    return createdModules;
+  }
+
+  public void setCreatedModules(Set<Module> createdModules) {
+    this.createdModules = createdModules;
+  }
+
+  public Set<Module> getUpdatedModules() {
+    return updatedModules;
+  }
+
+  public void setUpdatedModules(Set<Module> updatedModules) {
+    this.updatedModules = updatedModules;
+  }
+
+  public Set<Lesson> getCreatedLessons() {
+    return createdLessons;
+  }
+
+  public void setCreatedLessons(Set<Lesson> createdLessons) {
+    this.createdLessons = createdLessons;
+  }
+
+  public Set<Lesson> getUpdatedLessons() {
+    return updatedLessons;
+  }
+
+  public void setUpdatedLessons(Set<Lesson> updatedLessons) {
+    this.updatedLessons = updatedLessons;
+  }
+
+  public Set<News> getCreatedNews() {
+    return createdNews;
+  }
+
+  public void setCreatedNews(Set<News> createdNews) {
+    this.createdNews = createdNews;
+  }
+
+  public Set<News> getUpdatedNews() {
+    return updatedNews;
+  }
+
+  public void setUpdatedNews(Set<News> updatedNews) {
+    this.updatedNews = updatedNews;
   }
 
   public Set<Course> getCourses() {
@@ -192,6 +296,14 @@ public class User extends BaseEntity {
 
   public void setNews(Set<News> news) {
     this.news = news;
+  }
+
+  public Set<CourseRating> getCourseRatings() {
+    return courseRatings;
+  }
+
+  public void setCourseRatings(Set<CourseRating> courseRatings) {
+    this.courseRatings = courseRatings;
   }
 
   @Override

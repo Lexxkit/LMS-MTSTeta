@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "lessons")
-public class Lesson {
+public class Lesson extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
