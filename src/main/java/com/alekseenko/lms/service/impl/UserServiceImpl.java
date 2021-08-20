@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,15 @@ public class UserServiceImpl implements UserService {
     this.userMapper = userMapper;
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+  }
+
+  @Override
+  public List<UserDto> getUsers(Long id, HttpServletRequest request) {
+    if (request.isUserInRole(RoleConstants.ROLE_ADMIN)) {
+     return getUsersNotAssignedToCourse(id);
+    } else {
+      return assignSingleUserToCourse(request.getRemoteUser());
+    }
   }
 
   @Override

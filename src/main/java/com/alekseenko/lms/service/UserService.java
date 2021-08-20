@@ -2,8 +2,11 @@ package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.dto.UserDto;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
+
+  List<UserDto> getUsers(Long id, HttpServletRequest request);
 
   List<UserDto> findAllUsers();
 

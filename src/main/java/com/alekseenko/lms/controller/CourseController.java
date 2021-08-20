@@ -100,11 +100,7 @@ public class CourseController {
       @PathVariable("id") Long id) {
     model.addAttribute("activePage", "courses");
     model.addAttribute("courseId", id);
-    if (request.isUserInRole(RoleConstants.ROLE_ADMIN)) {
-      model.addAttribute("users", userService.getUsersNotAssignedToCourse(id));
-    } else {
-      model.addAttribute("users", userService.assignSingleUserToCourse(request.getRemoteUser()));
-    }
+    model.addAttribute("users", userService.getUsers(id, request));
     return "course-assign";
   }
 
