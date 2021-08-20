@@ -2,13 +2,11 @@ package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.conastants.RoleConstants;
 import com.alekseenko.lms.dto.CourseDto;
-import com.alekseenko.lms.exception.InternalServerException;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.CourseImageService;
 import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.LessonService;
 import com.alekseenko.lms.service.UserService;
-import java.io.IOException;
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -151,17 +149,7 @@ public class CourseController {
   @PostMapping("/{id}/picture")
   public String updateCourseImage(@PathVariable("id") Long courseId,
       @RequestParam("courseImage") MultipartFile courseImage) {
-    if (!courseImage.isEmpty()) {
-      logger.info("File name {}, file content type {}, file size {}",
-          courseImage.getOriginalFilename(), courseImage.getContentType(), courseImage.getSize());
-      try {
-        courseImageService
-            .saveCourseImage(courseId, courseImage.getContentType(), courseImage.getInputStream());
-      } catch (IOException ex) {
-        logger.info("Read file error", ex);
-        throw new InternalServerException("Internal server error");
-      }
-    }
+      courseImageService.saveCourseImage(courseId, courseImage);
     return String.format("redirect:/course/%d", courseId);
   }
 }

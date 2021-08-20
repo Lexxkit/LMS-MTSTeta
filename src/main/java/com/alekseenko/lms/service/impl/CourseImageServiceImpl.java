@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CourseImageServiceImpl implements CourseImageService {
@@ -65,34 +66,46 @@ public class CourseImageServiceImpl implements CourseImageService {
 
   @Override
   @Transactional
-  public void saveCourseImage(Long courseId, String contentType, InputStream is) {
-    Optional<CourseImage> opt = courseImageRepository.findByCourseId(courseId);
+  public void saveCourseImage(Long courseId, MultipartFile multipartFile) {
     CourseImage courseImage;
-    String filename;
+    InputStream is = null;
 
-    if (Files.notExists(Path.of(path))) {
-      new File(path).mkdir();
-    }
+    if (!multipartFile.isEmpty()) {
+      String contentType = multipartFile.getContentType();
+      try {
+        is = multipartFile.getInputStream();
+      } catch (IOException e) {
+        logger.info("Read file error", e);
+      }
+      Optional<CourseImage> opt = courseImageRepository.findByCourseId(courseId);
 
-    if (opt.isEmpty()) {
-      filename = UUID.randomUUID().toString();
-      Course course = courseRepository.findById(courseId)
-          .orElseThrow(
-              () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
-      courseImage = new CourseImage(null, contentType, filename, course);
-    } else {
-      courseImage = opt.get();
-      filename = courseImage.getFilename();
-      courseImage.setContentType(contentType);
-    }
-    courseImageRepository.save(courseImage);
+      String filename;
 
-    try (OutputStream os = Files
-        .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
-      is.transferTo(os);
-    } catch (Exception ex) {
-      logger.error("Can't write to file {}", filename, ex);
-      throw new IllegalStateException(ex);
+      if (Files.notExists(Path.of(path))) {
+        new File(path).mkdir();
+      }
+
+      if (opt.isEmpty()) {
+        filename = UUID.randomUUID().toString();
+        Course course = courseRepository.findById(courseId)
+            .orElseThrow(
+                () -> new NotFoundException(
+                    String.format("Course with id#%d not found", courseId)));
+        courseImage = new CourseImage(null, contentType, filename, course);
+      } else {
+        courseImage = opt.get();
+        filename = courseImage.getFilename();
+        courseImage.setContentType(contentType);
+      }
+      courseImageRepository.save(courseImage);
+
+      try (OutputStream os = Files
+          .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
+        is.transferTo(os);
+      } catch (Exception ex) {
+        logger.error("Can't write to file {}", filename, ex);
+        throw new IllegalStateException(ex);
+      }
     }
   }
 }
