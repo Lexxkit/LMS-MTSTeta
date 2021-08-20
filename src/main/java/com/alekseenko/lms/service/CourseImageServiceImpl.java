@@ -4,11 +4,11 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 
-import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.CourseImageRepository;
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.domain.CourseImage;
+import com.alekseenko.lms.exception.NotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +30,8 @@ public class CourseImageServiceImpl implements CourseImageService {
   private static final Logger logger = LoggerFactory.getLogger(AvatarImageServiceImpl.class);
   private final CourseImageRepository courseImageRepository;
   private final CourseRepository courseRepository;
+  @Value("${file.storage.logo.path}")
+  private String path;
 
   @Autowired
   public CourseImageServiceImpl(CourseImageRepository courseImageRepository,
@@ -38,14 +40,12 @@ public class CourseImageServiceImpl implements CourseImageService {
     this.courseRepository = courseRepository;
   }
 
-    @Value("${file.storage.logo.path}")
-    private String path;
-
   @Override
   public String getContentTypeByCourse(Long courseId) {
     return courseImageRepository.findByCourseId(courseId)
         .map(CourseImage::getContentType)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(
+            () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
   }
 
   @Override
@@ -62,28 +62,29 @@ public class CourseImageServiceImpl implements CourseImageService {
         });
   }
 
-    @Override
-    @Transactional
-    public void saveCourseImage(Long courseId, String contentType, InputStream is) {
-        Optional<CourseImage> opt = courseImageRepository.findByCourseId(courseId);
-        CourseImage courseImage;
-        String filename;
+  @Override
+  @Transactional
+  public void saveCourseImage(Long courseId, String contentType, InputStream is) {
+    Optional<CourseImage> opt = courseImageRepository.findByCourseId(courseId);
+    CourseImage courseImage;
+    String filename;
 
-        if (Files.notExists(Path.of(path))) {
-            new File(path).mkdir();
-        }
+    if (Files.notExists(Path.of(path))) {
+      new File(path).mkdir();
+    }
 
-        if (opt.isEmpty()) {
-            filename = UUID.randomUUID().toString();
-            Course course = courseRepository.findById(courseId)
-                .orElseThrow(NotFoundException::new);
-            courseImage = new CourseImage(null, contentType, filename, course);
-        } else {
-            courseImage = opt.get();
-            filename = courseImage.getFilename();
-            courseImage.setContentType(contentType);
-        }
-        courseImageRepository.save(courseImage);
+    if (opt.isEmpty()) {
+      filename = UUID.randomUUID().toString();
+      Course course = courseRepository.findById(courseId)
+          .orElseThrow(
+              () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
+      courseImage = new CourseImage(null, contentType, filename, course);
+    } else {
+      courseImage = opt.get();
+      filename = courseImage.getFilename();
+      courseImage.setContentType(contentType);
+    }
+    courseImageRepository.save(courseImage);
 
     try (OutputStream os = Files
         .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {

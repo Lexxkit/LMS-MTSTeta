@@ -1,12 +1,12 @@
 package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.RoleConstants;
-import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.exception.NotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -52,14 +52,14 @@ public class UserServiceImpl implements UserService {
   public UserDto getUserById(Long id) {
     return userRepository.findById(id)
         .map(userMapper::mapToUserDto)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("User with id#%d not found", id)));
   }
 
   @Override
   public UserDto getUserByUsername(String username) {
     return userRepository.findUserByUsername(username)
         .map(userMapper::mapToUserDto)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("User %s not found", username)));
   }
 
   @Override
@@ -72,7 +72,9 @@ public class UserServiceImpl implements UserService {
   public void saveUser(UserDto userDto) {
     // New users get ROLE_STUDENT upon registration
     if (userDto.getRoles() == null) {
-      Role studentRole = roleRepository.findRoleByName(RoleConstants.ROLE_STUDENT).get();
+      Role studentRole = roleRepository.findRoleByName(RoleConstants.ROLE_STUDENT)
+          .orElseThrow(
+              () -> new NotFoundException(String.format("Role %s not found", userDto.getRoles())));
       userDto.setRoles(Set.of(studentRole));
     }
     userRepository.save(new User(userDto.getId(),
@@ -86,7 +88,7 @@ public class UserServiceImpl implements UserService {
   public List<UserDto> assignSingleUserToCourse(String username) {
     UserDto userDto = userRepository.findUserByUsername(username)
         .map(userMapper::mapToUserDto)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("User %s not found", username)));
     return Collections.singletonList(userDto);
   }
 }

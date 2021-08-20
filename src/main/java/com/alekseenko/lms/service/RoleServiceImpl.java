@@ -1,8 +1,8 @@
 package com.alekseenko.lms.service;
 
-import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dto.RoleDto;
+import com.alekseenko.lms.exception.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,6 @@ public class RoleServiceImpl implements RoleService {
   public RoleDto getRoleByName(String name) {
     return roleRepository.findRoleByName(name)
         .map(role -> new RoleDto(role.getName()))
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("Role %s not found", name)));
   }
 }

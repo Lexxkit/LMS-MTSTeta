@@ -2,6 +2,8 @@ package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.RoleConstants;
 import com.alekseenko.lms.dto.CourseDto;
+import com.alekseenko.lms.exception.InternalServerException;
+import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.CourseImageService;
 import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.LessonService;
@@ -145,7 +147,7 @@ public class CourseController {
   public ResponseEntity<byte[]> courseImage(@PathVariable("id") Long courseId) {
     String contentType = courseImageService.getContentTypeByCourse(courseId);
     byte[] data = courseImageService.getCourseImageByCourse(courseId)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType(contentType))
@@ -164,7 +166,7 @@ public class CourseController {
             .saveCourseImage(courseId, courseImage.getContentType(), courseImage.getInputStream());
       } catch (Exception ex) {
         logger.info("", ex);
-        throw new InternalServerError();
+        throw new InternalServerException("Internal server error");
       }
     }
     return String.format("redirect:/course/%d", courseId);

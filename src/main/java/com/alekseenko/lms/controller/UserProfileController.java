@@ -1,5 +1,7 @@
 package com.alekseenko.lms.controller;
 
+import com.alekseenko.lms.exception.InternalServerException;
+import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.AvatarImageService;
 import com.alekseenko.lms.service.CourseService;
 import org.slf4j.Logger;
@@ -24,9 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/profile")
 public class UserProfileController {
 
+  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
   private final AvatarImageService avatarImageService;
   private final CourseService courseService;
-  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
 
   @Autowired
   public UserProfileController(AvatarImageService avatarImageService, CourseService courseService) {
@@ -51,7 +53,8 @@ public class UserProfileController {
   public ResponseEntity<byte[]> avatarImage(Authentication auth) {
     String contentType = avatarImageService.getContentTypeByUser(auth.getName());
     byte[] data = avatarImageService.getAvatarImageByUser(auth.getName())
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(
+            String.format("Avatar for user %s not found", auth.getName())));
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType(contentType))
@@ -70,7 +73,7 @@ public class UserProfileController {
             .saveAvatarImage(auth.getName(), avatar.getContentType(), avatar.getInputStream());
       } catch (Exception ex) {
         logger.info("", ex);
-        throw new InternalServerError();
+        throw new InternalServerException("Internal Server Error");
       }
     }
     return "redirect:/profile";

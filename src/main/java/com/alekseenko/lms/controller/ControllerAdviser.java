@@ -1,5 +1,8 @@
 package com.alekseenko.lms.controller;
 
+import com.alekseenko.lms.exception.AccessDeniedException;
+import com.alekseenko.lms.exception.InternalServerException;
+import com.alekseenko.lms.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,8 +25,8 @@ public class ControllerAdviser {
     return modelAndView;
   }
 
-  @ExceptionHandler(InternalServerError.class)
-  public ModelAndView internalServerErrorHandler(InternalServerError ex) {
+  @ExceptionHandler(InternalServerException.class)
+  public ModelAndView internalServerErrorHandler(InternalServerException ex) {
     ModelAndView modelAndView = new ModelAndView("internal_error");
     modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     return modelAndView;

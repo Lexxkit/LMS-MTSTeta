@@ -1,11 +1,11 @@
 package com.alekseenko.lms.service;
 
-import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.LessonRepository;
 import com.alekseenko.lms.dao.ModuleRepository;
 import com.alekseenko.lms.domain.Lesson;
 import com.alekseenko.lms.domain.Module;
 import com.alekseenko.lms.dto.LessonDto;
+import com.alekseenko.lms.exception.NotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class LessonServiceImpl implements LessonService {
     return lessonRepository.findById(id)
         .map(lsn -> new LessonDto(lsn.getId(), lsn.getTitle(), lsn.getDescription(),
             lsn.getModule().getId()))
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("Lesson with id#%d not found", id)));
   }
 
   @Override
@@ -38,7 +38,8 @@ public class LessonServiceImpl implements LessonService {
   @Override
   public void saveLesson(LessonDto lessonDto) {
     Module currentModule = moduleRepository.findById(lessonDto.getModuleId())
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(
+            String.format("Lesson with id#%d not found", lessonDto.getModuleId())));
     Lesson lesson = new Lesson(
         lessonDto.getId(),
         lessonDto.getTitle(),
