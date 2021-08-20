@@ -1,14 +1,15 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.service.impl;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 
-import com.alekseenko.lms.dao.CourseImageRepository;
-import com.alekseenko.lms.dao.CourseRepository;
-import com.alekseenko.lms.domain.Course;
-import com.alekseenko.lms.domain.CourseImage;
+import com.alekseenko.lms.dao.AvatarImageRepository;
+import com.alekseenko.lms.dao.UserRepository;
+import com.alekseenko.lms.domain.AvatarImage;
+import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.service.AvatarImageService;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,33 +26,34 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CourseImageServiceImpl implements CourseImageService {
+public class AvatarImageServiceImpl implements AvatarImageService {
 
   private static final Logger logger = LoggerFactory.getLogger(AvatarImageServiceImpl.class);
-  private final CourseImageRepository courseImageRepository;
-  private final CourseRepository courseRepository;
-  @Value("${file.storage.logo.path}")
+  private final AvatarImageRepository avatarImageRepository;
+  private final UserRepository userRepository;
+
+  @Value("${file.storage.avatar.path}")
   private String path;
 
   @Autowired
-  public CourseImageServiceImpl(CourseImageRepository courseImageRepository,
-      CourseRepository courseRepository) {
-    this.courseImageRepository = courseImageRepository;
-    this.courseRepository = courseRepository;
+  public AvatarImageServiceImpl(AvatarImageRepository avatarImageRepository,
+      UserRepository userRepository) {
+    this.avatarImageRepository = avatarImageRepository;
+    this.userRepository = userRepository;
   }
 
   @Override
-  public String getContentTypeByCourse(Long courseId) {
-    return courseImageRepository.findByCourseId(courseId)
-        .map(CourseImage::getContentType)
+  public String getContentTypeByUser(String username) {
+    return avatarImageRepository.findByUsername(username)
+        .map(AvatarImage::getContentType)
         .orElseThrow(
-            () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
+            () -> new NotFoundException(String.format("Avatar for user %s not found", username)));
   }
 
   @Override
-  public Optional<byte[]> getCourseImageByCourse(Long courseId) {
-    return courseImageRepository.findByCourseId(courseId)
-        .map(CourseImage::getFilename)
+  public Optional<byte[]> getAvatarImageByUser(String username) {
+    return avatarImageRepository.findByUsername(username)
+        .map(AvatarImage::getFilename)
         .map(filename -> {
           try {
             return Files.readAllBytes(Path.of(path, filename));
@@ -64,9 +66,9 @@ public class CourseImageServiceImpl implements CourseImageService {
 
   @Override
   @Transactional
-  public void saveCourseImage(Long courseId, String contentType, InputStream is) {
-    Optional<CourseImage> opt = courseImageRepository.findByCourseId(courseId);
-    CourseImage courseImage;
+  public void saveAvatarImage(String username, String contentType, InputStream is) {
+    Optional<AvatarImage> opt = avatarImageRepository.findByUsername(username);
+    AvatarImage avatarImage;
     String filename;
 
     if (Files.notExists(Path.of(path))) {
@@ -75,16 +77,15 @@ public class CourseImageServiceImpl implements CourseImageService {
 
     if (opt.isEmpty()) {
       filename = UUID.randomUUID().toString();
-      Course course = courseRepository.findById(courseId)
-          .orElseThrow(
-              () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
-      courseImage = new CourseImage(null, contentType, filename, course);
+      User user = userRepository.findUserByUsername(username)
+          .orElseThrow(IllegalArgumentException::new);
+      avatarImage = new AvatarImage(null, contentType, filename, user);
     } else {
-      courseImage = opt.get();
-      filename = courseImage.getFilename();
-      courseImage.setContentType(contentType);
+      avatarImage = opt.get();
+      filename = avatarImage.getFilename();
+      avatarImage.setContentType(contentType);
     }
-    courseImageRepository.save(courseImage);
+    avatarImageRepository.save(avatarImage);
 
     try (OutputStream os = Files
         .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {

@@ -7,6 +7,7 @@ import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

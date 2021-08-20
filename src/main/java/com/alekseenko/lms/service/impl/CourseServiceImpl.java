@@ -1,4 +1,4 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.service.impl;
 
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.UserRepository;
@@ -6,6 +6,8 @@ import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.exception.AccessDeniedException;
 import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.mapper.CourseMapper;
+import com.alekseenko.lms.service.CourseService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;

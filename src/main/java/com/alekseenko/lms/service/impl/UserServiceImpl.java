@@ -1,4 +1,4 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.service.impl;
 
 import com.alekseenko.lms.RoleConstants;
 import com.alekseenko.lms.dao.RoleRepository;
@@ -7,6 +7,8 @@ import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.mapper.UserMapper;
+import com.alekseenko.lms.service.UserService;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;

@@ -2,9 +2,8 @@ package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.domain.Course;
-import com.alekseenko.lms.domain.CourseImage;
 import com.alekseenko.lms.dto.CourseDto;
-import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.mapper.CourseMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

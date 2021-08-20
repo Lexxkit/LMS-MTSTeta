@@ -1,4 +1,4 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.service.impl;
 
 import com.alekseenko.lms.dao.LessonRepository;
 import com.alekseenko.lms.dao.ModuleRepository;
@@ -6,6 +6,7 @@ import com.alekseenko.lms.domain.Lesson;
 import com.alekseenko.lms.domain.Module;
 import com.alekseenko.lms.dto.LessonDto;
 import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.service.LessonService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

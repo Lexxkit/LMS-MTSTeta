@@ -1,8 +1,9 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.service.impl;
 
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dto.RoleDto;
 import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.service.RoleService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
