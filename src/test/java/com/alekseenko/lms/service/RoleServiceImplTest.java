@@ -1,7 +1,7 @@
 package com.alekseenko.lms.service;
 
-import static com.alekseenko.lms.RoleConstants.ROLE_ADMIN;
-import static com.alekseenko.lms.RoleConstants.ROLE_STUDENT;
+import static com.alekseenko.lms.conastants.RoleConstants.ROLE_ADMIN;
+import static com.alekseenko.lms.conastants.RoleConstants.ROLE_STUDENT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.alekseenko.lms.dao.RoleRepository;

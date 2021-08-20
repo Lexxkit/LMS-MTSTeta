@@ -1,6 +1,6 @@
 package com.alekseenko.lms.controller;
 
-import com.alekseenko.lms.RoleConstants;
+import com.alekseenko.lms.conastants.RoleConstants;
 import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.exception.InternalServerException;
 import com.alekseenko.lms.exception.NotFoundException;

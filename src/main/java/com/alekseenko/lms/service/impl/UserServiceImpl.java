@@ -1,6 +1,6 @@
 package com.alekseenko.lms.service.impl;
 
-import com.alekseenko.lms.RoleConstants;
+import com.alekseenko.lms.conastants.RoleConstants;
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Role;

@@ -1,4 +1,4 @@
-package com.alekseenko.lms;
+package com.alekseenko.lms.conastants;
 
 public final class RoleConstants {
 
