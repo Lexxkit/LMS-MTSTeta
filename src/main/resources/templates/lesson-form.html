@@ -18,7 +18,7 @@
 
               <form th:object="${lessonDto}" method="post" th:action="@{/lesson}">
                 <input type="hidden" th:field="*{id}">
-                <input type="hidden" th:field="*{courseId}">
+                <input type="hidden" th:field="*{moduleId}">
                 <div class="row">
                   <div class="col-12">
                     <div class="form-group pb-2">
@@ -34,10 +34,10 @@
                   <div class="col-12">
                     <div class="form-group pb-2">
                       <label class="mb-2 text-dark" for="lessonContent">Lesson content</label>
-                      <textarea class="form-control" rows="20" id="lessonContent" th:field="*{text}">Здесь должен быть текст урока.
+                      <textarea class="form-control" rows="20" id="lessonContent" th:field="*{content}">Здесь должен быть текст урока.
                       </textarea>
-                      <small class="validation-error text-danger" th:if="${#fields.hasErrors('text')}"
-                             th:errors="*{text}">
+                      <small class="validation-error text-danger" th:if="${#fields.hasErrors('content')}"
+                             th:errors="*{content}">
                         Lesson title has to be filled
                       </small>
                     </div>
