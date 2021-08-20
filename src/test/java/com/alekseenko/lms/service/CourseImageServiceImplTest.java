@@ -34,8 +34,6 @@ public class CourseImageServiceImplTest {
     private CourseImageService courseImageService;
     @Autowired
     private CourseRepository courseRepository;
-    @MockBean
-    private MyEventListener myEventListener;
 
     @Value("${file.storage.path}")
     private String path;

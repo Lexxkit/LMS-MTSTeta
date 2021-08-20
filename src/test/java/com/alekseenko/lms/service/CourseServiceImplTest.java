@@ -19,7 +19,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -32,8 +31,6 @@ public class CourseServiceImplTest {
     private UserRepository userRepository;
     @Autowired
     private CourseService courseService;
-    @MockBean
-    private MyEventListener myEventListener;
 
 
     @BeforeAll

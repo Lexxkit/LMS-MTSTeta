@@ -1,22 +1,19 @@
 package com.alekseenko.lms.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.mapper.CourseMapper;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import javax.transaction.Transactional;
-
-import java.util.List;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase
@@ -27,8 +24,6 @@ public class CourseMapperTest {
     private CourseRepository courseRepository;
     @Autowired
     CourseMapper courseMapper;
-    @MockBean
-    private MyEventListener myEventListener;
 
     @BeforeAll
     void setUp() {

@@ -34,8 +34,6 @@ public class AvatarImageServiceImplTest {
     private AvatarImageService avatarImageService;
     @Autowired
     private UserRepository userRepository;
-    @MockBean
-    private MyEventListener myEventListener;
 
     @Value("${file.storage.path}")
     private String path;

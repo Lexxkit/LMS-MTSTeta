@@ -1,21 +1,19 @@
 package com.alekseenko.lms.service;
 
+import static com.alekseenko.lms.RoleConstants.ROLE_ADMIN;
+import static com.alekseenko.lms.RoleConstants.ROLE_STUDENT;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.domain.Role;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import javax.transaction.Transactional;
-import java.util.List;
-
-import static com.alekseenko.lms.RoleConstants.ROLE_ADMIN;
-import static com.alekseenko.lms.RoleConstants.ROLE_STUDENT;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase
@@ -26,8 +24,6 @@ public class RoleServiceImplTest {
     private RoleRepository roleRepository;
     @Autowired
     private RoleService roleService;
-    @MockBean
-    private MyEventListener myEventListener;
 
     @BeforeEach
     void setUp() {

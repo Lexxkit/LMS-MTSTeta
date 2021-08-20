@@ -1,5 +1,9 @@
 package com.alekseenko.lms.service;
 
+import static com.alekseenko.lms.RoleConstants.ROLE_ADMIN;
+import static com.alekseenko.lms.RoleConstants.ROLE_STUDENT;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dao.UserRepository;
@@ -8,22 +12,16 @@ import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.mapper.UserMapper;
+import java.util.List;
+import java.util.Set;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Set;
-
-import static com.alekseenko.lms.RoleConstants.ROLE_ADMIN;
-import static com.alekseenko.lms.RoleConstants.ROLE_STUDENT;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -42,8 +40,6 @@ public class UserServiceImplTest {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
-    @MockBean
-    private MyEventListener myEventListener;
 
     @BeforeAll
     void setUp() {

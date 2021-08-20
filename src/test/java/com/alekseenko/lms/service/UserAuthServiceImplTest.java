@@ -16,7 +16,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -31,8 +30,6 @@ public class UserAuthServiceImplTest {
     private UserRepository userRepository;
     @Autowired
     private UserDetailsService userDetailsService;
-    @MockBean
-    private MyEventListener myEventListener;
 
     @BeforeAll
     void setUp() {
