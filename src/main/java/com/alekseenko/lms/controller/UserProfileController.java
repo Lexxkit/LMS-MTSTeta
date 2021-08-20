@@ -4,6 +4,7 @@ import com.alekseenko.lms.exception.InternalServerException;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.AvatarImageService;
 import com.alekseenko.lms.service.CourseService;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +72,8 @@ public class UserProfileController {
       try {
         avatarImageService
             .saveAvatarImage(auth.getName(), avatar.getContentType(), avatar.getInputStream());
-      } catch (Exception ex) {
-        logger.info("", ex);
+      } catch (IOException ex) {
+        logger.info("Read file error", ex);
         throw new InternalServerException("Internal Server Error");
       }
     }

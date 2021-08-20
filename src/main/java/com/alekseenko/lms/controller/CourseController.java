@@ -9,6 +9,7 @@ import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.LessonService;
 import com.alekseenko.lms.service.StatisticsCounter;
 import com.alekseenko.lms.service.UserService;
+import java.io.IOException;
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -36,12 +37,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/course")
 public class CourseController {
 
+  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
   private final CourseService courseService;
   private final CourseImageService courseImageService;
   private final LessonService lessonService;
   private final UserService userService;
   private final StatisticsCounter statisticsCounter;
-  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
 
   @Autowired
   public CourseController(CourseService courseService,
@@ -147,7 +148,8 @@ public class CourseController {
   public ResponseEntity<byte[]> courseImage(@PathVariable("id") Long courseId) {
     String contentType = courseImageService.getContentTypeByCourse(courseId);
     byte[] data = courseImageService.getCourseImageByCourse(courseId)
-        .orElseThrow(() -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
+        .orElseThrow(
+            () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType(contentType))
@@ -164,8 +166,8 @@ public class CourseController {
       try {
         courseImageService
             .saveCourseImage(courseId, courseImage.getContentType(), courseImage.getInputStream());
-      } catch (Exception ex) {
-        logger.info("", ex);
+      } catch (IOException ex) {
+        logger.info("Read file error", ex);
         throw new InternalServerException("Internal server error");
       }
     }
