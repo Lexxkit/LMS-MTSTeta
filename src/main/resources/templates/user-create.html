@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/head :: head"></head>
 
@@ -35,6 +36,17 @@
                  th:errors="*{password}">
             Password has to be filled
           </small>
+        </div>
+
+        <div sec:authorize="hasRole('ADMIN')" class="mt-5 form-label-group">
+          <label class="mb-2" for="roles">Choose user's role:</label>
+          <select multiple class="form-control custom-select mr-sm-2" id="roles" th:field="*{roles}" required>
+            <option th:each="role : ${roles}"
+                    th:text="${role.name}"
+                    th:value="${role.id}"
+                    th:selected="${user.roles?.contains(role)}">
+            </option>
+          </select>
         </div>
 
         <div class="checkbox mb-3"></div>

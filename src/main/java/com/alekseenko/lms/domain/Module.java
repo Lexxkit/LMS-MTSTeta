@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "modules")
-public class Module extends BaseEntity {
+public class Module extends BaseEntity<String> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

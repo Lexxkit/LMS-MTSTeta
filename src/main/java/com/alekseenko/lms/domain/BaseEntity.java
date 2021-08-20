@@ -2,37 +2,43 @@ package com.alekseenko.lms.domain;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
-import javax.persistence.ManyToOne;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
-public abstract class BaseEntity {
+@EntityListeners(AuditingEntityListener.class)
+public abstract class BaseEntity<User> {
 
   @Column(updatable = false)
   @CreationTimestamp
   private LocalDateTime createdAt;
 
-  @ManyToOne
-  private User createdByUser;
+  @CreatedBy
+  @Column(name = "created_by", updatable = false)
+  private User createdBy;
 
   @Column
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-  @ManyToOne
-  private User updatedByUser;
+  @LastModifiedBy
+  @Column(name = "updated_by")
+  private User updatedBy;
 
   public BaseEntity() {
   }
 
-  public BaseEntity(LocalDateTime createdAt, User createdByUser, LocalDateTime updatedAt,
-      User updatedByUser) {
+  public BaseEntity(LocalDateTime createdAt, User createdBy, LocalDateTime updatedAt,
+      User updatedBy) {
     this.createdAt = createdAt;
-    this.createdByUser = createdByUser;
+    this.createdBy = createdBy;
     this.updatedAt = updatedAt;
-    this.updatedByUser = updatedByUser;
+    this.updatedBy = updatedBy;
   }
 
   public LocalDateTime getCreatedAt() {
@@ -43,12 +49,12 @@ public abstract class BaseEntity {
     this.createdAt = createdAt;
   }
 
-  public User getCreatedByUser() {
-    return createdByUser;
+  public User getCreatedBy() {
+    return createdBy;
   }
 
-  public void setCreatedByUser(User createdByUser) {
-    this.createdByUser = createdByUser;
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
   }
 
   public LocalDateTime getUpdatedAt() {
@@ -59,11 +65,11 @@ public abstract class BaseEntity {
     this.updatedAt = updatedAt;
   }
 
-  public User getUpdatedByUser() {
-    return updatedByUser;
+  public User getUpdatedBy() {
+    return updatedBy;
   }
 
-  public void setUpdatedByUser(User updatedByUser) {
-    this.updatedByUser = updatedByUser;
+  public void setUpdatedBy(User updatedBy) {
+    this.updatedBy = updatedBy;
   }
 }
