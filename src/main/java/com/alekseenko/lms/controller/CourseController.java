@@ -7,7 +7,6 @@ import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.CourseImageService;
 import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.LessonService;
-import com.alekseenko.lms.service.StatisticsCounter;
 import com.alekseenko.lms.service.UserService;
 import java.io.IOException;
 import java.security.Principal;
@@ -42,25 +41,21 @@ public class CourseController {
   private final CourseImageService courseImageService;
   private final LessonService lessonService;
   private final UserService userService;
-  private final StatisticsCounter statisticsCounter;
 
   @Autowired
   public CourseController(CourseService courseService,
       CourseImageService courseImageService,
       LessonService lessonService,
-      UserService userService,
-      StatisticsCounter statisticsCounter) {
+      UserService userService) {
     this.courseService = courseService;
     this.courseImageService = courseImageService;
     this.lessonService = lessonService;
     this.userService = userService;
-    this.statisticsCounter = statisticsCounter;
   }
 
   @GetMapping
   public String courseTable(Model model,
       @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
-    statisticsCounter.countHandlerCall();
     model.addAttribute("activePage", "courses");
     if (titlePrefix == null) {
       model.addAttribute("courses", courseService.getAllCourses());
