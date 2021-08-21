@@ -26,7 +26,7 @@ public class LessonServiceImpl implements LessonService {
   @Override
   public LessonDto getLessonById(Long id) {
     return lessonRepository.findById(id)
-        .map(lsn -> new LessonDto(lsn.getId(), lsn.getTitle(), lsn.getDescription(),
+        .map(lsn -> new LessonDto(lsn.getId(), lsn.getTitle(), lsn.getContent(),
             lsn.getModule().getId()))
         .orElseThrow(() -> new NotFoundException(String.format("Lesson with id#%d not found", id)));
   }

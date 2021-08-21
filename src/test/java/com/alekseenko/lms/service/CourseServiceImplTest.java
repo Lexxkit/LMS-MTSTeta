@@ -12,16 +12,18 @@ import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.exception.AccessDeniedException;
 import com.alekseenko.lms.exception.NotFoundException;
 import java.util.List;
+import java.util.Set;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -34,12 +36,22 @@ public class CourseServiceImplTest {
     @Autowired
     private CourseService courseService;
 
+    private User TEST_USER;
 
     @BeforeAll
     void setUp() {
+        TEST_USER = new User(1L, "Test", "", Set.of());
+        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
         Course course1 = new Course(1L, "Oleg", "Learning test", null);
         Course course2 = new Course(2L, "Test", "Programming for beginners", null);
         courseRepository.saveAll(List.of(course1, course2));
+    }
+
+    @BeforeEach
+    void setAuth() {
+        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     @Test
