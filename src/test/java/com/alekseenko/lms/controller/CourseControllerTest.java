@@ -5,6 +5,7 @@ import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.dto.LessonDto;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.service.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -38,28 +39,28 @@ public class CourseControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void testIndexPage() throws Exception{
-        CourseDto course = new CourseDto(1L, "Test user", "New course", (CourseImage) null);
-        List<CourseDto> allCourses = Arrays.asList(course);
+//    @Test
+//    void testIndexPage() throws Exception{
+//        CourseDto course = new CourseDto(1L, "Test user", "New course", (CourseImage) null);
+//        List<CourseDto> allCourses = Arrays.asList(course);
+//
+//        when(courseService.getAllCourses()).thenReturn(allCourses);
+//
+//        mockMvc.perform(get("/course"))
+//                .andExpect(view().name("index"));
+//    }
 
-        when(courseService.getAllCourses()).thenReturn(allCourses);
-
-        mockMvc.perform(get("/course"))
-                .andExpect(view().name("index"));
-    }
-
-    @Test
-    void testIndexPageWithPrefix() throws Exception {
-        CourseDto course = new CourseDto(1L, "Test user", "New course", (CourseImage) null );
-        List<CourseDto> allCourses = Arrays.asList(course);
-
-        when(courseService.getCoursesByTitleWithPrefix("New" + "%")).thenReturn(allCourses);
-
-        mockMvc.perform(get("/course"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"));
-    }
+//    @Test
+//    void testIndexPageWithPrefix() throws Exception {
+//        CourseDto course = new CourseDto(1L, "Test user", "New course", (CourseImage) null );
+//        List<CourseDto> allCourses = Arrays.asList(course);
+//
+//        when(courseService.getCoursesByTitleWithPrefix("New" + "%")).thenReturn(allCourses);
+//
+//        mockMvc.perform(get("/course"))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("index"));
+//    }
 
     @Test
     void testCoursePage() throws Exception {

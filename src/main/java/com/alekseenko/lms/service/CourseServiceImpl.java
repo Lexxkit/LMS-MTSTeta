@@ -6,9 +6,15 @@ import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.dto.CourseDto;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +35,16 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
+  public List<CourseDto> getAllCourses(String titlePrefix) {
+    if (titlePrefix == null) {
+      return getAllCourses();
+    } else {
+      return getCoursesByTitleWithPrefix(titlePrefix + "%");
+    }
+  }
+
+
+  @Override
   public CourseDto getCourseTemplate() {
     return new CourseDto();
   }
@@ -38,6 +54,12 @@ public class CourseServiceImpl implements CourseService {
     return courseRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
         .map(courseMapper::mapToCourseDtoWithoutUser)
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<CourseDto> findPaginated(int pageNumber, int pageSize) {
+    Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+    return courseRepository.findAll(pageable).map(courseMapper::mapToCourseDtoWithoutUser);
   }
 
   @Override

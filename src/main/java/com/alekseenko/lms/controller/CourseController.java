@@ -1,6 +1,7 @@
 package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.RoleConstants;
+import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.service.CourseImageService;
 import com.alekseenko.lms.service.CourseService;
@@ -8,11 +9,20 @@ import com.alekseenko.lms.service.LessonService;
 import com.alekseenko.lms.service.StatisticsCounter;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -58,14 +68,30 @@ public class CourseController {
   public String courseTable(Model model,
       @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
     statisticsCounter.countHandlerCall();
-    model.addAttribute("activePage", "courses");
     if (titlePrefix == null) {
-      model.addAttribute("courses", courseService.getAllCourses());
-    } else {
-      model.addAttribute("courses", courseService.getCoursesByTitleWithPrefix(titlePrefix + "%"));
+      return viewPaginated(model, 1);
     }
+    model.addAttribute("activePage", "courses");
+    model.addAttribute("courses", courseService.getAllCourses(titlePrefix));
+
     return "index";
   }
+
+  @GetMapping("/page/{pageNumber}")
+  public String viewPaginated(Model model,
+      @PathVariable ("pageNumber") int pageNumber) {
+    int pageSize = 3;
+
+    Page<CourseDto> page = courseService.findPaginated(pageNumber, pageSize);
+
+    model.addAttribute("currentPage", pageNumber);
+    model.addAttribute("totalPages", page.getTotalPages());
+    model.addAttribute("totalItems", page.getTotalElements());
+    model.addAttribute("courses", page.getContent());
+
+    return "index";
+  }
+
 
   @PostMapping
   public String submitCourseForm(@Valid @ModelAttribute("course") CourseDto courseDto,
