@@ -1,10 +1,15 @@
 package com.alekseenko.lms.service;
 
-import com.alekseenko.lms.controller.NotFoundException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.alekseenko.lms.dao.AvatarImageRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.AvatarImage;
 import com.alekseenko.lms.domain.User;
+import com.alekseenko.lms.exception.NotFoundException;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,14 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import javax.transaction.Transactional;
-
-import java.io.InputStream;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -36,8 +33,6 @@ public class AvatarImageServiceImplTest {
     private AvatarImageService avatarImageService;
     @Autowired
     private UserRepository userRepository;
-    @MockBean
-    private MyEventListener myEventListener;
 
     @Value("${file.storage.path}")
     private String path;
@@ -68,8 +63,8 @@ public class AvatarImageServiceImplTest {
 
     @Test
     void shouldSaveAvatarImage() {
-        avatarImageService.saveAvatarImage("Test_user", "png", InputStream.nullInputStream());
-        avatarImageService.saveAvatarImage("Another_test_user", "jpeg", InputStream.nullInputStream());
+//        avatarImageService.saveAvatarImage("Test_user", "png", InputStream.nullInputStream());
+//        avatarImageService.saveAvatarImage("Another_test_user", "jpeg", InputStream.nullInputStream());
 
         final var contentTypeForTestUser = avatarImageService.getContentTypeByUser("Test_user");
         final var contentTypeForAnotherUser = avatarImageService.getContentTypeByUser("Another_test_user");

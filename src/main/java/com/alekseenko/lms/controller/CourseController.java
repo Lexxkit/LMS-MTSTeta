@@ -1,11 +1,11 @@
 package com.alekseenko.lms.controller;
 
-import com.alekseenko.lms.RoleConstants;
+import com.alekseenko.lms.constants.RoleConstants;
 import com.alekseenko.lms.dto.CourseDto;
+import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.CourseImageService;
 import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.LessonService;
-import com.alekseenko.lms.service.StatisticsCounter;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
@@ -34,36 +34,28 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/course")
 public class CourseController {
 
+  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
   private final CourseService courseService;
   private final CourseImageService courseImageService;
   private final LessonService lessonService;
   private final UserService userService;
-  private final StatisticsCounter statisticsCounter;
-  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
 
   @Autowired
   public CourseController(CourseService courseService,
       CourseImageService courseImageService,
       LessonService lessonService,
-      UserService userService,
-      StatisticsCounter statisticsCounter) {
+      UserService userService) {
     this.courseService = courseService;
     this.courseImageService = courseImageService;
     this.lessonService = lessonService;
     this.userService = userService;
-    this.statisticsCounter = statisticsCounter;
   }
 
   @GetMapping
   public String courseTable(Model model,
       @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
-    statisticsCounter.countHandlerCall();
     model.addAttribute("activePage", "courses");
-    if (titlePrefix == null) {
-      model.addAttribute("courses", courseService.getAllCourses());
-    } else {
-      model.addAttribute("courses", courseService.getCoursesByTitleWithPrefix(titlePrefix + "%"));
-    }
+    model.addAttribute("courses", courseService.getAllCourses(titlePrefix));
     return "index";
   }
 
@@ -102,11 +94,7 @@ public class CourseController {
       @PathVariable("id") Long id) {
     model.addAttribute("activePage", "courses");
     model.addAttribute("courseId", id);
-    if (request.isUserInRole(RoleConstants.ROLE_ADMIN)) {
-      model.addAttribute("users", userService.getUsersNotAssignedToCourse(id));
-    } else {
-      model.addAttribute("users", userService.assignSingleUserToCourse(request.getRemoteUser()));
-    }
+    model.addAttribute("users", userService.getUsers(id, request));
     return "course-assign";
   }
 
@@ -145,7 +133,8 @@ public class CourseController {
   public ResponseEntity<byte[]> courseImage(@PathVariable("id") Long courseId) {
     String contentType = courseImageService.getContentTypeByCourse(courseId);
     byte[] data = courseImageService.getCourseImageByCourse(courseId)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(
+            () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType(contentType))
@@ -156,17 +145,7 @@ public class CourseController {
   @PostMapping("/{id}/picture")
   public String updateCourseImage(@PathVariable("id") Long courseId,
       @RequestParam("courseImage") MultipartFile courseImage) {
-    if (!courseImage.isEmpty()) {
-      logger.info("File name {}, file content type {}, file size {}",
-          courseImage.getOriginalFilename(), courseImage.getContentType(), courseImage.getSize());
-      try {
-        courseImageService
-            .saveCourseImage(courseId, courseImage.getContentType(), courseImage.getInputStream());
-      } catch (Exception ex) {
-        logger.info("", ex);
-        throw new InternalServerError();
-      }
-    }
+      courseImageService.saveCourseImage(courseId, courseImage);
     return String.format("redirect:/course/%d", courseId);
   }
 }

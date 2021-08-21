@@ -1,4 +1,4 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.mapper;
 
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.dto.CourseDto;

@@ -1,4 +1,4 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.service.impl;
 
 import com.alekseenko.lms.dao.UserRepository;
 import java.util.stream.Collectors;

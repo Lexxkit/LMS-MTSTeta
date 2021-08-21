@@ -1,6 +1,8 @@
 package com.alekseenko.lms.service;
 
-import com.alekseenko.lms.controller.NotFoundException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.LessonRepository;
 import com.alekseenko.lms.dao.ModuleRepository;
@@ -8,18 +10,14 @@ import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.domain.Lesson;
 import com.alekseenko.lms.domain.Module;
 import com.alekseenko.lms.dto.LessonDto;
+import com.alekseenko.lms.exception.NotFoundException;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import javax.transaction.Transactional;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase
@@ -34,8 +32,6 @@ public class LessonServiceImplTest {
     private ModuleRepository moduleRepository;
     @Autowired
     private LessonService lessonService;
-    @MockBean
-    private MyEventListener myEventListener;
 
     @BeforeAll
     void setUp() {

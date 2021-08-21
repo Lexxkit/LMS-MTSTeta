@@ -1,26 +1,24 @@
 package com.alekseenko.lms.service;
 
-import com.alekseenko.lms.controller.AccessDeniedException;
-import com.alekseenko.lms.controller.NotFoundException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.domain.CourseImage;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.CourseDto;
+import com.alekseenko.lms.exception.AccessDeniedException;
+import com.alekseenko.lms.exception.NotFoundException;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import javax.transaction.Transactional;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -33,8 +31,6 @@ public class CourseServiceImplTest {
     private UserRepository userRepository;
     @Autowired
     private CourseService courseService;
-    @MockBean
-    private MyEventListener myEventListener;
 
 
     @BeforeAll

@@ -1,11 +1,13 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.service.impl;
 
-import com.alekseenko.lms.controller.AccessDeniedException;
-import com.alekseenko.lms.controller.NotFoundException;
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.dto.CourseDto;
+import com.alekseenko.lms.exception.AccessDeniedException;
+import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.mapper.CourseMapper;
+import com.alekseenko.lms.service.CourseService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,15 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
+  public List<CourseDto> getAllCourses(String titlePrefix) {
+    if (titlePrefix == null) {
+      return getAllCourses();
+    } else {
+      return getCoursesByTitleWithPrefix(titlePrefix + "%");
+    }
+  }
+
+  @Override
   public CourseDto getCourseTemplate() {
     return new CourseDto();
   }
@@ -44,7 +55,7 @@ public class CourseServiceImpl implements CourseService {
   public CourseDto getCourseById(Long id) {
     return courseRepository.findById(id)
         .map(courseMapper::mapToCourseDtoWithoutImage)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("Course with id#%d not found", id)));
   }
 
   @Override
@@ -79,7 +90,8 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   public void setUserCourseConnection(Long userId, Long courseId) {
-    Course course = courseRepository.findById(courseId).orElseThrow(NotFoundException::new);
+    Course course = courseRepository.findById(courseId).orElseThrow(
+        () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
     course.getUsers().add(userRepository.getById(userId));
     courseRepository.save(course);
   }
@@ -89,11 +101,12 @@ public class CourseServiceImpl implements CourseService {
       boolean isAdmin) {
 
     if (userRepository.getById(userId).getUsername().equals(username) || isAdmin) {
-      Course course = courseRepository.findById(courseId).orElseThrow(NotFoundException::new);
+      Course course = courseRepository.findById(courseId).orElseThrow(
+          () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
       course.getUsers().remove(userRepository.getById(userId));
       courseRepository.save(course);
     } else {
-      throw new AccessDeniedException();
+      throw new AccessDeniedException("Access Denied");
     }
 
   }
