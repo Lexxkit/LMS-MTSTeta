@@ -1,20 +1,19 @@
 package com.alekseenko.lms.service.impl;
 
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
+import static com.alekseenko.lms.util.DataUtil.getContentType;
+import static com.alekseenko.lms.util.DataUtil.getInputStream;
+import static com.alekseenko.lms.util.DataUtil.printFileProperties;
+import static com.alekseenko.lms.util.DataUtil.writeFile;
 
 import com.alekseenko.lms.dao.AvatarImageRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.AvatarImage;
 import com.alekseenko.lms.domain.User;
-import com.alekseenko.lms.exception.InternalServerException;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.AvatarImageService;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -68,18 +67,11 @@ public class AvatarImageServiceImpl implements AvatarImageService {
 
   @Override
   @Transactional
-  public void saveAvatarImage(String username, MultipartFile avatar) {
-    if (!avatar.isEmpty()) {
-      logger.info("File name {}, file content type {}, file size {}", avatar.getOriginalFilename(),
-          avatar.getContentType(), avatar.getSize());
-      String contentType = avatar.getContentType();
-      InputStream is = null;
-      try {
-        is = avatar.getInputStream();
-      } catch (IOException e) {
-        logger.info("Read file error", e);
-        throw new InternalServerException("Internal Server Error");
-      }
+  public void saveAvatarImage(String username, MultipartFile inputImage) {
+    if (!inputImage.isEmpty()) {
+      printFileProperties(inputImage);
+      String contentType = getContentType(inputImage);
+      InputStream is = getInputStream(inputImage);
       Optional<AvatarImage> opt = avatarImageRepository.findByUsername(username);
       AvatarImage avatarImage;
       String filename;
@@ -99,14 +91,7 @@ public class AvatarImageServiceImpl implements AvatarImageService {
         avatarImage.setContentType(contentType);
       }
       avatarImageRepository.save(avatarImage);
-
-      try (OutputStream os = Files
-          .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
-        is.transferTo(os);
-      } catch (Exception ex) {
-        logger.error("Can't write to file {}", filename, ex);
-        throw new IllegalStateException(ex);
-      }
+      writeFile(is, filename, path);
     }
   }
 }

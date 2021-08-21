@@ -1,8 +1,9 @@
 package com.alekseenko.lms.service.impl;
 
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
+import static com.alekseenko.lms.util.DataUtil.getContentType;
+import static com.alekseenko.lms.util.DataUtil.getInputStream;
+import static com.alekseenko.lms.util.DataUtil.printFileProperties;
+import static com.alekseenko.lms.util.DataUtil.writeFile;
 
 import com.alekseenko.lms.dao.CourseImageRepository;
 import com.alekseenko.lms.dao.CourseRepository;
@@ -13,7 +14,6 @@ import com.alekseenko.lms.service.CourseImageService;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class CourseImageServiceImpl implements CourseImageService {
 
-  private static final Logger logger = LoggerFactory.getLogger(AvatarImageServiceImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(CourseImageServiceImpl.class);
   private final CourseImageRepository courseImageRepository;
   private final CourseRepository courseRepository;
   @Value("${file.storage.logo.path}")
@@ -66,19 +66,13 @@ public class CourseImageServiceImpl implements CourseImageService {
 
   @Override
   @Transactional
-  public void saveCourseImage(Long courseId, MultipartFile multipartFile) {
-    CourseImage courseImage;
-    InputStream is = null;
-
-    if (!multipartFile.isEmpty()) {
-      String contentType = multipartFile.getContentType();
-      try {
-        is = multipartFile.getInputStream();
-      } catch (IOException e) {
-        logger.info("Read file error", e);
-      }
+  public void saveCourseImage(Long courseId, MultipartFile inputImage) {
+    if (!inputImage.isEmpty()) {
+      printFileProperties(inputImage);
+      String contentType = getContentType(inputImage);
+      InputStream is = getInputStream(inputImage);
       Optional<CourseImage> opt = courseImageRepository.findByCourseId(courseId);
-
+      CourseImage courseImage;
       String filename;
 
       if (Files.notExists(Path.of(path))) {
@@ -98,14 +92,9 @@ public class CourseImageServiceImpl implements CourseImageService {
         courseImage.setContentType(contentType);
       }
       courseImageRepository.save(courseImage);
-
-      try (OutputStream os = Files
-          .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
-        is.transferTo(os);
-      } catch (Exception ex) {
-        logger.error("Can't write to file {}", filename, ex);
-        throw new IllegalStateException(ex);
-      }
+      writeFile(is, filename, path);
     }
   }
+
+
 }
