@@ -1,10 +1,8 @@
 package com.alekseenko.lms.service;
 
-import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.dto.CourseDto;
 import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 public interface CourseService {
 
