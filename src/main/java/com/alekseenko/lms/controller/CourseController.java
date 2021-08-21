@@ -70,14 +70,8 @@ public class CourseController {
   public String viewPaginated(Model model,
       @PathVariable ("pageNumber") int pageNumber,
       @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
-    if (titlePrefix != null) {
-      model.addAttribute("activePage", "courses");
-      model.addAttribute("courses", courseService.getAllCourses(titlePrefix));
 
-      return "index";
-    }
-
-    Page<CourseDto> page = courseService.findPaginated(pageNumber, ITEMS_PER_PAGE);
+    Page<CourseDto> page = courseService.findPaginated(pageNumber, ITEMS_PER_PAGE, titlePrefix);
 
     model.addAttribute("currentPage", pageNumber);
     model.addAttribute("totalPages", page.getTotalPages());

@@ -12,7 +12,7 @@ public interface CourseService {
 
   List<CourseDto> getAllCourses();
 
-  Page<CourseDto> findPaginated(int pageNumber, int pageSize);
+  Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix);
 
   CourseDto getCourseById(Long id);
 
@@ -22,7 +22,7 @@ public interface CourseService {
 
   void deleteCourse(Long id);
 
-  List<CourseDto> getCoursesByTitleWithPrefix(String prefix);
+  Page<CourseDto> getCoursesByTitleWithPrefix(String prefix);
 
   void setUserCourseConnection(Long userId, Long courseId);
 

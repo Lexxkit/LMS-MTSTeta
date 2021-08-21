@@ -36,7 +36,7 @@ public class CourseServiceImpl implements CourseService {
     if (titlePrefix == null) {
       return getAllCourses();
     } else {
-      return getCoursesByTitleWithPrefix(titlePrefix + "%");
+      return getCoursesByTitleWithPrefix(titlePrefix + "%").getContent();
     }
   }
 
@@ -53,9 +53,13 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public Page<CourseDto> findPaginated(int pageNumber, int pageSize) {
-    Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-    return courseRepository.findAll(pageable).map(courseMapper::mapToCourseDtoWithoutUser);
+  public Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix) {
+    if (titlePrefix != null) {
+      return getCoursesByTitleWithPrefix(titlePrefix + "%");
+    } else {
+      Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+      return courseRepository.findAll(pageable).map(courseMapper::mapToCourseDtoWithoutUser);
+    }
   }
 
   @Override
@@ -89,10 +93,12 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public List<CourseDto> getCoursesByTitleWithPrefix(String prefix) {
-    return courseRepository.findByTitleLike(prefix).stream()
-        .map(courseMapper::mapToCourseDtoWithoutUser)
-        .collect(Collectors.toList());
+  public Page<CourseDto> getCoursesByTitleWithPrefix(String prefix) {
+    return courseRepository.findByTitleLike(prefix, Pageable.unpaged())
+        .map(courseMapper::mapToCourseDtoWithoutUser);
+//    return courseRepository.findByTitleLike(prefix).stream()
+//        .map(courseMapper::mapToCourseDtoWithoutUser)
+//        .collect(Collectors.toList());
   }
 
   @Override
