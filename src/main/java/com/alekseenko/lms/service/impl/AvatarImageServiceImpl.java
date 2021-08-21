@@ -11,8 +11,8 @@ import com.alekseenko.lms.domain.AvatarImage;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.AvatarImageService;
+import com.alekseenko.lms.util.DataUtil;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,14 +55,7 @@ public class AvatarImageServiceImpl implements AvatarImageService {
   public Optional<byte[]> getAvatarImageByUser(String username) {
     return avatarImageRepository.findByUsername(username)
         .map(AvatarImage::getFilename)
-        .map(filename -> {
-          try {
-            return Files.readAllBytes(Path.of(path, filename));
-          } catch (IOException ex) {
-            logger.error("Can't read file {}", filename, ex);
-            throw new IllegalStateException(ex);
-          }
-        });
+        .map((String filename) -> DataUtil.readData(filename, path));
   }
 
   @Override

@@ -18,6 +18,15 @@ public class DataUtil {
 
   private static final Logger logger = LoggerFactory.getLogger(DataUtil.class);
 
+  public static byte[] readData(String filename, String path) {
+    try {
+      return Files.readAllBytes(Path.of(path, filename));
+    } catch (IOException ex) {
+      logger.error("Can't read file {}", filename, ex);
+      throw new IllegalStateException(ex);
+    }
+  }
+
   public static void writeFile(InputStream is, String filename, String path) {
     try (OutputStream os = Files
         .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
@@ -49,5 +58,4 @@ public class DataUtil {
         inputImage.getOriginalFilename(),
         inputImage.getContentType(), inputImage.getSize());
   }
-
 }

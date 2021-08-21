@@ -11,8 +11,8 @@ import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.domain.CourseImage;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.CourseImageService;
+import com.alekseenko.lms.util.DataUtil;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,14 +54,7 @@ public class CourseImageServiceImpl implements CourseImageService {
   public Optional<byte[]> getCourseImageByCourse(Long courseId) {
     return courseImageRepository.findByCourseId(courseId)
         .map(CourseImage::getFilename)
-        .map(filename -> {
-          try {
-            return Files.readAllBytes(Path.of(path, filename));
-          } catch (IOException ex) {
-            logger.error("Can't read file {}", filename, ex);
-            throw new IllegalStateException(ex);
-          }
-        });
+        .map((String filename) -> DataUtil.readData(filename, path));
   }
 
   @Override
