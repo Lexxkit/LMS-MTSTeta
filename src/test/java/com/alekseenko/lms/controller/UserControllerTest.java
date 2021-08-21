@@ -42,7 +42,7 @@ public class UserControllerTest {
         when(userService.getUserById(1L)).thenReturn(user);
 
         mockMvc.perform(get("/user/{id}", 1L))
-                .andExpect(view().name("user-edit"));
+                .andExpect(view().name("user-create"));
     }
 
     @Test
