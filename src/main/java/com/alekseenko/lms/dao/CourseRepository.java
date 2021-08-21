@@ -14,6 +14,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
   Page<Course> findByTitleLike(String title, Pageable pageable);
 
+  Page<Course> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
   @Query("from Course c inner join c.users u where u.username = :username")
   List<Course> findByUsername(@Param("username") String username);
 }
