@@ -114,8 +114,8 @@ public class CourseServiceImplTest {
 
     @Test
     void shouldFindCourseByTitleWithPrefix() {
-        var course = courseService.getCoursesByTitleWithPrefix("Prog" + "%");
-        assertThat(course.size()).isEqualTo(1);
+        var course = courseService.getCoursesByTitleWithPrefix("Prog");
+        assertThat(course.getTotalElements()).isEqualTo(1);
     }
 
     @Test
