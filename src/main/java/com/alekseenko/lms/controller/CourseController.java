@@ -35,6 +35,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/course")
 public class CourseController {
 
+  // Constant, which defines number of elements on each page
+  private final static int ITEMS_PER_PAGE = 3;
+
   private final CourseService courseService;
   private final CourseImageService courseImageService;
   private final LessonService lessonService;
@@ -59,13 +62,7 @@ public class CourseController {
   public String courseTable(Model model,
       @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
     statisticsCounter.countHandlerCall();
-//    if (titlePrefix == null) {
-//      return viewPaginated(model, 1, titlePrefix);
-//    }
-//    model.addAttribute("activePage", "courses");
-//    model.addAttribute("courses", courseService.getAllCourses(titlePrefix));
-//
-//    return "index";
+
     return viewPaginated(model, 1, titlePrefix);
   }
 
@@ -79,9 +76,8 @@ public class CourseController {
 
       return "index";
     }
-    int pageSize = 3;
 
-    Page<CourseDto> page = courseService.findPaginated(pageNumber, pageSize);
+    Page<CourseDto> page = courseService.findPaginated(pageNumber, ITEMS_PER_PAGE);
 
     model.addAttribute("currentPage", pageNumber);
     model.addAttribute("totalPages", page.getTotalPages());
