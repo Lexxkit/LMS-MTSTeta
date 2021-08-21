@@ -88,6 +88,4 @@ public class CourseImageServiceImpl implements CourseImageService {
       writeFile(is, filename, path);
     }
   }
-
-
 }

@@ -1,6 +1,6 @@
 package com.alekseenko.lms.service.impl;
 
-import com.alekseenko.lms.conastants.RoleConstants;
+import com.alekseenko.lms.constants.RoleConstants;
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Role;
@@ -76,8 +76,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDto getRegistrationTemplate() {
-    UserDto userDto = new UserDto();
-    return userDto;
+    return new UserDto();
   }
 
   @Override

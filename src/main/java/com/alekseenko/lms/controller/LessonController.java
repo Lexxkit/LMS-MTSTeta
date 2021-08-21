@@ -1,6 +1,6 @@
 package com.alekseenko.lms.controller;
 
-import com.alekseenko.lms.conastants.RoleConstants;
+import com.alekseenko.lms.constants.RoleConstants;
 import com.alekseenko.lms.dto.LessonDto;
 import com.alekseenko.lms.service.LessonService;
 import javax.validation.Valid;
