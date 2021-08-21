@@ -31,6 +31,15 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
+  public List<CourseDto> getAllCourses(String titlePrefix) {
+    if (titlePrefix == null) {
+      return getAllCourses();
+    } else {
+      return getCoursesByTitleWithPrefix(titlePrefix + "%");
+    }
+  }
+
+  @Override
   public CourseDto getCourseTemplate() {
     return new CourseDto();
   }

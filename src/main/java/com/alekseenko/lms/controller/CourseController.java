@@ -55,11 +55,7 @@ public class CourseController {
   public String courseTable(Model model,
       @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
     model.addAttribute("activePage", "courses");
-    if (titlePrefix == null) {
-      model.addAttribute("courses", courseService.getAllCourses());
-    } else {
-      model.addAttribute("courses", courseService.getCoursesByTitleWithPrefix(titlePrefix + "%"));
-    }
+    model.addAttribute("courses", courseService.getAllCourses(titlePrefix));
     return "index";
   }
 

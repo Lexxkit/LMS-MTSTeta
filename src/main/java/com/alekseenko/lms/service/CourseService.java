@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface CourseService {
 
+  List<CourseDto> getAllCourses(String titlePrefix);
+
   CourseDto getCourseTemplate();
 
   List<CourseDto> getAllCourses();
