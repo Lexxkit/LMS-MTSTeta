@@ -1,6 +1,16 @@
 package com.alekseenko.lms.controller;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import com.alekseenko.lms.dto.LessonDto;
+import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.LessonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(LessonController.class)
 public class LessonControllerTest {
@@ -62,7 +67,7 @@ public class LessonControllerTest {
         mockMvc.perform(post("/lesson")
                 .with(csrf())
                 .flashAttr("lessonDto", new LessonDto(1L, "", "", 1L)))
-                .andExpect(model().attributeHasFieldErrors("lessonDto", "title", "text"))
+                .andExpect(model().attributeHasFieldErrors("lessonDto", "title", "content"))
                 .andExpect(view().name("lesson-form"));
     }
 

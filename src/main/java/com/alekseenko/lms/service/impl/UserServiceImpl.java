@@ -1,16 +1,19 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.service.impl;
 
-import com.alekseenko.lms.RoleConstants;
-import com.alekseenko.lms.controller.NotFoundException;
+import com.alekseenko.lms.constants.RoleConstants;
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.mapper.UserMapper;
+import com.alekseenko.lms.service.UserService;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,15 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public List<UserDto> getUsers(Long id, HttpServletRequest request) {
+    if (request.isUserInRole(RoleConstants.ROLE_ADMIN)) {
+     return getUsersNotAssignedToCourse(id);
+    } else {
+      return assignSingleUserToCourse(request.getRemoteUser());
+    }
+  }
+
+  @Override
   public List<UserDto> findAllUsers() {
     return userRepository.findAll().stream()
         .map(userMapper::mapToUserDto)
@@ -52,27 +64,28 @@ public class UserServiceImpl implements UserService {
   public UserDto getUserById(Long id) {
     return userRepository.findById(id)
         .map(userMapper::mapToUserDto)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("User with id#%d not found", id)));
   }
 
   @Override
   public UserDto getUserByUsername(String username) {
     return userRepository.findUserByUsername(username)
         .map(userMapper::mapToUserDto)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("User %s not found", username)));
   }
 
   @Override
   public UserDto getRegistrationTemplate() {
-    UserDto userDto = new UserDto();
-    return userDto;
+    return new UserDto();
   }
 
   @Override
   public void saveUser(UserDto userDto) {
     // New users get ROLE_STUDENT upon registration
     if (userDto.getRoles() == null) {
-      Role studentRole = roleRepository.findRoleByName(RoleConstants.ROLE_STUDENT).get();
+      Role studentRole = roleRepository.findRoleByName(RoleConstants.ROLE_STUDENT)
+          .orElseThrow(
+              () -> new NotFoundException(String.format("Role %s not found", userDto.getRoles())));
       userDto.setRoles(Set.of(studentRole));
     }
     userRepository.save(new User(userDto.getId(),
@@ -86,7 +99,7 @@ public class UserServiceImpl implements UserService {
   public List<UserDto> assignSingleUserToCourse(String username) {
     UserDto userDto = userRepository.findUserByUsername(username)
         .map(userMapper::mapToUserDto)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new NotFoundException(String.format("User %s not found", username)));
     return Collections.singletonList(userDto);
   }
 }

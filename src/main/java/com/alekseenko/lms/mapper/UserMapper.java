@@ -1,4 +1,4 @@
-package com.alekseenko.lms.service;
+package com.alekseenko.lms.mapper;
 
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.UserDto;
