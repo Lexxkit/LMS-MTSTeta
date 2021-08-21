@@ -1,7 +1,7 @@
 package com.alekseenko.lms.service;
 
-import java.io.InputStream;
 import java.util.Optional;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface AvatarImageService {
 
@@ -9,5 +9,5 @@ public interface AvatarImageService {
 
   Optional<byte[]> getAvatarImageByUser(String username);
 
-  void saveAvatarImage(String username, String contentType, InputStream is);
+  void saveAvatarImage(String username, MultipartFile avatar);
 }

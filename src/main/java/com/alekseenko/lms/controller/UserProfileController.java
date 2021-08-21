@@ -1,10 +1,8 @@
 package com.alekseenko.lms.controller;
 
-import com.alekseenko.lms.exception.InternalServerException;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.AvatarImageService;
 import com.alekseenko.lms.service.CourseService;
-import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,17 +64,7 @@ public class UserProfileController {
   @PostMapping("/avatar")
   public String updateAvatarImage(Authentication auth,
       @RequestParam("avatar") MultipartFile avatar) {
-    if (!avatar.isEmpty()) {
-      logger.info("File name {}, file content type {}, file size {}", avatar.getOriginalFilename(),
-          avatar.getContentType(), avatar.getSize());
-      try {
-        avatarImageService
-            .saveAvatarImage(auth.getName(), avatar.getContentType(), avatar.getInputStream());
-      } catch (IOException ex) {
-        logger.info("Read file error", ex);
-        throw new InternalServerException("Internal Server Error");
-      }
-    }
+    avatarImageService.saveAvatarImage(auth.getName(), avatar);
     return "redirect:/profile";
   }
 }

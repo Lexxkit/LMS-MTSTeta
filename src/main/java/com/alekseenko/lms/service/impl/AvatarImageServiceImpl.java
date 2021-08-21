@@ -8,6 +8,7 @@ import com.alekseenko.lms.dao.AvatarImageRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.AvatarImage;
 import com.alekseenko.lms.domain.User;
+import com.alekseenko.lms.exception.InternalServerException;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.AvatarImageService;
 import java.io.File;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AvatarImageServiceImpl implements AvatarImageService {
@@ -66,33 +68,45 @@ public class AvatarImageServiceImpl implements AvatarImageService {
 
   @Override
   @Transactional
-  public void saveAvatarImage(String username, String contentType, InputStream is) {
-    Optional<AvatarImage> opt = avatarImageRepository.findByUsername(username);
-    AvatarImage avatarImage;
-    String filename;
+  public void saveAvatarImage(String username, MultipartFile avatar) {
+    if (!avatar.isEmpty()) {
+      logger.info("File name {}, file content type {}, file size {}", avatar.getOriginalFilename(),
+          avatar.getContentType(), avatar.getSize());
+      String contentType = avatar.getContentType();
+      InputStream is = null;
+      try {
+        is = avatar.getInputStream();
+      } catch (IOException e) {
+        logger.info("Read file error", e);
+        throw new InternalServerException("Internal Server Error");
+      }
+      Optional<AvatarImage> opt = avatarImageRepository.findByUsername(username);
+      AvatarImage avatarImage;
+      String filename;
 
-    if (Files.notExists(Path.of(path))) {
-      new File(path).mkdir();
-    }
+      if (Files.notExists(Path.of(path))) {
+        new File(path).mkdir();
+      }
 
-    if (opt.isEmpty()) {
-      filename = UUID.randomUUID().toString();
-      User user = userRepository.findUserByUsername(username)
-          .orElseThrow(IllegalArgumentException::new);
-      avatarImage = new AvatarImage(null, contentType, filename, user);
-    } else {
-      avatarImage = opt.get();
-      filename = avatarImage.getFilename();
-      avatarImage.setContentType(contentType);
-    }
-    avatarImageRepository.save(avatarImage);
+      if (opt.isEmpty()) {
+        filename = UUID.randomUUID().toString();
+        User user = userRepository.findUserByUsername(username)
+            .orElseThrow(IllegalArgumentException::new);
+        avatarImage = new AvatarImage(null, contentType, filename, user);
+      } else {
+        avatarImage = opt.get();
+        filename = avatarImage.getFilename();
+        avatarImage.setContentType(contentType);
+      }
+      avatarImageRepository.save(avatarImage);
 
-    try (OutputStream os = Files
-        .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
-      is.transferTo(os);
-    } catch (Exception ex) {
-      logger.error("Can't write to file {}", filename, ex);
-      throw new IllegalStateException(ex);
+      try (OutputStream os = Files
+          .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
+        is.transferTo(os);
+      } catch (Exception ex) {
+        logger.error("Can't write to file {}", filename, ex);
+        throw new IllegalStateException(ex);
+      }
     }
   }
 }
