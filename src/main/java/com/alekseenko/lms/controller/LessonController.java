@@ -36,11 +36,12 @@ public class LessonController {
 
   @PostMapping
   public String submitLessonForm(@Valid LessonDto lessonDto, BindingResult bindingResult) {
+
     if (bindingResult.hasErrors()) {
       return "lesson-form";
     }
     lessonService.saveLesson(lessonDto);
-    return String.format("redirect:/course/%d", lessonDto.getModuleId());
+    return String.format("redirect:/module/%d", lessonDto.getModuleId());
   }
 
 

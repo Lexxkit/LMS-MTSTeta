@@ -1,5 +1,6 @@
 package com.alekseenko.lms.dto;
 
+import com.alekseenko.lms.domain.Lesson;
 import javax.validation.constraints.NotBlank;
 
 public class LessonDto {
@@ -15,6 +16,13 @@ public class LessonDto {
   private Long moduleId;
 
   public LessonDto() {
+  }
+
+
+  public LessonDto(Lesson lesson) {
+    this.id = lesson.getId();
+    this.title = lesson.getTitle();
+    this.moduleId = lesson.getModule().getId();
   }
 
   public LessonDto(Long moduleId) {

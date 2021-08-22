@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -23,19 +22,37 @@ public class Lesson extends BaseEntity<String> {
   @Column
   private String title;
 
-  @Lob
+//  @Lob
   @Column
   private String description;
 
   @NotBlank(message = "Lesson test has to be filled")
-  @Lob
+//  @Lob
   @Column
   private String content;
+
+  @Column
+  private Long courseId;
 
   @ManyToOne(optional = false)
   private Module module;
 
   public Lesson() {
+  }
+
+  public Lesson(Long id, String title, String content, Module module, Long courseId) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
+    this.module = module;
+    this.courseId = courseId;
+  }
+
+
+  public Lesson( String title, String content, Module module) {
+    this.title = title;
+    this.content = content;
+    this.module = module;
   }
 
   public Lesson(Long id, String title, String content, Module module) {

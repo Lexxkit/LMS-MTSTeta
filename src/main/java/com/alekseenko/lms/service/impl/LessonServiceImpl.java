@@ -8,6 +8,7 @@ import com.alekseenko.lms.dto.LessonDto;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.LessonService;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,19 @@ public class LessonServiceImpl implements LessonService {
     return lessonRepository.findAllForLessonIdWithoutText(id);
   }
 
+
+  @Override
+  public List<LessonDto> getAllLessonsByIdModule(Module module) {
+    return lessonRepository.findAll().stream().filter(lesson -> lesson.getModule().equals(module))
+        .map(LessonDto::new).collect(Collectors.toList());
+  }
+
+  @Override
+  public List<LessonDto> getAllLessonsByModule(Module module) {
+    return lessonRepository.getAllLessonsByModule(module).stream()
+        .map(LessonDto::new).collect(Collectors.toList());
+  }
+
   @Override
   public void saveLesson(LessonDto lessonDto) {
     Module currentModule = moduleRepository.findById(lessonDto.getModuleId())
@@ -45,7 +59,8 @@ public class LessonServiceImpl implements LessonService {
         lessonDto.getId(),
         lessonDto.getTitle(),
         lessonDto.getContent(),
-        currentModule
+        currentModule,
+        currentModule.getCourse().getId()
     );
     lessonRepository.save(lesson);
   }

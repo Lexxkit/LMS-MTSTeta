@@ -9,6 +9,7 @@ import com.alekseenko.lms.service.LessonService;
 import com.alekseenko.lms.service.ModuleService;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -79,8 +80,8 @@ public class CourseController {
     model.addAttribute("activePage", "courses");
     model.addAttribute("modules", moduleService.findAllByCourse(currentCourse));
     model.addAttribute("course", currentCourse);
-    model
-        .addAttribute("lessons", lessonService.getAllForLessonIdWithoutText(currentCourse.getId()));
+//    model
+//        .addAttribute("lessons", lessonService.getAllForLessonIdWithoutText(currentCourse.getId()));
     model.addAttribute("users", currentCourse.getUsers());
     return "course-form";
   }
@@ -129,6 +130,7 @@ public class CourseController {
   @GetMapping("/new")
   public String courseForm(Model model) {
     model.addAttribute("course", courseService.getCourseTemplate());
+    model.addAttribute("modules", new ArrayList<>());
     return "course-form";
   }
 

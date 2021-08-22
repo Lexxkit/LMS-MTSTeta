@@ -1,7 +1,10 @@
 package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.constants.RoleConstants;
+import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.dto.ModuleDto;
+import com.alekseenko.lms.service.CourseService;
+import com.alekseenko.lms.service.LessonService;
 import com.alekseenko.lms.service.ModuleService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +25,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ModuleController {
 
   private final ModuleService moduleService;
+  private final LessonService lessonService;
+  private final CourseService courseService;
+
 
   @Autowired
-  public ModuleController(ModuleService moduleService) {
+  public ModuleController(ModuleService moduleService,
+      LessonService lessonService, CourseService courseService) {
     this.moduleService = moduleService;
+    this.lessonService = lessonService;
+    this.courseService = courseService;
   }
 
   @GetMapping("/new")
@@ -42,14 +51,18 @@ public class ModuleController {
     moduleService.save(moduleDto);
     return String.format("redirect:/course/%d", moduleDto.getCourseId());
   }
-//
-//
-//  @RequestMapping("/{id}")
-//  public String lessonForm(Model model, @PathVariable("id") Long id) {
-//    model.addAttribute("lessonDto", lessonService.getLessonById(id));
-//    return "lesson-form";
-//  }
-//
+
+  @RequestMapping("/{id}")
+  public String lessonForm(Model model, @PathVariable("id") Long id) {
+    ModuleDto moduleDto = moduleService.findById(id);
+    CourseDto currentCourse = courseService.getCourseById(moduleDto.getCourseId());
+    model.addAttribute("course", currentCourse);
+    model
+        .addAttribute("lessons", lessonService.getAllForLessonIdWithoutText(currentCourse.getId()));
+
+    return "lesson-table";
+  }
+
   @DeleteMapping("/{id}")
   public String deleteLesson(@PathVariable("id") Long id,
       @RequestParam("courseId") Long courseId) {

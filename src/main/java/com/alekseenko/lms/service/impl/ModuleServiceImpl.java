@@ -20,16 +20,19 @@ public class ModuleServiceImpl implements ModuleService {
   private final CourseRepository courseRepository;
 
 
+
   @Autowired
   public ModuleServiceImpl(ModuleRepository repository,
       CourseRepository courseRepository) {
     this.moduleRepository = repository;
     this.courseRepository = courseRepository;
+
   }
 
   @Override
   public ModuleDto findById(Long id) {
-    return null;
+    return moduleRepository.findById(id).map(ModuleDto::new)
+        .orElseThrow(() -> new NotFoundException("Module not found"));
   }
 
   @Override
@@ -55,7 +58,6 @@ public class ModuleServiceImpl implements ModuleService {
     moduleRepository.save(module);
 
   }
-
 
 
   @Override

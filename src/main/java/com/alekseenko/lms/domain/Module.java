@@ -47,6 +47,13 @@ public class Module extends BaseEntity<String> {
     this.lessons = lessons;
   }
 
+  public Module(ModuleDto moduleDto) {
+//    this.id = moduleDto.getId();
+    this.title = moduleDto.getTitle();
+    this.description = moduleDto.getContent();
+  }
+
+
   public Module(ModuleDto moduleDto, Course course) {
 //    this.id = moduleDto.getId();
     this.title = moduleDto.getTitle();
