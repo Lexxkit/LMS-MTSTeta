@@ -54,9 +54,14 @@ public class UserControllerTest {
 
     @Test
     void testValidRegisterUser() throws Exception {
+        var userDto = new UserDto("Test");
+        userDto.setPassword("123");
+        userDto.setEmail("test@test.com");
+        userDto.setRoles(new HashSet<>());
+
         mockMvc.perform(post("/user")
                 .with(csrf())
-                .flashAttr("user", new UserDto(1L, "Title", "123", new HashSet<>())))
+                .flashAttr("user", userDto))
                 .andExpect(model().hasNoErrors())
                 .andExpect(redirectedUrl("/login"));
     }

@@ -2,8 +2,11 @@ package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.domain.CourseImage;
 import com.alekseenko.lms.dto.CourseDto;
+import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.service.AvatarImageService;
 import com.alekseenko.lms.service.CourseService;
+import com.alekseenko.lms.service.RoleService;
+import com.alekseenko.lms.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,10 @@ public class UserProfileControllerTest {
     @MockBean
     private CourseService courseService;
     @MockBean
+    private RoleService roleService;
+    @MockBean
+    private UserService userService;
+    @MockBean
     private Logger logger;
 
     @Test
@@ -45,12 +52,13 @@ public class UserProfileControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "admin")
     void testGetUserProfileForAuthUser() throws Exception {
         CourseDto testCourse = new CourseDto(null, "Title", "Author", (CourseImage) null);
 
         when(courseService.getCoursesForUser("Test_user")).thenReturn(List.of(testCourse));
         when(avatarImageService.getAvatarImageByUser("Test_user")).thenReturn(Optional.empty());
+        when(userService.getUserByUsername("admin")).thenReturn(new UserDto("admin"));
 
         mockMvc.perform(get("/profile"))
                 .andExpect(status().isOk())
