@@ -6,6 +6,7 @@ import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.CourseImageService;
 import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.LessonService;
+import com.alekseenko.lms.service.ModuleService;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
@@ -39,16 +40,19 @@ public class CourseController {
   private final CourseImageService courseImageService;
   private final LessonService lessonService;
   private final UserService userService;
+  private final ModuleService moduleService;
+
 
   @Autowired
   public CourseController(CourseService courseService,
       CourseImageService courseImageService,
       LessonService lessonService,
-      UserService userService) {
+      UserService userService, ModuleService moduleService) {
     this.courseService = courseService;
     this.courseImageService = courseImageService;
     this.lessonService = lessonService;
     this.userService = userService;
+    this.moduleService = moduleService;
   }
 
   @GetMapping
@@ -72,8 +76,8 @@ public class CourseController {
   @RequestMapping("/{id}")
   public String courseForm(Model model, @PathVariable("id") Long id) {
     CourseDto currentCourse = courseService.getCourseById(id);
-
     model.addAttribute("activePage", "courses");
+    model.addAttribute("modules", moduleService.findAllByCourse(currentCourse));
     model.addAttribute("course", currentCourse);
     model
         .addAttribute("lessons", lessonService.getAllForLessonIdWithoutText(currentCourse.getId()));
@@ -145,7 +149,7 @@ public class CourseController {
   @PostMapping("/{id}/picture")
   public String updateCourseImage(@PathVariable("id") Long courseId,
       @RequestParam("courseImage") MultipartFile courseImage) {
-      courseImageService.saveCourseImage(courseId, courseImage);
+    courseImageService.saveCourseImage(courseId, courseImage);
     return String.format("redirect:/course/%d", courseId);
   }
 }

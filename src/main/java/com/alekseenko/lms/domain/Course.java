@@ -1,5 +1,6 @@
 package com.alekseenko.lms.domain;
 
+import com.alekseenko.lms.dto.CourseDto;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -57,6 +58,13 @@ public class Course extends BaseEntity<String> {
   private Set<CourseRating> courseRatings;
 
   public Course() {
+  }
+
+  public Course(CourseDto courseDto) {
+    this.id = courseDto.getId();
+    this.author = courseDto.getAuthor();
+    this.title = courseDto.getTitle();
+    this.courseImage = courseDto.getCourseImage();
   }
 
   public Course(Long id, String author, String title, CourseImage courseImage) {
