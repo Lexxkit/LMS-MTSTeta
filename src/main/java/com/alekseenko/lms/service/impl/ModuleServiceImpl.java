@@ -60,6 +60,7 @@ public class ModuleServiceImpl implements ModuleService {
 
   @Override
   public void deleteModule(Long id) {
+    moduleRepository.deleteById(id);
 
   }
 }

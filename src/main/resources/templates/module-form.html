@@ -27,18 +27,18 @@
                              th:field="*{title}" autofocus>
                       <small class="validation-error text-danger" th:if="${#fields.hasErrors('title')}"
                              th:errors="*{title}">
-                        Lesson title has to be filled
+                        Module title has to be filled
                       </small>
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="form-group pb-2">
-                      <label class="mb-2 text-dark" for="moduleContent">Lesson content</label>
-                      <textarea class="form-control" rows="20" id="moduleContent" th:field="*{content}">Здесь должен быть текст урока.
+                      <label class="mb-2 text-dark" for="moduleContent">Module description</label>
+                      <textarea class="form-control" rows="20" id="moduleContent" th:field="*{content}">Здесь должно быть описание модуля.
                       </textarea>
                       <small class="validation-error text-danger" th:if="${#fields.hasErrors('content')}"
                              th:errors="*{content}">
-                        Lesson title has to be filled
+                        Module title has to be filled
                       </small>
                     </div>
                   </div>
