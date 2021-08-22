@@ -14,11 +14,30 @@
         <input type="hidden" th:field="*{id}">
 
         <div class="text-center mt-5 b-1">
-
-          <h1 class="h3 mb-3 font-weight-normal">User Info</h1>
-
+          <h1 class="h3 mb-3 font-weight-normal">Personal Info</h1>
         </div>
-        <div class="mt-5 form-label-group">
+
+        <div class="mt-1 form-label-group">
+          <p class="text">First Name</p>
+          <input type="text" id="firstName" class="form-control" th:field="*{firstName}">
+          <label for="firstName"></label>
+          <small class="validation-error text-danger" th:if="${#fields.hasErrors('firstName')}"
+                 th:errors="*{firstName}">
+            Check spelling.
+          </small>
+        </div>
+
+        <div class="mt-1 form-label-group">
+          <p class="text">Last Name</p>
+          <input type="text" id="lastName" class="form-control" th:field="*{lastName}">
+          <label for="lastName"></label>
+          <small class="validation-error text-danger" th:if="${#fields.hasErrors('lastName')}"
+                 th:errors="*{lastName}">
+            Check spelling.
+          </small>
+        </div>
+
+        <div class="mt-3 form-label-group">
           <p class="text">Username</p>
           <input type="text" id="username" class="form-control" th:field="*{username}">
           <label for="username"></label>
@@ -38,7 +57,33 @@
           </small>
         </div>
 
-        <div sec:authorize="hasRole('ADMIN')" class="mt-5 form-label-group">
+        <div class="mt-3 form-label-group">
+          <p class="text">Email</p>
+          <input type="text" id="email" class="form-control" th:field="*{email}">
+          <label for="email"></label>
+          <small class="validation-error text-danger" th:if="${#fields.hasErrors('email')}"
+                 th:errors="*{email}">
+            Email has to be filled
+          </small>
+        </div>
+
+        <div class="form-label-group">
+          <p class="text">Phone</p>
+          <input type="text" id="phone" class="form-control" th:field="*{phone}">
+          <label for="phone"></label>
+          <small class="validation-error text-danger" th:if="${#fields.hasErrors('phone')}"
+                 th:errors="*{phone}">
+            Phone has to be filled
+          </small>
+        </div>
+
+        <div class="form-label-group">
+          <p class="text">Social Network Link</p>
+          <input type="text" id="socialNetworkLink" class="form-control" th:field="*{socialNetworkLink}">
+          <label for="socialNetworkLink"></label>
+        </div>
+
+        <div sec:authorize="hasAnyRole('ADMIN', 'OWNER')" class="mt-5 form-label-group">
           <label class="mb-2" for="roles">Choose user's role:</label>
           <select multiple class="form-control custom-select mr-sm-2" id="roles" th:field="*{roles}" required>
             <option th:each="role : ${roles}"
@@ -49,7 +94,6 @@
           </select>
         </div>
 
-        <div class="checkbox mb-3"></div>
         <button class="btn btn-success btn-lg btn-block" type="submit">Submit</button>
       </form>
 
