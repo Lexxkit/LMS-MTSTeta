@@ -1,5 +1,6 @@
 package com.alekseenko.lms.domain;
 
+import com.alekseenko.lms.dto.ModuleDto;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,6 +45,20 @@ public class Module extends BaseEntity<String> {
     this.description = description;
     this.course = course;
     this.lessons = lessons;
+  }
+
+  public Module(ModuleDto moduleDto) {
+    this.id = moduleDto.getId();
+    this.title = moduleDto.getTitle();
+    this.description = moduleDto.getContent();
+  }
+
+
+  public Module(ModuleDto moduleDto, Course course) {
+//    this.id = moduleDto.getId();
+    this.title = moduleDto.getTitle();
+    this.description = moduleDto.getContent();
+    this.course = course;
   }
 
   public Long getId() {

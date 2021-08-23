@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public List<UserDto> getUsers(Long id, HttpServletRequest request) {
     if (request.isUserInRole(RoleConstants.ROLE_ADMIN)) {
-     return getUsersNotAssignedToCourse(id);
+      return getUsersNotAssignedToCourse(id);
     } else {
       return assignSingleUserToCourse(request.getRemoteUser());
     }
