@@ -39,8 +39,7 @@ public class UserController {
   @GetMapping
   public String userForm(Model model, Principal principal) {
     if (principal != null) {
-      UserDto currentUser = userService.getUserByUsername(principal.getName());
-      return String.format("redirect:/user/%d", currentUser.getId());
+      return "redirect:/profile";
     }
     return "redirect:/login";
   }

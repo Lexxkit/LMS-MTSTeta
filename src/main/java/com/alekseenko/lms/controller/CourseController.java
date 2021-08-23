@@ -137,7 +137,7 @@ public class CourseController {
     return String.format("redirect:/course/%d", courseId);
   }
 
-  @Secured(RoleConstants.ROLE_ADMIN)
+  @Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
   @GetMapping("/new")
   public String courseForm(Model model) {
     model.addAttribute("course", courseService.getCourseTemplate());
@@ -158,7 +158,7 @@ public class CourseController {
         .body(data);
   }
 
-  @Secured(RoleConstants.ROLE_ADMIN)
+  @Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
   @PostMapping("/{id}/picture")
   public String updateCourseImage(@PathVariable("id") Long courseId,
       @RequestParam("courseImage") MultipartFile courseImage) {

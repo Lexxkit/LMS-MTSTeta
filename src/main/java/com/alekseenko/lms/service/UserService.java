@@ -21,4 +21,6 @@ public interface UserService {
   UserDto getRegistrationTemplate();
 
   void saveUser(UserDto userDto);
+
+  void deleteUser(Long id, String username);
 }
