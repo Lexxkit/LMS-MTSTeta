@@ -78,7 +78,7 @@ public class UserProfileController {
     }
 
     userService.saveUser(user);
-    return "redirect:/profile";
+    return "redirect:/login";
   }
 
   @GetMapping("/avatar")

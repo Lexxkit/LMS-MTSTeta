@@ -5,6 +5,7 @@ import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.exception.AccessDeniedException;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.mapper.UserMapper;
 import com.alekseenko.lms.service.UserService;
@@ -92,5 +93,14 @@ public class UserServiceImpl implements UserService {
         .map(userMapper::mapToUserDto)
         .orElseThrow(() -> new NotFoundException(String.format("User %s not found", username)));
     return Collections.singletonList(userDto);
+  }
+
+  @Override
+  public void deleteUser(Long id, String username) {
+    if (userRepository.getById(id).getUsername().equals(username)) {
+      throw new AccessDeniedException("You can't delete yourself");
+    } else {
+      userRepository.deleteById(id);
+    }
   }
 }
