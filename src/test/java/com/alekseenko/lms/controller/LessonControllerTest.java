@@ -30,7 +30,7 @@ public class LessonControllerTest {
     @WithMockUser(roles={"ADMIN"})
     void testGetLessonTemplatePage() throws Exception {
         mockMvc.perform(get("/lesson/new")
-                .param("course_id", "1"))
+                .param("module_id", "1"))
                 .andExpect(view().name("lesson-form"));
     }
 
@@ -59,7 +59,7 @@ public class LessonControllerTest {
                 .with(csrf())
                 .flashAttr("lessonDto", new LessonDto(1L, "Title", "Text", 1L)))
                 .andExpect(model().hasNoErrors())
-                .andExpect(view().name(String.format("redirect:/course/%d", 1L)));
+                .andExpect(view().name(String.format("redirect:/module/%d", 1L)));
     }
 
     @Test
