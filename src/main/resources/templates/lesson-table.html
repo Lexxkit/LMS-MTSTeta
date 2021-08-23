@@ -14,13 +14,15 @@
           <div class="card-body px-4 pb-4">
             <!-- Tab -->
             <section class="tab-pane fade show active">
-              <h1 class="h1 mb-3 font-weight-normal text-center">Добавление и удаление модуля</h1>
-<!--              <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt="">-->
+              <h1 class="h1 mb-3 font-weight-normal text-center">Добавление и удаление урока</h1>
 
 <!----------------------------------------------------lesson--------------------------------------------------------->
-                <section class="mt-5 pt-3" th:unless="${lessons == null}">
+
+              <section class="mt-5 pt-3" th:unless="${lessons == null}">
                   <div>
-                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/lesson/new(course_id = ${course.id})}">Добавить новый урок</a>
+                    <a sec:authorize="hasRole('ADMIN')"  th:href="@{/lesson/new(module_id = ${moduleDto.id})}">Добавить новый урок</a>
+                    <input type="text"  th:value="${moduleDto.id}" name="moduleDto"/>
+
                   </div>
                   <table class="table table-striped table-success">
                     <thead>

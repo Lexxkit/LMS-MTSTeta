@@ -29,14 +29,13 @@ public class LessonController {
   }
 
   @GetMapping("/new")
-  public String lessonNewForm(Model model, @RequestParam("course_id") Long courseId) {
-    model.addAttribute("lessonDto", new LessonDto(courseId));
+  public String lessonNewForm(Model model, @RequestParam("module_id") Long moduleId) {
+    model.addAttribute("lessonDto", new LessonDto(moduleId));
     return "lesson-form";
   }
 
   @PostMapping
   public String submitLessonForm(@Valid LessonDto lessonDto, BindingResult bindingResult) {
-
     if (bindingResult.hasErrors()) {
       return "lesson-form";
     }
@@ -54,7 +53,6 @@ public class LessonController {
   @DeleteMapping("/{id}")
   public String deleteLesson(@PathVariable("id") Long id,
       @RequestParam("courseId") Long courseId) {
-
     lessonService.deleteLesson(id);
     return String.format("redirect:/course/%d", courseId);
   }

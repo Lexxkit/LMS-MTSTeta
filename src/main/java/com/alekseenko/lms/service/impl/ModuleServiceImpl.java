@@ -19,8 +19,6 @@ public class ModuleServiceImpl implements ModuleService {
   private final ModuleRepository moduleRepository;
   private final CourseRepository courseRepository;
 
-
-
   @Autowired
   public ModuleServiceImpl(ModuleRepository repository,
       CourseRepository courseRepository) {
@@ -59,10 +57,8 @@ public class ModuleServiceImpl implements ModuleService {
 
   }
 
-
   @Override
   public void deleteModule(Long id) {
     moduleRepository.deleteById(id);
-
   }
 }

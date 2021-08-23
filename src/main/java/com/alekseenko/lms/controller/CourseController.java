@@ -5,7 +5,6 @@ import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.CourseImageService;
 import com.alekseenko.lms.service.CourseService;
-import com.alekseenko.lms.service.LessonService;
 import com.alekseenko.lms.service.ModuleService;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
@@ -39,7 +38,6 @@ public class CourseController {
   private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
   private final CourseService courseService;
   private final CourseImageService courseImageService;
-  private final LessonService lessonService;
   private final UserService userService;
   private final ModuleService moduleService;
 
@@ -47,11 +45,9 @@ public class CourseController {
   @Autowired
   public CourseController(CourseService courseService,
       CourseImageService courseImageService,
-      LessonService lessonService,
       UserService userService, ModuleService moduleService) {
     this.courseService = courseService;
     this.courseImageService = courseImageService;
-    this.lessonService = lessonService;
     this.userService = userService;
     this.moduleService = moduleService;
   }
@@ -80,8 +76,6 @@ public class CourseController {
     model.addAttribute("activePage", "courses");
     model.addAttribute("modules", moduleService.findAllByCourse(currentCourse));
     model.addAttribute("course", currentCourse);
-//    model
-//        .addAttribute("lessons", lessonService.getAllForLessonIdWithoutText(currentCourse.getId()));
     model.addAttribute("users", currentCourse.getUsers());
     return "course-form";
   }

@@ -48,7 +48,7 @@ public class Module extends BaseEntity<String> {
   }
 
   public Module(ModuleDto moduleDto) {
-//    this.id = moduleDto.getId();
+    this.id = moduleDto.getId();
     this.title = moduleDto.getTitle();
     this.description = moduleDto.getContent();
   }

@@ -16,7 +16,7 @@
             <section class="tab-pane fade show active">
               <h1 class="h1 mb-3 font-weight-normal text-center">Создать или отредактировать Модуль</h1>
 
-              <form th:object="${module}" method="post" th:action="@{/module}">
+              <form th:object="${moduleDto}" method="post" th:action="@{/module}">
                 <input type="hidden" th:field="*{id}">
                 <input type="hidden" th:field="*{courseId}">
                 <div class="row">
