@@ -11,6 +11,9 @@ import com.alekseenko.lms.service.CourseService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +38,7 @@ public class CourseServiceImpl implements CourseService {
     if (titlePrefix == null) {
       return getAllCourses();
     } else {
-      return getCoursesByTitleWithPrefix(titlePrefix + "%");
+      return getCoursesByTitleWithPrefix(titlePrefix).getContent();
     }
   }
 
@@ -49,6 +52,16 @@ public class CourseServiceImpl implements CourseService {
     return courseRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
         .map(courseMapper::mapToCourseDtoWithoutUser)
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix) {
+    if (titlePrefix != null) {
+      return getCoursesByTitleWithPrefix(titlePrefix);
+    } else {
+      Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+      return courseRepository.findAll(pageable).map(courseMapper::mapToCourseDtoWithoutUser);
+    }
   }
 
   @Override
@@ -82,10 +95,9 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public List<CourseDto> getCoursesByTitleWithPrefix(String prefix) {
-    return courseRepository.findByTitleLike(prefix).stream()
-        .map(courseMapper::mapToCourseDtoWithoutUser)
-        .collect(Collectors.toList());
+  public Page<CourseDto> getCoursesByTitleWithPrefix(String prefix) {
+    return courseRepository.findByTitleContainingIgnoreCase(prefix, Pageable.unpaged())
+        .map(courseMapper::mapToCourseDtoWithoutUser);
   }
 
   @Override

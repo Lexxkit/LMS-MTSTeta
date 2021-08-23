@@ -76,3 +76,25 @@ insert into users_roles (users_id, roles_id)
 values (13, '3');
 insert into users_roles (users_id, roles_id)
 values (14, '4');
+
+-- courses
+insert into courses (author, title)
+values ('Linnell Girsch', 'Seamless optimizing collaboration');
+insert into courses (author, title)
+values ('Nettle Bentson', 'Cloned disintermediate projection');
+insert into courses (author, title)
+values ('Egor Coath', 'User-centric real-time intranet');
+insert into courses (author, title)
+values ('Norman Bowton', 'Public-key background application');
+insert into courses (author, title)
+values ('Loraine Danielis', 'User-friendly tangible focus group');
+insert into courses (author, title)
+values ('Kliment Read', 'Distributed foreground orchestration');
+insert into courses (author, title)
+values ('Kalil Ribchester', 'User-centric methodical toolset');
+insert into courses (author, title)
+values ('Joscelin Savin', 'Sharable hybrid capacity');
+insert into courses (author, title)
+values ('Romonda Edinburgh', 'Configurable didactic attitude');
+insert into courses (author, title)
+values ('Ailene Fuggle', 'Extended object-oriented time-frame');

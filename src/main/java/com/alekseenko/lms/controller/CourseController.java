@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -35,6 +36,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/course")
 public class CourseController {
 
+  // Constant, which defines number of elements on each page
+  private final static int ITEMS_PER_PAGE = 3;
+
   private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
   private final CourseService courseService;
   private final CourseImageService courseImageService;
@@ -55,8 +59,21 @@ public class CourseController {
   @GetMapping
   public String courseTable(Model model,
       @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
-    model.addAttribute("activePage", "courses");
-    model.addAttribute("courses", courseService.getAllCourses(titlePrefix));
+    return viewPaginated(model, 1, titlePrefix);
+  }
+
+  @GetMapping("/page/{pageNumber}")
+  public String viewPaginated(Model model,
+      @PathVariable ("pageNumber") int pageNumber,
+      @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
+
+    Page<CourseDto> page = courseService.findPaginated(pageNumber, ITEMS_PER_PAGE, titlePrefix);
+
+    model.addAttribute("currentPage", pageNumber);
+    model.addAttribute("totalPages", page.getTotalPages());
+    model.addAttribute("totalItems", page.getTotalElements());
+    model.addAttribute("courses", page.getContent());
+
     return "index";
   }
 

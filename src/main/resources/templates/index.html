@@ -91,6 +91,19 @@
           <p>No courses to display</p>
         </div>
       </div>
+      <div th:if="${totalPages > 1}">
+        <div class="row-sm-10">
+          <div class="col-sm-2">
+            Всего курсов: [[${totalItems}]]
+          </div>
+          <div class="col-sm-2">
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						  <a th:if="${currentPage != i}" th:href="@{'/course/page/' + ${i}}">[[${i}]]</a>
+						  <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
