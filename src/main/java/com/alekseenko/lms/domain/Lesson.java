@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "lessons")
@@ -18,7 +17,6 @@ public class Lesson extends BaseEntity<String> {
   @Column
   private Long id;
 
-  @NotBlank(message = "Lesson title has to be filled")
   @Column
   private String title;
 
@@ -26,7 +24,6 @@ public class Lesson extends BaseEntity<String> {
   @Column
   private String description;
 
-  @NotBlank(message = "Lesson test has to be filled")
 //  @Lob
   @Column
   private String content;

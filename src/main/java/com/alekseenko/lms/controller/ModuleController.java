@@ -55,10 +55,7 @@ public class ModuleController {
   @RequestMapping("/{id}")
   public String lessonForm(Model model, @PathVariable("id") Long id) {
     ModuleDto moduleDto = moduleService.findById(id);
-    System.out.println("moduleDto.getId() = " + moduleDto.getId());
     CourseDto currentCourse = courseService.getCourseById(moduleDto.getCourseId());
-
-    System.out.println("currentCourse.getId() = " + currentCourse.getId());
     model.addAttribute("course", currentCourse);
     model
         .addAttribute("lessons", lessonService.getAllForLessonIdWithoutText(moduleDto.getId()));
