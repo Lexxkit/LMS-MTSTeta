@@ -30,6 +30,7 @@
                   <input type="submit" class="btn btn-success" value="Обновить">
                 </div>
               </form>
+<!------------------------------------------new course--------------------------------------------->
               <form th:object="${course}" th:method="post" th:action="@{/course}">
                 <input type="hidden" th:field="*{id}">
                 <div class="row">
@@ -60,39 +61,42 @@
                   <input sec:authorize="hasRole('ADMIN')" type="submit" class="btn btn-success" value="Сохранить">
                 </div>
               </form>
-                <section class="mt-5 pt-3" th:unless="${lessons == null}">
-                  <div>
-                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/lesson/new(course_id = ${course.id})}">Добавить новый урок</a>
-                  </div>
-                  <table class="table table-striped table-success">
-                    <thead>
-                      <tr>
-                        <th scope="col">id</th>
-                        <th scope="col">Название</th>
-                        <th scope="col">Действие</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr th:unless="${lessons.empty}" th:each="lesson : ${lessons}">
-                        <th scope="row" th:text="${lesson.id}">1</th>
-                        <td>
-                          <a th:text="${lesson.title}" th:href="@{/lesson/{id}(id = ${lesson.id})}">Lesson name</a>
-                        </td>
-                        <td>
-                          <div class="form-group col-2 col-md-10 pl-0">
-                            <form th:method="delete" th:action="@{/lesson/{id}(id = ${lesson.id})}">
-                              <input type="hidden" name="courseId" id="courseId" th:value="${course.id}">
-                              <button sec:authorize="hasRole('ADMIN')" class="btn btn-danger" type="submit">Удалить</button>
-                            </form>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr th:if="${lessons.empty}">
-                        <td colspan="3">No lessons in this course</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </section>
+<!----------------------------------------Module -------------------------------------------------->
+              <p>Модули курса</p>
+<!--              <section class="mt-5 pt-3" th:unless="${lessons == null}">-->
+                <div>
+                  <a sec:authorize="hasRole('ADMIN')" th:href="@{/module/new(course_id = ${course.id})}">Добавить новый модуль</a>
+                </div>
+                <table class="table table-striped table-success">
+                  <thead>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Название</th>
+                    <th scope="col">Действие</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:unless="${modules.empty}" th:each="module : ${modules}">
+                    <th scope="row" th:text="${module.id}">1</th>
+                    <td>
+                      <a th:text="${module.title}" th:href="@{/module/{id}(id = ${module.id})}">module name</a>
+                    </td>
+                    <td>
+                      <div class="form-group col-2 col-md-10 pl-0">
+                        <form th:method="delete" th:action="@{/module/{id}(id = ${module.id})}">
+                          <input type="hidden" name="courseId" id="courseId" th:value="${course.id}">
+                          <button sec:authorize="hasRole('ADMIN')" class="btn btn-danger" type="submit">Удалить</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr th:if="${modules.empty}">
+                    <td colspan="3">No module in this course</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </section>
+
                 <section class="mt-5 pt-3" th:unless="${users == null}">
                   <p>Пользователи связанные с курсом</p>
                   <table class="table table-striped table-success">

@@ -33,7 +33,7 @@ public class LessonServiceImpl implements LessonService {
 
   @Override
   public List<LessonDto> getAllForLessonIdWithoutText(Long id) {
-    return lessonRepository.findAllForLessonIdWithoutText(id);
+    return lessonRepository.findAllLessonDtoByModuleId(id);
   }
 
   @Override
@@ -45,7 +45,8 @@ public class LessonServiceImpl implements LessonService {
         lessonDto.getId(),
         lessonDto.getTitle(),
         lessonDto.getContent(),
-        currentModule
+        currentModule,
+        currentModule.getCourse().getId()
     );
     lessonRepository.save(lesson);
   }

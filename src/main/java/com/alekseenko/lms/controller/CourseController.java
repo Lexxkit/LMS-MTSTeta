@@ -5,9 +5,10 @@ import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.CourseImageService;
 import com.alekseenko.lms.service.CourseService;
-import com.alekseenko.lms.service.LessonService;
+import com.alekseenko.lms.service.ModuleService;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -37,18 +38,18 @@ public class CourseController {
   private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
   private final CourseService courseService;
   private final CourseImageService courseImageService;
-  private final LessonService lessonService;
   private final UserService userService;
+  private final ModuleService moduleService;
+
 
   @Autowired
   public CourseController(CourseService courseService,
       CourseImageService courseImageService,
-      LessonService lessonService,
-      UserService userService) {
+      UserService userService, ModuleService moduleService) {
     this.courseService = courseService;
     this.courseImageService = courseImageService;
-    this.lessonService = lessonService;
     this.userService = userService;
+    this.moduleService = moduleService;
   }
 
   @GetMapping
@@ -72,11 +73,9 @@ public class CourseController {
   @RequestMapping("/{id}")
   public String courseForm(Model model, @PathVariable("id") Long id) {
     CourseDto currentCourse = courseService.getCourseById(id);
-
     model.addAttribute("activePage", "courses");
+    model.addAttribute("modules", moduleService.findAllByCourse(currentCourse));
     model.addAttribute("course", currentCourse);
-    model
-        .addAttribute("lessons", lessonService.getAllForLessonIdWithoutText(currentCourse.getId()));
     model.addAttribute("users", currentCourse.getUsers());
     return "course-form";
   }
@@ -125,6 +124,7 @@ public class CourseController {
   @GetMapping("/new")
   public String courseForm(Model model) {
     model.addAttribute("course", courseService.getCourseTemplate());
+    model.addAttribute("modules", new ArrayList<>());
     return "course-form";
   }
 
@@ -145,7 +145,7 @@ public class CourseController {
   @PostMapping("/{id}/picture")
   public String updateCourseImage(@PathVariable("id") Long courseId,
       @RequestParam("courseImage") MultipartFile courseImage) {
-      courseImageService.saveCourseImage(courseId, courseImage);
+    courseImageService.saveCourseImage(courseId, courseImage);
     return String.format("redirect:/course/%d", courseId);
   }
 }

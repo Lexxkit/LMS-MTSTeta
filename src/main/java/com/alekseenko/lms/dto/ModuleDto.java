@@ -1,8 +1,9 @@
 package com.alekseenko.lms.dto;
 
+import com.alekseenko.lms.domain.Module;
 import javax.validation.constraints.NotBlank;
 
-public class LessonDto {
+public class ModuleDto {
 
   private Long id;
 
@@ -12,31 +13,32 @@ public class LessonDto {
   @NotBlank(message = "Text shouldn't be empty")
   private String content;
 
-  private Long moduleId;
+  private Long courseId;
 
-  public LessonDto() {
+  public ModuleDto() {
   }
 
-//  public LessonDto(Long id, Long moduleId) {
-//    this.id = id;
-//    this.moduleId = moduleId;
-//  }
-
-  public LessonDto(Long moduleId) {
-    this.moduleId = moduleId;
+  public ModuleDto(Long courseId) {
+    this.courseId = courseId;
   }
 
-  public LessonDto(Long id, String title, Long moduleId) {
+  public ModuleDto(Module module) {
+    this.id = module.getId();
+    this.title = module.getTitle();
+    this.courseId = module.getCourse().getId();
+  }
+
+  public ModuleDto(Long id, String title, Long courseId) {
     this.id = id;
     this.title = title;
-    this.moduleId = moduleId;
+    this.courseId = courseId;
   }
 
-  public LessonDto(Long id, String title, String content, Long moduleId) {
+  public ModuleDto(Long id, String title, String content, Long courseId) {
     this.id = id;
     this.title = title;
     this.content = content;
-    this.moduleId = moduleId;
+    this.courseId = courseId;
   }
 
   public Long getId() {
@@ -63,12 +65,12 @@ public class LessonDto {
     this.content = content;
   }
 
-  public Long getModuleId() {
-    return moduleId;
+  public Long getCourseId() {
+    return courseId;
   }
 
-  public void setModuleId(Long moduleId) {
-    this.moduleId = moduleId;
+  public void setCourseId(Long courseId) {
+    this.courseId = courseId;
   }
 }
 
