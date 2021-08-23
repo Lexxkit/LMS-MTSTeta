@@ -1,32 +1,33 @@
 package com.alekseenko.lms.service;
 
+import static com.alekseenko.lms.constants.RoleConstants.ROLE_ADMIN;
+import static com.alekseenko.lms.constants.RoleConstants.ROLE_STUDENT;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import com.alekseenko.lms.dao.CourseRepository;
 import com.alekseenko.lms.dao.RoleRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Course;
-import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.mapper.UserMapper;
+import java.util.Set;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Set;
-
-import static com.alekseenko.lms.RoleConstants.ROLE_ADMIN;
-import static com.alekseenko.lms.RoleConstants.ROLE_STUDENT;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(Lifecycle.PER_CLASS)
 @Transactional
 public class UserServiceImplTest {
     @Autowired
@@ -41,18 +42,23 @@ public class UserServiceImplTest {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
-    @MockBean
-    private MyEventListener myEventListener;
+
+    private User TEST_USER;
 
     @BeforeAll
     void setUp() {
-        Role roleAdmin = new Role("ROLE_ADMIN");
-        Role roleStudent = new Role("ROLE_STUDENT");
-        roleRepository.saveAll(List.of(roleAdmin, roleStudent));
+        TEST_USER = new User(1L, "Test", "", Set.of());
+        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
         Course course = new Course(1L, "Oleg", "New course", null);
         courseRepository.save(course);
-        User testUser = new User(1L, "Test", "", Set.of());
-        userRepository.save(testUser);
+        userRepository.save(TEST_USER);
+    }
+
+    @BeforeEach
+    void setAuth() {
+        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     @Test

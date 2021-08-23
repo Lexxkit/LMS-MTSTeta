@@ -10,10 +10,10 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/access_denied")
 public class AccessDeniedController {
 
-    @GetMapping
-    public ModelAndView accessDenied() {
-        ModelAndView modelAndView = new ModelAndView("access_denied");
-        modelAndView.setStatus(HttpStatus.FORBIDDEN);
-        return modelAndView;
-    }
+  @GetMapping
+  public ModelAndView accessDenied() {
+    ModelAndView modelAndView = new ModelAndView("access_denied");
+    modelAndView.setStatus(HttpStatus.FORBIDDEN);
+    return modelAndView;
+  }
 }

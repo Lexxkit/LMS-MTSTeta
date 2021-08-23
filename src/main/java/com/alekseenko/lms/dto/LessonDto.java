@@ -4,66 +4,66 @@ import javax.validation.constraints.NotBlank;
 
 public class LessonDto {
 
-    private Long id;
+  private Long id;
 
-    @NotBlank(message = "Title shouldn't be empty")
-    private String title;
+  @NotBlank(message = "Title shouldn't be empty")
+  private String title;
 
-    @NotBlank(message = "Text shouldn't be empty")
-    private String text;
+  @NotBlank(message = "Text shouldn't be empty")
+  private String content;
 
-    private Long courseId;
+  private Long moduleId;
 
-    public LessonDto() {
-    }
+  public LessonDto() {
+  }
 
-    public LessonDto(Long courseId) {
-        this.courseId = courseId;
-    }
+  public LessonDto(Long moduleId) {
+    this.moduleId = moduleId;
+  }
 
-    public LessonDto(Long id, String title, Long courseId) {
-        this.id = id;
-        this.title = title;
-        this.courseId = courseId;
-    }
+  public LessonDto(Long id, String title, Long moduleId) {
+    this.id = id;
+    this.title = title;
+    this.moduleId = moduleId;
+  }
 
-    public LessonDto(Long id, String title, String text, Long courseId) {
-        this.id = id;
-        this.title = title;
-        this.text = text;
-        this.courseId = courseId;
-    }
+  public LessonDto(Long id, String title, String content, Long moduleId) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
+    this.moduleId = moduleId;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getText() {
-        return text;
-    }
+  public String getContent() {
+    return content;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public void setContent(String content) {
+    this.content = content;
+  }
 
-    public Long getCourseId() {
-        return courseId;
-    }
+  public Long getModuleId() {
+    return moduleId;
+  }
 
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
-    }
+  public void setModuleId(Long moduleId) {
+    this.moduleId = moduleId;
+  }
 }
 

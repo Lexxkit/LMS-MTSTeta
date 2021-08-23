@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/head :: head"></head>
 <body>
 <header th:replace="fragments/header :: header"></header>
 <main class="container mt-3">
+
   <section>
     <h1 class="h1 text-center mx-auto mt-4 py-5"><strong>All users</strong></h1>
   </section>
 
   <section class="mt-2 pt-1">
+    <a th:href="@{/user/registration}">Добавить нового пользователя</a>
     <table class="table table-striped table-success">
       <thead>
       <tr>

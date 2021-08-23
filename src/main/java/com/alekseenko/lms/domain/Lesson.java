@@ -1,68 +1,97 @@
 package com.alekseenko.lms.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "lessons")
-public class Lesson {
+public class Lesson extends BaseEntity<String> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column
+  private Long id;
 
-    @NotBlank(message = "Lesson title has to be filled")
-    @Column
-    private String title;
+  @NotBlank(message = "Lesson title has to be filled")
+  @Column
+  private String title;
 
-    @NotBlank(message = "Lesson test has to be filled")
-    @Lob
-    @Column
-    private String text;
+  @Lob
+  @Column
+  private String description;
 
-    @ManyToOne(optional = false)
-    private Course course;
+  @NotBlank(message = "Lesson test has to be filled")
+  @Lob
+  @Column
+  private String content;
 
-    public Lesson() {
-    }
+  @ManyToOne(optional = false)
+  private Module module;
 
-    public Lesson(Long id, String title, String text, Course course) {
-        this.id = id;
-        this.title = title;
-        this.text = text;
-        this.course = course;
-    }
+  public Lesson() {
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Lesson(Long id, String title, String content, Module module) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
+    this.module = module;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Lesson(Long id, String title, String description, String content,
+      Module module) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.content = content;
+    this.module = module;
+  }
 
-    public String getTitle() {
-        return title;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getText() {
-        return text;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public Course getCourse() {
-        return course;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public void setCourse(Course course) {
-        this.course = course;
-    }
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public Module getModule() {
+    return module;
+  }
+
+  public void setModule(Module module) {
+    this.module = module;
+  }
 }

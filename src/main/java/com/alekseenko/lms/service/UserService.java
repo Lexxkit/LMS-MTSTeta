@@ -1,22 +1,24 @@
 package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.dto.UserDto;
-
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
-    List<UserDto> findAllUsers();
+  List<UserDto> getUsers(Long id, HttpServletRequest request);
 
-    List<UserDto> getUsersNotAssignedToCourse(Long id);
+  List<UserDto> findAllUsers();
 
-    UserDto getUserById(Long id);
+  List<UserDto> getUsersNotAssignedToCourse(Long id);
 
-    UserDto getUserByUsername(String username);
+  UserDto getUserById(Long id);
 
-   List<UserDto> assignSingleUserToCourse(String username);
+  UserDto getUserByUsername(String username);
 
-    UserDto getRegistrationTemplate();
+  List<UserDto> assignSingleUserToCourse(String username);
 
-    void saveUser(UserDto userDto);
+  UserDto getRegistrationTemplate();
+
+  void saveUser(UserDto userDto);
 }

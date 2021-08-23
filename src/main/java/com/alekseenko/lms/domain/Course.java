@@ -1,89 +1,173 @@
 package com.alekseenko.lms.domain;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 
 @Entity
-@Table(name="courses")
-public class Course {
+@Table(name = "courses")
+public class Course extends BaseEntity<String> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column
+  private Long id;
 
-    @Column
-    private String author;
+  @Column
+  private String author;
 
-    @Column
-    private String title;
+  @Column
+  private String title;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    @OrderBy("id")
-    private List<Lesson> lessons;
+  @Column
+  @Lob
+  private String description;
 
-    @ManyToMany
-    private Set<User> users;
+  @Column
+  private Integer durationWeeks;
 
-    @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private CourseImage courseImage;
+  @Column
+  private String tag;
 
-    public Course() {
-    }
+  @Column
+  private Double avgRating;
 
-    public Course(Long id, String author, String title, CourseImage courseImage) {
-        this.id = id;
-        this.author = author;
-        this.title = title;
-        this.courseImage = courseImage;
-    }
+  @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE) // TODO: 18.08.2021 Уточнить тип удаления 
+  @OrderBy("id") 
+  private List<Module> modules;
 
-    public Long getId() {
-        return id;
-    }
+  @ManyToMany
+  private Set<User> users;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
+  private CourseImage courseImage;
 
-    public String getAuthor() {
-        return author;
-    }
+  @OneToMany(mappedBy = "course")
+  private Set<CourseRating> courseRatings;
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+  public Course() {
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public Course(Long id, String author, String title, CourseImage courseImage) {
+    this.id = id;
+    this.author = author;
+    this.title = title;
+    this.courseImage = courseImage;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public Course(Long id, String author, String title, String description,
+      Integer durationWeeks, String tag, Double avgRating,
+      List<Module> modules, Set<User> users, CourseImage courseImage,
+      Set<CourseRating> courseRatings) {
+    this.id = id;
+    this.author = author;
+    this.title = title;
+    this.description = description;
+    this.durationWeeks = durationWeeks;
+    this.tag = tag;
+    this.avgRating = avgRating;
+    this.modules = modules;
+    this.users = users;
+    this.courseImage = courseImage;
+    this.courseRatings = courseRatings;
+  }
 
-    public List<Lesson> getLessons() {
-        return lessons;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setLessons(List<Lesson> lessons) {
-        this.lessons = lessons;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Set<User> getUsers() {
-        return users;
-    }
+  public String getAuthor() {
+    return author;
+  }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+  public void setAuthor(String author) {
+    this.author = author;
+  }
 
-    public CourseImage getCourseImage() {
-        return courseImage;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public void setCourseImage(CourseImage courseImage) {
-        this.courseImage = courseImage;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Integer getDurationWeeks() {
+    return durationWeeks;
+  }
+
+  public void setDurationWeeks(Integer durationWeeks) {
+    this.durationWeeks = durationWeeks;
+  }
+
+  public String getTag() {
+    return tag;
+  }
+
+  public void setTag(String tag) {
+    this.tag = tag;
+  }
+
+  public Double getAvgRating() {
+    return avgRating;
+  }
+
+  public void setAvgRating(Double avgRating) {
+    this.avgRating = avgRating;
+  }
+
+  public List<Module> getModules() {
+    return modules;
+  }
+
+  public void setModules(List<Module> modules) {
+    this.modules = modules;
+  }
+
+  public Set<User> getUsers() {
+    return users;
+  }
+
+  public void setUsers(Set<User> users) {
+    this.users = users;
+  }
+
+  public CourseImage getCourseImage() {
+    return courseImage;
+  }
+
+  public void setCourseImage(CourseImage courseImage) {
+    this.courseImage = courseImage;
+  }
+
+  public Set<CourseRating> getCourseRatings() {
+    return courseRatings;
+  }
+
+  public void setCourseRatings(Set<CourseRating> courseRatings) {
+    this.courseRatings = courseRatings;
+  }
 }

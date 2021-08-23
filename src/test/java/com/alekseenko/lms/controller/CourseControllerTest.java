@@ -1,27 +1,33 @@
 package com.alekseenko.lms.controller;
 
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import com.alekseenko.lms.domain.CourseImage;
 import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.dto.LessonDto;
 import com.alekseenko.lms.dto.UserDto;
-import com.alekseenko.lms.service.*;
+import com.alekseenko.lms.service.CourseImageService;
+import com.alekseenko.lms.service.CourseService;
+import com.alekseenko.lms.service.LessonService;
+import com.alekseenko.lms.service.UserService;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CourseController.class)
 public class CourseControllerTest {
@@ -33,8 +39,6 @@ public class CourseControllerTest {
     private LessonService lessonService;
     @MockBean
     private UserService userService;
-    @MockBean
-    private StatisticsCounter statisticsCounter;
     @Autowired
     private MockMvc mockMvc;
 

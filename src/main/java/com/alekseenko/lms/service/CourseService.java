@@ -1,26 +1,27 @@
 package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.dto.CourseDto;
-
 import java.util.List;
 
 public interface CourseService {
 
-    CourseDto getCourseTemplate();
+  List<CourseDto> getAllCourses(String titlePrefix);
 
-    List<CourseDto> getAllCourses();
+  CourseDto getCourseTemplate();
 
-    CourseDto getCourseById(Long id);
+  List<CourseDto> getAllCourses();
 
-    List<CourseDto> getCoursesForUser(String username);
+  CourseDto getCourseById(Long id);
 
-    void saveCourse(CourseDto courseDto);
+  List<CourseDto> getCoursesForUser(String username);
 
-    void deleteCourse(Long id);
+  void saveCourse(CourseDto courseDto);
 
-    List<CourseDto> getCoursesByTitleWithPrefix(String prefix);
+  void deleteCourse(Long id);
 
-    void setUserCourseConnection(Long userId, Long courseId);
+  List<CourseDto> getCoursesByTitleWithPrefix(String prefix);
 
-    void removeUserCourseConnection(Long userId, Long courseId, String username, boolean isAdmin);
+  void setUserCourseConnection(Long userId, Long courseId);
+
+  void removeUserCourseConnection(Long userId, Long courseId, String username, boolean isAdmin);
 }
