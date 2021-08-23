@@ -30,6 +30,7 @@
                   <input type="submit" class="btn btn-success" value="Обновить">
                 </div>
               </form>
+<!------------------------------------------new course--------------------------------------------->
               <form th:object="${course}" th:method="post" th:action="@{/course}">
                 <input type="hidden" th:field="*{id}">
                 <div class="row">
@@ -60,7 +61,7 @@
                   <input sec:authorize="hasRole('ADMIN')" type="submit" class="btn btn-success" value="Сохранить">
                 </div>
               </form>
-<!----------------------------------------Module -------------------------------------------------------------------->
+<!----------------------------------------Module -------------------------------------------------->
               <p>Модули курса</p>
 <!--              <section class="mt-5 pt-3" th:unless="${lessons == null}">-->
                 <div>
