@@ -22,7 +22,7 @@ public class LoginCheck extends TitleChecker {
   public boolean check(List<String> wordTitle) {
     logger.info("validation email...");
     if (wordTitle.stream().anyMatch(LoginCheck::isSpecialCharacter)) {
-      logger.info("emailCheck - INCORRECT EMAIL FORMAT");
+      logger.info("LoginCheck - INCORRECT LOGIN FORMAT");
       return false;
     }
     return checkNext(wordTitle);
