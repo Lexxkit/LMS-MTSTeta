@@ -1,6 +1,7 @@
 package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.exception.UserAlreadyRegisteredException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,4 +24,6 @@ public interface UserService {
   void saveUser(UserDto userDto);
 
   void deleteUser(Long id, String username);
+
+  void registerNewUserAccount(UserDto userDto) throws UserAlreadyRegisteredException;
 }
