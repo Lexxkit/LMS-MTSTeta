@@ -1,10 +1,13 @@
 package com.alekseenko.lms.dto;
 
 import com.alekseenko.lms.domain.CourseImage;
+import com.alekseenko.lms.domain.CourseRating;
 import com.alekseenko.lms.domain.Lesson;
+import com.alekseenko.lms.domain.Module;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.validator.type.TitleCase;
 import com.alekseenko.lms.validator.type.TitleType;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
@@ -20,11 +23,23 @@ public class CourseDto {
   @TitleCase(type = TitleType.ANY)
   private String title;
 
-  private List<Lesson> lessons;
+  private String description;
+
+  private Integer durationWeeks;
+
+  private String tag;
+
+  private Double avgRating;
+
+  private List<Module> modules;
 
   private Set<User> users;
 
   private CourseImage courseImage;
+
+  private Set<CourseRating> courseRatings;
+
+  private String createdAt;
 
   public CourseDto() {
   }
@@ -41,6 +56,24 @@ public class CourseDto {
     this.author = author;
     this.title = title;
     this.users = users;
+  }
+
+  public CourseDto(Long id, String author, String title, String description,
+      Integer durationWeeks, String tag, Double avgRating,
+      List<Module> modules, Set<User> users, CourseImage courseImage,
+      Set<CourseRating> courseRatings, String createdAt) {
+    this.id = id;
+    this.author = author;
+    this.title = title;
+    this.description = description;
+    this.durationWeeks = durationWeeks;
+    this.tag = tag;
+    this.avgRating = avgRating;
+    this.modules = modules;
+    this.users = users;
+    this.courseImage = courseImage;
+    this.courseRatings = courseRatings;
+    this.createdAt = createdAt;
   }
 
   public Long getId() {
@@ -67,12 +100,44 @@ public class CourseDto {
     this.title = title;
   }
 
-  public List<Lesson> getLessons() {
-    return lessons;
+  public String getDescription() {
+    return description;
   }
 
-  public void setLessons(List<Lesson> lessons) {
-    this.lessons = lessons;
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Integer getDurationWeeks() {
+    return durationWeeks;
+  }
+
+  public void setDurationWeeks(Integer durationWeeks) {
+    this.durationWeeks = durationWeeks;
+  }
+
+  public String getTag() {
+    return tag;
+  }
+
+  public void setTag(String tag) {
+    this.tag = tag;
+  }
+
+  public Double getAvgRating() {
+    return avgRating;
+  }
+
+  public void setAvgRating(Double avgRating) {
+    this.avgRating = avgRating;
+  }
+
+  public List<Module> getModules() {
+    return modules;
+  }
+
+  public void setModules(List<Module> modules) {
+    this.modules = modules;
   }
 
   public Set<User> getUsers() {
@@ -89,5 +154,21 @@ public class CourseDto {
 
   public void setCourseImage(CourseImage courseImage) {
     this.courseImage = courseImage;
+  }
+
+  public Set<CourseRating> getCourseRatings() {
+    return courseRatings;
+  }
+
+  public void setCourseRatings(Set<CourseRating> courseRatings) {
+    this.courseRatings = courseRatings;
+  }
+
+  public String getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(String createdAt) {
+    this.createdAt = createdAt;
   }
 }

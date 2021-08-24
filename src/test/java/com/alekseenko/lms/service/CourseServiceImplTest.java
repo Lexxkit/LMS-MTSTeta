@@ -63,7 +63,7 @@ public class CourseServiceImplTest {
 
     @Test
     void shouldFindAllCourses() {
-        final var courses = courseService.getAllCourses();
+        final var courses = courseService.getAllCourses("id", "asc");
         assertThat(courses.size()).isEqualTo(2);
     }
 
@@ -93,7 +93,7 @@ public class CourseServiceImplTest {
     void shouldSaveOneCourse() {
         final var courseToSave = new CourseDto(null, "Test2", "Work with DB", (CourseImage) null);
         courseService.saveCourse(courseToSave);
-        final var courses = courseService.getAllCourses();
+        final var courses = courseService.getAllCourses("id", "asc");
 
         assertThat(courses.size()).isEqualTo(3);
     }
@@ -108,7 +108,7 @@ public class CourseServiceImplTest {
         course = courseRepository.findById(1L);
         assertThat(course).isEmpty();
 
-        final var courses = courseService.getAllCourses();
+        final var courses = courseService.getAllCourses("id", "asc");
         assertThat(courses.size()).isEqualTo(1);
     }
 

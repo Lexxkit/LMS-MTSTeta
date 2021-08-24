@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@Secured(RoleConstants.ROLE_ADMIN)
+@Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
 @RequestMapping("/lesson")
 public class LessonController {
 
