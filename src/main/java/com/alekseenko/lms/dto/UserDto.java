@@ -20,7 +20,7 @@ public class UserDto {
   private String username;
 
   @Size(min = 8, message = "Пароль должен быть не менее 8 символов")
-  @TitleCase(type = TitleType.PASSWORD, message = "Некорректный формат email")
+  @TitleCase(type = TitleType.PASSWORD, message = "Некорректный формат пароля")
   @NotBlank(message = "Пароль не должен быть пустым")
   private String password;
 

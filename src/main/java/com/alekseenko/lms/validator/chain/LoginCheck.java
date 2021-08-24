@@ -8,7 +8,7 @@ public class LoginCheck extends TitleChecker {
 
   Logger logger = LoggerFactory.getLogger(LoginCheck.class);
 
-  private static boolean isSpecialCharacter(String s) {
+  private static boolean isSpecialCharacterAndLatin(String s) {
     String lowerCaseWord = s.toLowerCase();
     return !(lowerCaseWord.matches(
         "([A-Za-z0-9-@#$%^&+=]+)"));
@@ -20,8 +20,8 @@ public class LoginCheck extends TitleChecker {
    * спец.символы”.
    */
   public boolean check(List<String> wordTitle) {
-    logger.info("validation email...");
-    if (wordTitle.stream().anyMatch(LoginCheck::isSpecialCharacter)) {
+    logger.info("validation login...");
+    if (wordTitle.stream().anyMatch(LoginCheck::isSpecialCharacterAndLatin)) {
       logger.info("LoginCheck - INCORRECT LOGIN FORMAT");
       return false;
     }
