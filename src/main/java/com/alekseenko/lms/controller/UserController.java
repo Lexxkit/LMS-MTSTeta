@@ -9,6 +9,7 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +37,7 @@ public class UserController {
     return roleService.findAllRoles();
   }
 
-  @GetMapping
+  @GetMapping("")
   public String userForm(Model model, Principal principal) {
     if (principal != null) {
       return "redirect:/profile";
@@ -44,14 +45,18 @@ public class UserController {
     return "redirect:/login";
   }
 
-  @PostMapping()
+  @PostMapping("")
   public String registerUser(@Valid @ModelAttribute("user") UserDto user,
-      BindingResult bindingResult) {
+      BindingResult bindingResult, Authentication authentication) {
     if (bindingResult.hasErrors()) {
       return "user-create";
     }
 
     userService.saveUser(user);
+    if (authentication.getAuthorities().stream().anyMatch(r ->
+        (r.getAuthority().equals("ROLE_ADMIN") || (r.getAuthority().equals("ROLE_OWNER"))))) {
+      return "redirect:/admin/user";
+    }
     return "redirect:/login";
   }
 
