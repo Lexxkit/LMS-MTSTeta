@@ -22,7 +22,7 @@ public class AnyTitleValidator implements TitleValidator {
 
   @Override
   public boolean isValid(List<String> wordTitle) {
-    logger.debug("AnyTitleValidator entered");
+    logger.info("AnyTitleValidator entered");
     commonChain();
     return titleChecker.check(wordTitle);
   }

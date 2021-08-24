@@ -12,7 +12,7 @@ public class EnTitleValidator extends AnyTitleValidator implements TitleValidato
 
   @Override
   public boolean isValid(List<String> wordTitle) {
-    logger.debug("EnTitleValidator entered");
+    logger.info("EnTitleValidator entered");
 
     commonChain().linkWith(new EnCapitalLetterCheck());
     return super.titleChecker.check(wordTitle);

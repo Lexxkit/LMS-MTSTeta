@@ -19,7 +19,7 @@ public class UserDto {
   @TitleCase(type = TitleType.LOGIN, message = "Поле Логин должно содержать только латиницу и/или спец.символы")
   private String username;
 
-  @Size(min = 8,  message = "Пароль должен быть не менее 8 символов")
+  @Size(min = 8, message = "Пароль должен быть не менее 8 символов")
   @TitleCase(type = TitleType.PASSWORD, message = "Некорректный формат email")
   @NotBlank(message = "Пароль не должен быть пустым")
   private String password;
@@ -33,6 +33,7 @@ public class UserDto {
   @NotBlank(message = "Email не должен быть пустым")
   private String email;
 
+  @Size(min = 10, max = 10, message = "Некорректный формат телефона, только 10 цифр")
   private String phone;
 
   private String socialNetworkLink;

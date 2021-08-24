@@ -41,9 +41,6 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
     } else if (type == TitleType.PASSWORD) {
       titleValidator = new PasswordValidator();
       logger.info("Password validation initialize");
-    } else if (type == TitleType.PHONE) {
-      titleValidator = new PasswordValidator();
-      logger.info("Phone number validation initialize");
     } else {
       logger.info("Could not find this type of validation");
     }

@@ -13,7 +13,7 @@ public class RuTitleValidatorImpl extends AnyTitleValidator implements TitleVali
 
   @Override
   public boolean isValid(List<String> wordTitle) {
-    logger.debug("RuTitleValidatorImpl entered");
+    logger.info("RuTitleValidatorImpl entered");
     commonChain().linkWith(new RuCapitalLetterCheck()).linkWith(new CyrillicCharactersCheck());
     return super.titleChecker.check(wordTitle);
   }
