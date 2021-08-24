@@ -2,6 +2,7 @@ package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.dto.RoleDto;
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.exception.UserAlreadyRegisteredException;
 import com.alekseenko.lms.service.RoleService;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
@@ -46,14 +47,20 @@ public class UserController {
   }
 
   @PostMapping("")
-  public String registerUser(@Valid @ModelAttribute("user") UserDto user,
+  public String registerUser(@Valid @ModelAttribute("user") UserDto user, Model model,
       BindingResult bindingResult, Authentication authentication) {
     if (bindingResult.hasErrors()) {
       return "user-create";
     }
 
-    userService.saveUser(user);
-    if (authentication.getAuthorities().stream().anyMatch(r ->
+    try {
+      userService.registerNewUserAccount(user);
+    } catch (UserAlreadyRegisteredException e) {
+      bindingResult.rejectValue("email", "error.user",
+          "Пользователь с этим email уже зарегистрирован!");
+      return "user-create";
+    }
+    if (authentication != null && authentication.getAuthorities().stream().anyMatch(r ->
         (r.getAuthority().equals("ROLE_ADMIN") || (r.getAuthority().equals("ROLE_OWNER"))))) {
       return "redirect:/admin/user";
     }
