@@ -5,6 +5,8 @@ import com.alekseenko.lms.domain.CourseRating;
 import com.alekseenko.lms.domain.Lesson;
 import com.alekseenko.lms.domain.Module;
 import com.alekseenko.lms.domain.User;
+import com.alekseenko.lms.validator.type.TitleCase;
+import com.alekseenko.lms.validator.type.TitleType;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +20,7 @@ public class CourseDto {
   private String author;
 
   @NotBlank(message = "Course title has to be filled")
+  @TitleCase(type = TitleType.ANY)
   private String title;
 
   private String description;
