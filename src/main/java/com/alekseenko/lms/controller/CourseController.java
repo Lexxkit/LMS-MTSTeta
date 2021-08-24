@@ -58,21 +58,29 @@ public class CourseController {
 
   @GetMapping
   public String courseTable(Model model,
-      @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
-    return viewPaginated(model, 1, titlePrefix);
+      @RequestParam(name = "titlePrefix", required = false) String titlePrefix,
+      @RequestParam(name = "sortField", defaultValue = "title") String sortField,
+      @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir) {
+    return viewPaginated(model, 1, titlePrefix, sortField, sortDir);
   }
 
   @GetMapping("/page/{pageNumber}")
   public String viewPaginated(Model model,
       @PathVariable ("pageNumber") int pageNumber,
-      @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
+      @RequestParam(name = "titlePrefix", required = false) String titlePrefix,
+      @RequestParam(name = "sortField", defaultValue = "title") String sortField,
+      @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir) {
 
-    Page<CourseDto> page = courseService.findPaginated(pageNumber, ITEMS_PER_PAGE, titlePrefix);
+    Page<CourseDto> page = courseService.findPaginated(pageNumber, ITEMS_PER_PAGE, titlePrefix, sortField, sortDir);
 
     model.addAttribute("currentPage", pageNumber);
     model.addAttribute("totalPages", page.getTotalPages());
     model.addAttribute("totalItems", page.getTotalElements());
     model.addAttribute("courses", page.getContent());
+
+    model.addAttribute("sortField", sortField);
+    model.addAttribute("sortDir", sortDir);
+    model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
     return "index";
   }

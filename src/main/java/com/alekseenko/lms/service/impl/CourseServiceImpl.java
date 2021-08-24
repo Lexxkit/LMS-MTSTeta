@@ -50,19 +50,19 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   public List<CourseDto> getAllCourses(String sortField, String sortDirection) {
-    Sort sort = sortDirection.equalsIgnoreCase(Direction.ASC.name()) ? Sort.by(sortField).ascending() :
-        Sort.by(sortField).descending();
+    Sort sort = sortContent(sortField, sortDirection);
     return courseRepository.findAll(sort).stream()
         .map(courseMapper::mapToCourseDtoWithoutUser)
         .collect(Collectors.toList());
   }
 
   @Override
-  public Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix) {
+  public Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix,
+      String sortField, String sortDirection) {
     if (titlePrefix != null) {
       return getCoursesByTitleWithPrefix(titlePrefix);
     } else {
-      Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+      Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sortContent(sortField, sortDirection));
       return courseRepository.findAll(pageable).map(courseMapper::mapToCourseDtoWithoutUser);
     }
   }
@@ -117,6 +117,10 @@ public class CourseServiceImpl implements CourseService {
     } else {
       throw new AccessDeniedException("Access Denied");
     }
+  }
 
+  private Sort sortContent(String sortField, String sortDirection) {
+    return sortDirection.equalsIgnoreCase(Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+        Sort.by(sortField).descending();
   }
 }
