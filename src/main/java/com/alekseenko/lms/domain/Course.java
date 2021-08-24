@@ -75,6 +75,17 @@ public class Course extends BaseEntity<String> {
   }
 
   public Course(Long id, String author, String title, String description,
+      Integer durationWeeks, String tag, CourseImage courseImage) {
+    this.id = id;
+    this.author = author;
+    this.title = title;
+    this.description = description;
+    this.durationWeeks = durationWeeks;
+    this.tag = tag;
+    this.courseImage = courseImage;
+  }
+
+  public Course(Long id, String author, String title, String description,
       Integer durationWeeks, String tag, Double avgRating,
       List<Module> modules, Set<User> users, CourseImage courseImage,
       Set<CourseRating> courseRatings) {

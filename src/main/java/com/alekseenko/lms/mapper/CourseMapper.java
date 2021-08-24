@@ -13,7 +13,12 @@ public class CourseMapper {
     courseDto.setId(course.getId());
     courseDto.setAuthor(course.getAuthor());
     courseDto.setTitle(course.getTitle());
+    courseDto.setDescription(course.getDescription());
+    courseDto.setDurationWeeks(course.getDurationWeeks());
+    courseDto.setTag(course.getTag());
+    courseDto.setAvgRating(course.getAvgRating());
     courseDto.setCourseImage(course.getCourseImage());
+    courseDto.setCreatedAt(course.getCreatedAt());
 
     return courseDto;
   }
@@ -24,8 +29,24 @@ public class CourseMapper {
     courseDto.setId(course.getId());
     courseDto.setAuthor(course.getAuthor());
     courseDto.setTitle(course.getTitle());
+    courseDto.setDescription(course.getDescription());
+    courseDto.setDurationWeeks(course.getDurationWeeks());
+    courseDto.setTag(course.getTag());
+    courseDto.setAvgRating(course.getAvgRating());
     courseDto.setUsers(course.getUsers());
 
     return courseDto;
+  }
+
+  public Course mapToCourseWithoutUser(CourseDto courseDto) {
+    return new Course(
+        courseDto.getId(),
+        courseDto.getAuthor(),
+        courseDto.getTitle(),
+        courseDto.getDescription(),
+        courseDto.getDurationWeeks(),
+        courseDto.getTag(),
+        courseDto.getCourseImage()
+    );
   }
 }

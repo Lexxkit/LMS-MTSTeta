@@ -73,24 +73,46 @@
 
     <section class="mt-5 pt-3" >
       <h2 class="h2 font-weight-normal text-center mb-5">Действующие курсы</h2>
-      <div class="row mb-0">
-        <div class="col-6 col-md-6 col-lg-4" th:unless="${courses.empty}" th:each="course : ${courses}">
-          <div class="card pt-4 text-center mb-4">
+<!--      <div class="row mb-0">-->
+        <div th:unless="${courses.empty}" th:each="course : ${courses}">
+          <div class="container">
+            <div class="row">
+              <div class="col-10">
+                <div class="card pt-4 text-center mb-4">
 
-            <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt="">
+                  <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt="">
 
-            <div class="card-body">
-              <p class="card-text mb-2">
-                <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Название курса</a>
-              </p>
-              <p class="card-text" th:text="${course.author}">Начни свое изучение фронтеда</p>
+                  <div class="card-body">
+                    <p class="card-text mb-2">
+                      <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Название курса</a>
+                    </p>
+                    <p class="card-text" th:text="${course.author}">Начни свое изучение фронтеда</p>
+                    <div class="row">
+                      <div class="col-6 previous">
+                        <p>Rating: </p>
+                        <p class="card-text" th:text="${course.avgRating}">Рейтинг</p>
+                      </div>
+                      <div class="col-6 next">
+                        <p>Date: </p>
+                        <p class="card-text" th:text="${course.createdAt}">Дата создания</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-2 justify-content-center">
+                <form sec:authorize="isAuthenticated()" th:method="get" th:action="@{/course/{id}(id = ${course.id})}">
+                  <button class="btn btn-success" type="submit">Enroll to the course</button>
+                </form>
+                <p sec:authorize="!isAuthenticated()">Register and enroll!</p>
+              </div>
             </div>
           </div>
         </div>
         <div th:if="${courses.empty}">
           <p>No courses to display</p>
         </div>
-      </div>
+<!--      </div>-->
       <div th:if="${totalPages > 1}">
         <div class="row-sm-10">
           <div class="col-sm-2">

@@ -17,7 +17,7 @@
               <h1 class="h1 mb-3 font-weight-normal text-center">Просмотр и редактирование курса</h1>
               <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt="">
 
-              <form sec:authorize="hasRole('ADMIN')" th:object="${course}" th:method="post" th:action="@{/course/{id}/picture(id = ${course.id})}" enctype="multipart/form-data">
+              <form th:unless="${course.id == null}" sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" th:object="${course}" th:method="post" th:action="@{/course/{id}/picture(id = ${course.id})}" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-12">
                     <label class="mb-2 text-dark" for="courseImage">Выберите обложку курса</label>
@@ -56,11 +56,38 @@
                       </small>
                     </div>
                   </div>
+                  <div class="col-12">
+                    <div class="form-group pb-2">
+                      <label class="mb-2 text-dark" for="description">Description</label>
+                      <input class="form-control" type="text" value="Description" id="description"
+                             th:field="*{description}">
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group pb-2">
+                      <label class="mb-2 text-dark" for="duration">Duration in weeks</label>
+                      <input class="form-control" type="text" value="Duration" id="duration"
+                             th:field="*{durationWeeks}">
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group pb-2">
+                      <label class="mb-2 text-dark" for="courseTag">Tag</label>
+                      <input class="form-control" type="text" value="Tag" id="courseTag"
+                             th:field="*{tag}">
+                    </div>
+                  </div>
                 </div>
                 <div class="form-group">
                   <input sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" type="submit" class="btn btn-success" value="Сохранить">
                 </div>
               </form>
+
+              <div class="row">
+                <form sec:authorize="isAuthenticated()" th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
+                  <button class="btn btn-success" type="submit">Confirm enrollment</button>
+                </form>
+              </div>
 <!----------------------------------------Module -------------------------------------------------->
               <p>Модули курса</p>
 <!--              <section class="mt-5 pt-3" th:unless="${lessons == null}">-->
@@ -95,7 +122,7 @@
                   </tr>
                   </tbody>
                 </table>
-              </section>
+<!--              </section>-->
 
                 <section class="mt-5 pt-3" th:unless="${users == null}">
                   <p>Пользователи связанные с курсом</p>

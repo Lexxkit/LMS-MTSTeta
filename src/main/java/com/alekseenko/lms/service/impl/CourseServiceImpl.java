@@ -80,13 +80,7 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   public void saveCourse(CourseDto courseDto) {
-    Course course = new Course(
-        courseDto.getId(),
-        courseDto.getAuthor(),
-        courseDto.getTitle(),
-        courseDto.getCourseImage()
-    );
-    courseRepository.save(course);
+    courseRepository.save(courseMapper.mapToCourseWithoutUser(courseDto));
   }
 
   @Override
