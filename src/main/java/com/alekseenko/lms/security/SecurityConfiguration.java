@@ -13,7 +13,7 @@ public class SecurityConfiguration {
 
   @Configuration
   public static class UiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
-
+//TODO: expand configuration
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
       httpSecurity
