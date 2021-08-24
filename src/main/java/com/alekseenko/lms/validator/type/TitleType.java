@@ -6,5 +6,6 @@ public enum TitleType {
   ANY,
   EMAIL,
   PHONE,
-  PASSWORD
+  PASSWORD,
+  LOGIN
 }

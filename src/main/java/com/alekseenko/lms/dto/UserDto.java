@@ -9,15 +9,19 @@ import com.alekseenko.lms.validator.type.TitleType;
 import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class UserDto {
 
   private Long id;
 
-  @NotBlank(message = "Username shouldn't be empty")
+  @NotBlank(message = "Логин не должен быть пустым")
+  @TitleCase(type = TitleType.LOGIN, message = "Поле Логин должно содержать только латиницу и/или спец.символы")
   private String username;
 
-  @NotBlank(message = "User password shouldn't be empty")
+  @Size(min = 8,  message = "Пароль должен быть не менее 8 символов")
+  @TitleCase(type = TitleType.PASSWORD, message = "Некорректный формат email")
+  @NotBlank(message = "Пароль не должен быть пустым")
   private String password;
 
   private String firstName;
@@ -25,8 +29,8 @@ public class UserDto {
   private String lastName;
 
   @Email
-  @TitleCase(type = TitleType.EMAIL, message = "Invalid Email Format")
-  @NotBlank(message = "Email shouldn't be empty")
+  @TitleCase(type = TitleType.EMAIL, message = "Некорректный формат email")
+  @NotBlank(message = "Email не должен быть пустым")
   private String email;
 
   private String phone;

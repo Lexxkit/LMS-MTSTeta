@@ -4,9 +4,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class phoneNumberCheck extends TitleChecker {
+public class PasswordCheck extends TitleChecker {
 
-  Logger logger = LoggerFactory.getLogger(phoneNumberCheck.class);
+  Logger logger = LoggerFactory.getLogger(PasswordCheck.class);
 
   private static boolean isSpecialCharacter(String s) {
     return (s.equals("\\r") || s.equals("\\t") || s.equals("\\n"));
@@ -17,7 +17,7 @@ public class phoneNumberCheck extends TitleChecker {
    */
   public boolean check(List<String> wordTitle) {
     logger.info("search for special characters...");
-    if (wordTitle.stream().anyMatch(phoneNumberCheck::isSpecialCharacter)) {
+    if (wordTitle.stream().anyMatch(PasswordCheck::isSpecialCharacter)) {
       logger.info("SpecialCharactersCheck - SPECIAL CHARACTERS FOUND");
       return false;
     }

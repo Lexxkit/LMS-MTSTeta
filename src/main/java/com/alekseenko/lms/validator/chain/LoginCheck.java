@@ -11,9 +11,7 @@ public class LoginCheck extends TitleChecker {
   private static boolean isSpecialCharacter(String s) {
     String lowerCaseWord = s.toLowerCase();
     return !(lowerCaseWord.matches(
-        /*В данном регулярном выражении указанно, что строка может состоять с _A-Za-z0-9
-         допускаемых символов, после чего идет символ @ и опять допускаемые символы*/
-        "[_A-Za-z0-9-\\+][@#$%^&+=]"));
+        "([A-Za-z0-9-@#$%^&+=]+)"));
   }
 
   /**
