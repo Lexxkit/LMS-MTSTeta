@@ -1,6 +1,7 @@
 package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.RoleService;
 import com.alekseenko.lms.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,8 @@ public class AdminUserControllerTest {
     private UserService userService;
     @MockBean
     private RoleService roleService;
+    @MockBean
+    private CourseService courseService;
     @Autowired
     private MockMvc mockMvc;
 
