@@ -1,5 +1,7 @@
 package com.alekseenko.lms.dto;
 
+import com.alekseenko.lms.validator.type.TitleCase;
+import com.alekseenko.lms.validator.type.TitleType;
 import javax.validation.constraints.NotBlank;
 
 public class LessonDto {
@@ -7,9 +9,9 @@ public class LessonDto {
   private Long id;
 
   @NotBlank(message = "Title shouldn't be empty")
+  @TitleCase(type = TitleType.ANY)
   private String title;
 
-  @NotBlank(message = "Text shouldn't be empty")
   private String content;
 
   private Long moduleId;

@@ -15,6 +15,7 @@ public class AnyTitleValidator implements TitleValidator {
 
   protected TitleChecker titleChecker = new SpecialCharactersCheck();
 
+  /*Только латиница и кириллица, двойные пробелы не допускаются*/
   protected TitleChecker commonChain() {
     return titleChecker.linkWith(new SpaceCheck())
         .linkWith(new EnglishCyrillicCharactersCheck());

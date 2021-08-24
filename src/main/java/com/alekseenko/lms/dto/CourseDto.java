@@ -14,11 +14,10 @@ public class CourseDto {
   private Long id;
 
   @NotBlank(message = "Course author has to be filled")
-  @TitleCase(type = TitleType.RU)
   private String author;
 
   @NotBlank(message = "Course title has to be filled")
-  @TitleCase(type = TitleType.RU)
+  @TitleCase(type = TitleType.ANY)
   private String title;
 
   private List<Lesson> lessons;
