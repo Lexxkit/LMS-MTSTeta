@@ -4,6 +4,8 @@ import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.domain.CourseRating;
 import com.alekseenko.lms.domain.News;
 import com.alekseenko.lms.domain.Role;
+import com.alekseenko.lms.validator.type.TitleCase;
+import com.alekseenko.lms.validator.type.TitleType;
 import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -23,6 +25,7 @@ public class UserDto {
   private String lastName;
 
   @Email
+  @TitleCase(type = TitleType.EMAIL, message = "Invalid Email Format")
   @NotBlank(message = "Email shouldn't be empty")
   private String email;
 
