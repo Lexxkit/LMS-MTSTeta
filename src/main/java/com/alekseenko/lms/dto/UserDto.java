@@ -33,7 +33,7 @@ public class UserDto {
   @NotBlank(message = "Email не должен быть пустым")
   private String email;
 
-  @Size(min = 10, max = 10, message = "Некорректный формат телефона, только 10 цифр")
+  @TitleCase(type = TitleType.PHONE, message = "Некорректный формат телефона")
   private String phone;
 
   private String socialNetworkLink;

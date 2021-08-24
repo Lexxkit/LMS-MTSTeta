@@ -5,6 +5,7 @@ import com.alekseenko.lms.validator.impl.EmailValidator;
 import com.alekseenko.lms.validator.impl.EnTitleValidator;
 import com.alekseenko.lms.validator.impl.LoginValidator;
 import com.alekseenko.lms.validator.impl.PasswordValidator;
+import com.alekseenko.lms.validator.impl.PhoneValidator;
 import com.alekseenko.lms.validator.impl.RuTitleValidatorImpl;
 import com.alekseenko.lms.validator.type.TitleCase;
 import com.alekseenko.lms.validator.type.TitleType;
@@ -42,7 +43,11 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
     } else if (type == TitleType.PASSWORD) {
       titleValidator = new PasswordValidator();
       logger.info("Password validation initialize");
-    } else {
+    } else if (type == TitleType.PHONE) {
+      titleValidator = new PhoneValidator();
+      logger.info("Phone validation initialize");
+    }
+    else {
       logger.info("Could not find this type of validation");
     }
   }
