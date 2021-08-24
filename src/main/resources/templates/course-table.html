@@ -35,9 +35,18 @@
     <table class="table table-striped table-success">
       <thead>
       <tr>
-        <th scope="col">id</th>
-        <th scope="col">Название</th>
-        <th scope="col">Автор</th>
+        <th scope="col">
+          <a th:href="@{'/admin/user/course' + '?sortField=id&sortDir=' + ${reverseSortDir}}">id</a>
+        </th>
+        <th scope="col">
+          <a th:href="@{'/admin/user/course' + '?sortField=title&sortDir=' + ${reverseSortDir}}">Название</a>
+        </th>
+        <th scope="col">
+          <a th:href="@{'/admin/user/course' + '?sortField=author&sortDir=' + ${reverseSortDir}}">Автор</a>
+        </th>
+        <th scope="col">
+          <a th:href="@{'/admin/user/course' + '?sortField=createdAt&sortDir=' + ${reverseSortDir}}">Дата создания</a>
+        </th>
         <th scope="col">Назначить/удалить</th>
       </tr>
       </thead>
@@ -48,6 +57,7 @@
           <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Название курса</a>
         </td>
         <td th:text="${course.author}">Автор курса</td>
+        <td th:text="${course.createdAt}">Date created</td>
         <td class="row">
           <div class="col-6 previous">
             <form sec:authorize="isAuthenticated()" th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">

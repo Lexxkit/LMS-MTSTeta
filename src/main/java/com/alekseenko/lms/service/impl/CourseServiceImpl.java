@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,9 +35,9 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public List<CourseDto> getAllCourses(String titlePrefix) {
+  public List<CourseDto> getAllCourses(String titlePrefix, String sortField, String sortDirection) {
     if (titlePrefix == null) {
-      return getAllCourses();
+      return getAllCourses(sortField, sortDirection);
     } else {
       return getCoursesByTitleWithPrefix(titlePrefix).getContent();
     }
@@ -48,8 +49,10 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public List<CourseDto> getAllCourses() {
-    return courseRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
+  public List<CourseDto> getAllCourses(String sortField, String sortDirection) {
+    Sort sort = sortDirection.equalsIgnoreCase(Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+        Sort.by(sortField).descending();
+    return courseRepository.findAll(sort).stream()
         .map(courseMapper::mapToCourseDtoWithoutUser)
         .collect(Collectors.toList());
   }

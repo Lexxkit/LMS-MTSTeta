@@ -21,7 +21,7 @@ public class CourseMapper {
     courseDto.setAvgRating(course.getAvgRating());
     courseDto.setCourseImage(course.getCourseImage());
     courseDto.setCreatedAt((course.getCreatedAt() != null) ? course.getCreatedAt()
-        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : LocalDate.now().toString());
+        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : LocalDate.now().minusMonths(1L).toString());
 
     return courseDto;
   }

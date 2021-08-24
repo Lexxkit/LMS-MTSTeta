@@ -6,11 +6,11 @@ import org.springframework.data.domain.Page;
 
 public interface CourseService {
 
-  List<CourseDto> getAllCourses(String titlePrefix);
+  List<CourseDto> getAllCourses(String titlePrefix, String sortField, String sortDirection);
 
   CourseDto getCourseTemplate();
 
-  List<CourseDto> getAllCourses();
+  List<CourseDto> getAllCourses(String sortField, String sortDirection);
 
   Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix);
 

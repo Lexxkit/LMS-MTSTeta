@@ -74,9 +74,16 @@ public class AdminUserController {
 
   @GetMapping("/course")
   public String getAllCoursesTable(Model model,
-      @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
+      @RequestParam(name = "titlePrefix", required = false) String titlePrefix,
+      @RequestParam(name = "sortField", defaultValue = "title") String sortField,
+      @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir) {
     model.addAttribute("activePage", "courses");
-    model.addAttribute("courses", courseService.getAllCourses(titlePrefix));
+    model.addAttribute("courses", courseService.getAllCourses(titlePrefix, sortField, sortDir));
+
+    model.addAttribute("sortField", sortField);
+    model.addAttribute("sortDir", sortDir);
+    model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
     return "course-table";
 
   }
