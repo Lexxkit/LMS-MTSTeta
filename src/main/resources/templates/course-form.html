@@ -14,7 +14,8 @@
           <div class="card-body px-4 pb-4">
             <!-- Tab -->
             <section class="tab-pane fade show active">
-              <h1 class="h1 mb-3 font-weight-normal text-center">Просмотр и редактирование курса</h1>
+              <h1 sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" class="h1 mb-3 font-weight-normal text-center">Просмотр и редактирование курса</h1>
+              <h1 sec:authorize="hasRole('STUDENT')" class="h1 mb-3 font-weight-normal text-center">Просмотр курса</h1>
               <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt="">
 
               <form th:unless="${course.id == null}" sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" th:object="${course}" th:method="post" th:action="@{/course/{id}/picture(id = ${course.id})}" enctype="multipart/form-data">
@@ -124,7 +125,7 @@
                 </table>
 <!--              </section>-->
 
-                <section class="mt-5 pt-3" th:unless="${users == null}">
+                <section class="mt-5 pt-3" th:unless="${users == null}" sec:authorize="isAuthenticated()">
                   <p>Пользователи связанные с курсом</p>
                   <table class="table table-striped table-success">
                     <thead>

@@ -36,7 +36,7 @@ public class CourseDto {
 
   private Set<CourseRating> courseRatings;
 
-  private LocalDateTime createdAt;
+  private String createdAt;
 
   public CourseDto() {
   }
@@ -58,7 +58,7 @@ public class CourseDto {
   public CourseDto(Long id, String author, String title, String description,
       Integer durationWeeks, String tag, Double avgRating,
       List<Module> modules, Set<User> users, CourseImage courseImage,
-      Set<CourseRating> courseRatings, LocalDateTime createdAt) {
+      Set<CourseRating> courseRatings, String createdAt) {
     this.id = id;
     this.author = author;
     this.title = title;
@@ -161,11 +161,11 @@ public class CourseDto {
     this.courseRatings = courseRatings;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public String getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(LocalDateTime createdAt) {
+  public void setCreatedAt(String createdAt) {
     this.createdAt = createdAt;
   }
 }

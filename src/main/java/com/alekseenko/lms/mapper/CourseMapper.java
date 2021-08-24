@@ -2,6 +2,8 @@ package com.alekseenko.lms.mapper;
 
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.dto.CourseDto;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +20,8 @@ public class CourseMapper {
     courseDto.setTag(course.getTag());
     courseDto.setAvgRating(course.getAvgRating());
     courseDto.setCourseImage(course.getCourseImage());
-    courseDto.setCreatedAt(course.getCreatedAt());
+    courseDto.setCreatedAt((course.getCreatedAt() != null) ? course.getCreatedAt()
+        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : LocalDate.now().toString());
 
     return courseDto;
   }

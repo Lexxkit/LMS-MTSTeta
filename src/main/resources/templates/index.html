@@ -26,54 +26,14 @@
     </section>
 
     <section>
-      <div>
-        <a sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" th:href="@{/course/new}">Добавить новый курс</a>
-      </div>
       <div class="text-center">
         <a sec:authorize="!isAuthenticated()" th:href="@{/user/registration}">Регистрация нового пользователя</a>
       </div>
     </section>
 
-    <section class="mt-2 pt-1" sec:authorize="isAuthenticated()">
-      <table class="table table-striped table-success">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">Название</th>
-            <th scope="col">Автор</th>
-            <th scope="col">Назначить/удалить</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:unless="${courses.empty}" th:each="course : ${courses}">
-            <th scope="row" th:text="${course.id}">1</th>
-            <td>
-              <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Название курса</a>
-            </td>
-            <td th:text="${course.author}">Автор курса</td>
-            <td class="row">
-              <div class="col-6 previous">
-                <form sec:authorize="isAuthenticated()" th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
-                  <button class="btn btn-success" type="submit">Назначить пользователя</button>
-                </form>
-              </div>
-              <div class="col-6 next">
-                <form sec:authorize="hasAnyRole('OWNER', 'ADMIN')" th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
-                  <button class="btn btn-danger" type="submit">Удалить курс</button>
-                </form>
-              </div>
-            </td>
-          </tr>
-          <tr th:if="${courses.empty}" >
-            <td colspan="4">No courses to display</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
     <section class="mt-5 pt-3" >
       <h2 class="h2 font-weight-normal text-center mb-5">Действующие курсы</h2>
-<!--      <div class="row mb-0">-->
+
         <div th:unless="${courses.empty}" th:each="course : ${courses}">
           <div class="container">
             <div class="row">
@@ -104,7 +64,7 @@
                 <form sec:authorize="isAuthenticated()" th:method="get" th:action="@{/course/{id}(id = ${course.id})}">
                   <button class="btn btn-success" type="submit">Enroll to the course</button>
                 </form>
-                <p sec:authorize="!isAuthenticated()">Register and enroll!</p>
+                <p sec:authorize="!isAuthenticated()">Register or Login and enroll!</p>
               </div>
             </div>
           </div>
@@ -112,7 +72,7 @@
         <div th:if="${courses.empty}">
           <p>No courses to display</p>
         </div>
-<!--      </div>-->
+
       <div th:if="${totalPages > 1}">
         <div class="row-sm-10">
           <div class="col-sm-2">
