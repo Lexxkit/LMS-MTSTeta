@@ -1,5 +1,6 @@
 package com.alekseenko.lms.validator;
 
+import com.alekseenko.lms.validator.impl.AnyTitleValidator;
 import com.alekseenko.lms.validator.impl.EmailValidator;
 import com.alekseenko.lms.validator.impl.EnTitleValidator;
 import com.alekseenko.lms.validator.impl.LoginValidator;
@@ -30,8 +31,8 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
       titleValidator = new EnTitleValidator();
       logger.debug("En initialize");
     } else if (type == TitleType.ANY) {
-      titleValidator = new EnTitleValidator();
-      logger.debug("En initialize");
+      titleValidator = new AnyTitleValidator();
+      logger.debug("Any initialize");
     } else if (type == TitleType.EMAIL) {
       titleValidator = new EmailValidator();
       logger.info("Email validation initialize");
