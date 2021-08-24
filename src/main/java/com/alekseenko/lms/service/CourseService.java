@@ -12,8 +12,7 @@ public interface CourseService {
 
   List<CourseDto> getAllCourses(String sortField, String sortDirection);
 
-  Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix,
-      String sortField, String sortDirection);
+  Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix);
 
   CourseDto getCourseById(Long id);
 

@@ -54,9 +54,9 @@ public class CourseControllerTest {
         PageRequest pageable = PageRequest.of(1, 3);
         Page<CourseDto> coursePage = new PageImpl<>(listCourses, pageable, listCourses.size());
 
-        when(courseService.findPaginated(pageable.getPageNumber(), pageable.getPageSize(), null, "id", "asc")).thenReturn(coursePage);
+        when(courseService.findPaginated(pageable.getPageNumber(), pageable.getPageSize(), null)).thenReturn(coursePage);
 
-        mockMvc.perform(get("/course/page/{num}?sortField=id&sortDir=asc", 1))
+        mockMvc.perform(get("/course/page/{num}", 1))
                 .andExpect(view().name("index"));
     }
 
@@ -69,9 +69,9 @@ public class CourseControllerTest {
         PageRequest pageable = PageRequest.of(1, 3);
         Page<CourseDto> coursePage = new PageImpl<>(listCourses, pageable, listCourses.size());
 
-        when(courseService.findPaginated(pageable.getPageNumber(), pageable.getPageSize(), "New", "id", "asc")).thenReturn(coursePage);
+        when(courseService.findPaginated(pageable.getPageNumber(), pageable.getPageSize(), "New")).thenReturn(coursePage);
 
-        mockMvc.perform(get("/course/page/{num}?sortField=id&sortDir=asc", 1))
+        mockMvc.perform(get("/course/page/{num}", 1))
             .andExpect(view().name("index"));
     }
 

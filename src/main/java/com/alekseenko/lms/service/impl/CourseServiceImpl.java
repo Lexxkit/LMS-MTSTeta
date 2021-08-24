@@ -57,12 +57,11 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix,
-      String sortField, String sortDirection) {
+  public Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix) {
     if (titlePrefix != null) {
       return getCoursesByTitleWithPrefix(titlePrefix);
     } else {
-      Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sortContent(sortField, sortDirection));
+      Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
       return courseRepository.findAll(pageable).map(courseMapper::mapToCourseDtoWithoutUser);
     }
   }

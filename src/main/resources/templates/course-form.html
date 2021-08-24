@@ -38,7 +38,7 @@
                   <div class="col-12">
                     <div class="form-group pb-2">
                       <label class="mb-2 text-dark" for="title">Title</label>
-                      <input class="form-control" type="text" value="Title" id="title"
+                      <input th:readonly="${isReadOnly}" class="form-control" type="text" value="Title" id="title"
                              th:field="*{title}" autofocus>
                       <small class="validation-error text-danger" th:if="${#fields.hasErrors('title')}"
                              th:errors="*{title}">
@@ -49,7 +49,7 @@
                   <div class="col-12">
                     <div class="form-group pb-2">
                       <label class="mb-2 text-dark" for="author">Author</label>
-                      <input class="form-control" type="text" value="Author" id="author"
+                      <input th:readonly="${isReadOnly}" class="form-control" type="text" value="Author" id="author"
                              th:field="*{author}">
                       <small class="validation-error text-danger" th:if="${#fields.hasErrors('author')}"
                              th:errors="*{author}">
@@ -60,21 +60,21 @@
                   <div class="col-12">
                     <div class="form-group pb-2">
                       <label class="mb-2 text-dark" for="description">Description</label>
-                      <input class="form-control" type="text" value="Description" id="description"
+                      <input th:readonly="${isReadOnly}" class="form-control" type="text" value="Description" id="description"
                              th:field="*{description}">
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="form-group pb-2">
                       <label class="mb-2 text-dark" for="duration">Duration in weeks</label>
-                      <input class="form-control" type="text" value="Duration" id="duration"
+                      <input th:readonly="${isReadOnly}" class="form-control" type="text" value="Duration" id="duration"
                              th:field="*{durationWeeks}">
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="form-group pb-2">
                       <label class="mb-2 text-dark" for="courseTag">Tag</label>
-                      <input class="form-control" type="text" value="Tag" id="courseTag"
+                      <input th:readonly="${isReadOnly}" class="form-control" type="text" value="Tag" id="courseTag"
                              th:field="*{tag}">
                     </div>
                   </div>
@@ -85,16 +85,24 @@
               </form>
 
               <div class="row">
-                <form sec:authorize="isAuthenticated()" th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
+                <form th:unless="${course.id == null}" sec:authorize="isAuthenticated()" th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
                   <button class="btn btn-success" type="submit">Confirm enrollment</button>
                 </form>
               </div>
 <!----------------------------------------Module -------------------------------------------------->
+              <div class="mt-3">
               <p>Модули курса</p>
-<!--              <section class="mt-5 pt-3" th:unless="${lessons == null}">-->
-                <div>
-                  <a sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" th:href="@{/module/new(course_id = ${course.id})}">Добавить новый модуль</a>
+              </div>
+
+              <section>
+                <div th:unless="${course.id == null}">
+                  <a class="btn btn-primary" sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" th:href="@{/module/new(course_id = ${course.id})}">Добавить новый модуль</a>
                 </div>
+                <div th:if="${course.id == null}">
+                  <p>Для создания модулей надо сохранить курс</p>
+                </div>
+              </section>
+              <section class="mt-5 pt-3" th:unless="${modules == null}">
                 <table class="table table-striped table-success">
                   <thead>
                   <tr>
@@ -123,7 +131,7 @@
                   </tr>
                   </tbody>
                 </table>
-<!--              </section>-->
+              </section>
 
                 <section class="mt-5 pt-3" th:unless="${users == null}" sec:authorize="isAuthenticated()">
                   <p>Пользователи связанные с курсом</p>

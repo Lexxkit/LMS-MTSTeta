@@ -9,6 +9,7 @@ import com.alekseenko.lms.service.ModuleService;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -58,29 +60,21 @@ public class CourseController {
 
   @GetMapping
   public String courseTable(Model model,
-      @RequestParam(name = "titlePrefix", required = false) String titlePrefix,
-      @RequestParam(name = "sortField", defaultValue = "title") String sortField,
-      @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir) {
-    return viewPaginated(model, 1, titlePrefix, sortField, sortDir);
+      @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
+    return viewPaginated(model, 1, titlePrefix);
   }
 
   @GetMapping("/page/{pageNumber}")
   public String viewPaginated(Model model,
       @PathVariable ("pageNumber") int pageNumber,
-      @RequestParam(name = "titlePrefix", required = false) String titlePrefix,
-      @RequestParam(name = "sortField", defaultValue = "title") String sortField,
-      @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir) {
+      @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
 
-    Page<CourseDto> page = courseService.findPaginated(pageNumber, ITEMS_PER_PAGE, titlePrefix, sortField, sortDir);
+    Page<CourseDto> page = courseService.findPaginated(pageNumber, ITEMS_PER_PAGE, titlePrefix);
 
     model.addAttribute("currentPage", pageNumber);
     model.addAttribute("totalPages", page.getTotalPages());
     model.addAttribute("totalItems", page.getTotalElements());
     model.addAttribute("courses", page.getContent());
-
-    model.addAttribute("sortField", sortField);
-    model.addAttribute("sortDir", sortDir);
-    model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
     return "index";
   }
@@ -96,9 +90,15 @@ public class CourseController {
   }
 
   @RequestMapping("/{id}")
-  public String courseForm(Model model, @PathVariable("id") Long id) {
+  public String courseForm(Model model, @PathVariable("id") Long id,
+      Authentication auth) {
     CourseDto currentCourse = courseService.getCourseById(id);
     model.addAttribute("activePage", "courses");
+
+    if (auth == null || !auth.isAuthenticated()) {
+      model.addAttribute("isReadOnly", "true");
+    }
+
     model.addAttribute("modules", moduleService.findAllByCourse(currentCourse));
     model.addAttribute("course", currentCourse);
     model.addAttribute("users", currentCourse.getUsers());
@@ -149,7 +149,6 @@ public class CourseController {
   @GetMapping("/new")
   public String courseForm(Model model) {
     model.addAttribute("course", courseService.getCourseTemplate());
-    model.addAttribute("modules", new ArrayList<>());
     return "course-form";
   }
 
