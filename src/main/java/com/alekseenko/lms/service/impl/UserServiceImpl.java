@@ -7,6 +7,7 @@ import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.exception.AccessDeniedException;
 import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.exception.UserAlreadyRegisteredException;
 import com.alekseenko.lms.mapper.UserMapper;
 import com.alekseenko.lms.service.UserService;
 import java.util.Collections;
@@ -75,8 +76,16 @@ public class UserServiceImpl implements UserService {
     return new UserDto();
   }
 
+  private boolean emailExist(String email) {
+    return userRepository.findUserByEmail(email) != null;
+  }
+
   @Override
-  public void saveUser(UserDto userDto) {
+  public void registerNewUserAccount(UserDto userDto) throws UserAlreadyRegisteredException {
+    if (emailExist(userDto.getEmail())) {
+      throw new UserAlreadyRegisteredException("There is an account with that email address: "
+          + userDto.getEmail());
+    }
     // New users get ROLE_STUDENT upon self registration
     if (userDto.getRoles() == null) {
       Role studentRole = roleRepository.findRoleByName(RoleConstants.ROLE_STUDENT)
@@ -84,6 +93,11 @@ public class UserServiceImpl implements UserService {
               () -> new NotFoundException(String.format("Role %s not found", userDto.getRoles())));
       userDto.setRoles(Set.of(studentRole));
     }
+    userRepository.save(userMapper.mapToUser(userDto));
+  }
+
+  @Override
+  public void saveUser(UserDto userDto) {
     userRepository.save(userMapper.mapToUser(userDto));
   }
 
