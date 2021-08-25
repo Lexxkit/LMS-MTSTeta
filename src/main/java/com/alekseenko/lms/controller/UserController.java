@@ -56,8 +56,7 @@ public class UserController {
     try {
       userService.registerNewUserAccount(user);
     } catch (UserAlreadyRegisteredException e) {
-      bindingResult.rejectValue("email", "error.user",
-          "Пользователь с этим email уже зарегистрирован!");
+      bindingResult.rejectValue(e.getField(), "error.user", e.getMessage());
       return "user-create";
     }
     if (authentication != null && authentication.getAuthorities().stream().anyMatch(r ->
