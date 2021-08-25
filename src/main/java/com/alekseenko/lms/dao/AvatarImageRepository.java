@@ -12,4 +12,6 @@ public interface AvatarImageRepository extends JpaRepository<AvatarImage, Long> 
 
   @Query("from AvatarImage ai inner join ai.user u where u.username = :username")
   Optional<AvatarImage> findByUsername(@Param("username") String username);
+
+  boolean existsAvatarImageByUser_Id(Long courseId);
 }

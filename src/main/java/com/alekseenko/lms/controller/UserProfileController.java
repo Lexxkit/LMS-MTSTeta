@@ -89,15 +89,16 @@ public class UserProfileController {
   @GetMapping("/avatar")
   @ResponseBody
   public ResponseEntity<byte[]> avatarImage(Authentication auth) {
-    String contentType = avatarImageService.getContentTypeByUser(auth.getName());
-    byte[] data = avatarImageService.getAvatarImageByUser(auth.getName())
-        .orElseThrow(() -> new NotFoundException(
-            String.format("Avatar for user %s not found", auth.getName())));
+    String username = auth.getName();
+    byte[] data = avatarImageService.getDataAvatar(username)
+        .orElseThrow(() -> new NotFoundException("avatar_not_found"));
+    String contentType = avatarImageService.getContentTypeAvatarByUser(username)
+        .orElseThrow(() -> new NotFoundException("content_type_undefined"));
+
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType(contentType))
         .body(data);
-
   }
 
   @PostMapping("/avatar")
