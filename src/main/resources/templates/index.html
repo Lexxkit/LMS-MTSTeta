@@ -27,7 +27,7 @@
 
     <section>
       <div class="text-center">
-        <a sec:authorize="!isAuthenticated()" th:href="@{/user/registration}">Регистрация нового пользователя</a>
+        <a class="btn btn-primary" sec:authorize="!isAuthenticated()" th:href="@{/user/registration}">Регистрация нового пользователя</a>
       </div>
     </section>
 
