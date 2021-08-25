@@ -13,9 +13,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
 public class User extends BaseEntity<String> {
 
   @Id
@@ -62,6 +66,9 @@ public class User extends BaseEntity<String> {
   @OneToMany(mappedBy = "user")
   private Set<CourseRating> courseRatings;
 
+  @Column
+  private boolean enabled = false;
+
   public User() {
   }
 
@@ -102,118 +109,6 @@ public class User extends BaseEntity<String> {
     this.roles = roles;
     this.avatarImage = avatarImage;
     this.news = news;
-    this.courseRatings = courseRatings;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getPhone() {
-    return phone;
-  }
-
-  public void setPhone(String phone) {
-    this.phone = phone;
-  }
-
-  public String getSocialNetworkLink() {
-    return socialNetworkLink;
-  }
-
-  public void setSocialNetworkLink(String socialNetworkLink) {
-    this.socialNetworkLink = socialNetworkLink;
-  }
-
-  public String getAchievements() {
-    return achievements;
-  }
-
-  public void setAchievements(String achievements) {
-    this.achievements = achievements;
-  }
-
-  public Set<Course> getCourses() {
-    return courses;
-  }
-
-  public void setCourses(Set<Course> courses) {
-    this.courses = courses;
-  }
-
-  public Set<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
-  }
-
-  public AvatarImage getAvatarImage() {
-    return avatarImage;
-  }
-
-  public void setAvatarImage(AvatarImage avatarImage) {
-    this.avatarImage = avatarImage;
-  }
-
-  public Set<News> getNews() {
-    return news;
-  }
-
-  public void setNews(Set<News> news) {
-    this.news = news;
-  }
-
-  public Set<CourseRating> getCourseRatings() {
-    return courseRatings;
-  }
-
-  public void setCourseRatings(Set<CourseRating> courseRatings) {
     this.courseRatings = courseRatings;
   }
 

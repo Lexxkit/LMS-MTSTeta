@@ -1,5 +1,7 @@
 package com.alekseenko.lms.service;
 
+import com.alekseenko.lms.domain.User;
+import com.alekseenko.lms.domain.VerificationToken;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.exception.UserAlreadyRegisteredException;
 import java.util.List;
@@ -23,7 +25,13 @@ public interface UserService {
 
   void saveUser(UserDto userDto);
 
+  void saveUser(User user);
+
   void deleteUser(Long id, String username);
 
-  void registerNewUserAccount(UserDto userDto) throws UserAlreadyRegisteredException;
+  User registerNewUserAccount(UserDto userDto) throws UserAlreadyRegisteredException;
+
+  void createVerificationToken(User user, String token);
+
+  VerificationToken getVerificationToken(final String VerificationToken);
 }
