@@ -40,8 +40,7 @@
               <div class="col-10">
                 <div class="card pt-4 text-center mb-4">
 
-                  <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt=""
-                       onerror="this.src='../img/course-default.png'">
+                  <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt="">
                   <div class="card-body">
                     <p class="card-text mb-2">
                       <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Название курса</a>

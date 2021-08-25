@@ -16,8 +16,7 @@
       </div>
 
       <div class="text-center mt-2">
-        <img th:unless="${avatar.empty}" th:src="@{/profile/avatar}" alt="User profile" width="120">
-        <img th:if="${avatar.empty}" src="https://place-hold.it/120x120" width="120" height="120">
+        <img th:src="@{/profile/avatar}" alt="User profile" width="120">
 
         <form th:method="post" th:action="@{/profile/avatar}" enctype="multipart/form-data">
           <div>

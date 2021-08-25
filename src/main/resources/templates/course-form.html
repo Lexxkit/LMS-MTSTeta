@@ -16,8 +16,7 @@
             <section class="tab-pane fade show active">
               <h1 sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" class="h1 mb-3 font-weight-normal text-center">Просмотр и редактирование курса</h1>
               <h1 sec:authorize="hasRole('STUDENT')" class="h1 mb-3 font-weight-normal text-center">Просмотр курса</h1>
-              <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt=""
-                   onerror="this.src='../img/course-default.png'">
+              <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt="">
 
               <form th:unless="${course.id == null}" sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" th:object="${course}" th:method="post" th:action="@{/course/{id}/picture(id = ${course.id})}" enctype="multipart/form-data">
                 <div class="row">

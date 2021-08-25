@@ -36,11 +36,61 @@ public class AvatarImageServiceImpl implements AvatarImageService {
   @Value("${file.storage.avatar.path}")
   private String path;
 
+  @Value("${file.storage.img.path.default}")
+  private String defaultImgPath;
+
   @Autowired
   public AvatarImageServiceImpl(AvatarImageRepository avatarImageRepository,
       UserRepository userRepository) {
     this.avatarImageRepository = avatarImageRepository;
     this.userRepository = userRepository;
+  }
+
+  @Override
+  public boolean checkAvatarImage(Long userId) {
+    return !avatarImageRepository.existsAvatarImageByUser_Id(userId);
+  }
+
+  public byte[] getDefaultAvatar() {
+    final String DEFAULT_IMAGE_FILENAME = "default-user-avatar.png";
+    return DataUtil.readData(DEFAULT_IMAGE_FILENAME, defaultImgPath);
+  }
+
+  public Optional<byte[]> getDataAvatar(String username) {
+    Long userId;
+    Optional<byte[]> data;
+    userId = getIdByUsername(username);
+    if (userId == null || checkAvatarImage(userId)) {
+      data = Optional.ofNullable(getDefaultAvatar());
+    } else {
+      data = getAvatarImageByUser(username);
+    }
+    return data;
+  }
+
+  private Long getIdByUsername(String username) {
+    Long userId;
+    try {
+      userId = userRepository.findUserByUsername(username)
+          .orElseThrow(() -> new NotFoundException("user_not_found")).getId();
+    } catch (NotFoundException e) {
+      userId = null; //если юзер не имеет id, например, взят из inMemoryAuthentication
+    }
+    return userId;
+  }
+
+  public Optional<String> getContentTypeAvatarByUser(String username) {
+    Long userId;
+    userId = getIdByUsername(username);
+    Optional<String> contentType;
+
+    if (userId == null || checkAvatarImage(userId)) {
+      String DEFAULT_CONTENT_TYPE = "image/png";
+      contentType = Optional.of(DEFAULT_CONTENT_TYPE);
+    } else {
+      contentType = Optional.ofNullable(getContentTypeByUser(username));
+    }
+    return contentType;
   }
 
   @Override
