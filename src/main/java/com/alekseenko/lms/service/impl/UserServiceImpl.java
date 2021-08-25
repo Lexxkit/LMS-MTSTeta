@@ -80,11 +80,19 @@ public class UserServiceImpl implements UserService {
     return userRepository.findUserByEmail(email) != null;
   }
 
+  private boolean loginExists(String name) {
+    return userRepository.findUserByUsername(name).isPresent();
+  }
+
   @Override
   public void registerNewUserAccount(UserDto userDto) throws UserAlreadyRegisteredException {
     if (emailExist(userDto.getEmail())) {
-      throw new UserAlreadyRegisteredException("There is an account with that email address: "
-          + userDto.getEmail());
+      throw new UserAlreadyRegisteredException("Пользователь с этим email уже зарегистрирован",
+          "email");
+    }
+    if (loginExists(userDto.getUsername())) {
+      throw new UserAlreadyRegisteredException("Пользователь с этим username уже зарегистрирован",
+          "username");
     }
     // New users get ROLE_STUDENT upon self registration
     if (userDto.getRoles() == null) {
