@@ -91,11 +91,11 @@ public class CourseController {
 
   @RequestMapping("/{id}")
   public String courseForm(Model model, @PathVariable("id") Long id,
-      Authentication auth) {
+      Authentication auth, HttpServletRequest request) {
     CourseDto currentCourse = courseService.getCourseById(id);
     model.addAttribute("activePage", "courses");
 
-    if (auth == null || !auth.isAuthenticated()) {
+    if (auth == null || !auth.isAuthenticated() || request.isUserInRole(RoleConstants.ROLE_STUDENT)) {
       model.addAttribute("isReadOnly", "true");
     }
 
