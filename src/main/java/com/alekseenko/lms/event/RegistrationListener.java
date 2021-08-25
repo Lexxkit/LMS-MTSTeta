@@ -2,6 +2,7 @@ package com.alekseenko.lms.event;
 
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.service.UserService;
+import java.util.Locale;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class RegistrationListener implements
     String subject = "Registration Confirmation";
     String confirmationUrl
         = event.getAppUrl() + "/user/registrationConfirm?token=" + token;
-    String message = messages.getMessage("message.regSucc", null, event.getLocale());
+    String message = messages.getMessage("message.regSucc", null, new Locale("ru"));
     log.info("Attempting to register a user '{}' with email address: {}", user.getUsername(),
         user.getEmail());
 
