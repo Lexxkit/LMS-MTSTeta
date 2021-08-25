@@ -71,7 +71,7 @@ public class CourseControllerTest {
 
         when(courseService.findPaginated(pageable.getPageNumber(), pageable.getPageSize(), "New")).thenReturn(coursePage);
 
-        mockMvc.perform(get("/course/page/{num}", 1))
+        mockMvc.perform(get("/course?titlePrefix=New", 1))
             .andExpect(view().name("index"));
     }
 

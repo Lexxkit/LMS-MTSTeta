@@ -9,7 +9,7 @@
 <body>
 <main class="container">
   <div class="row">
-    <div class="col-12 col-lg-8 offset-2 offset-lg-12">
+    <div class="col-12 offset-lg-12">
 
       <div class="text-center mt-3 b-1">
         <h1 class="h3 mb-3 font-weight-normal">Привет, <span sec:authentication="principal.username"></span>!</h1>
@@ -110,7 +110,7 @@
 
             <div class="form-label-group">
               <p class="text">Achievements</p>
-              <input type="text" id="achievements" class="form-control" th:field="*{achievements}">
+              <input type="text" id="achievements" class="form-control" th:field="*{achievements}" readonly>
               <label for="achievements"></label>
             </div>
 
@@ -135,7 +135,17 @@
           <section class="mt-3">
             <h2 class="h2 font-weight-normal text-center mb-5">Ваши курсы:</h2>
             <div class="mt-1 form-label-group text-center" th:unless="${courses.empty}" th:each="course : ${courses}">
-              <p> <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Название курса</a></p>
+              <div class="row">
+                <div class="col-8">
+                  <p> <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Название курса</a></p>
+                </div>
+                <div class="col-4">
+                  <form th:method="delete" th:action="@{/profile/{courseId}/unassign(courseId = ${course.id})}">
+                    <input type="hidden" name="userId" id="userId" th:value="${user.id}">
+                    <button class="btn btn-warning" type="submit">Снять с курса</button>
+                  </form>
+                </div>
+              </div>
             </div>
             <div class="text-center" th:if="${courses.empty}">
               <p>У вас нет действующих курсов.</p>
@@ -144,6 +154,12 @@
               <a th:href="@{/course}">Хотите записаться на новый курс?</a>
             </div>
           </section>
+        </div>
+        <div class="col">
+          <section class="mt-3">
+            <h2 class="h2 font-weight-normal text-center mb-5">Статистика:</h2>
+            <p class="text-center">Активных курсов: [[${courses.size()}]]</p>
+            <p class="text-center">Завершено курсов 0 из [[${courses.size()}]]</p>
         </div>
       </div>
     </div>

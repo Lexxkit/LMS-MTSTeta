@@ -140,8 +140,8 @@ public class CourseController {
 
     courseService.removeUserCourseConnection(userId,
         courseId,
-        principal.getName(),
-        request.isUserInRole(RoleConstants.ROLE_ADMIN));
+        principal.getName()
+    );
     return String.format("redirect:/course/%d", courseId);
   }
 

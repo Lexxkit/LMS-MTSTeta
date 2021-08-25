@@ -1,5 +1,6 @@
 package com.alekseenko.lms.controller;
 
+import com.alekseenko.lms.constants.RoleConstants;
 import com.alekseenko.lms.dto.RoleDto;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.exception.NotFoundException;
@@ -7,7 +8,9 @@ import com.alekseenko.lms.service.AvatarImageService;
 import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.RoleService;
 import com.alekseenko.lms.service.UserService;
+import java.security.Principal;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +22,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -100,5 +105,19 @@ public class UserProfileController {
       @RequestParam("avatar") MultipartFile avatar) {
     avatarImageService.saveAvatarImage(auth.getName(), avatar);
     return "redirect:/profile";
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @DeleteMapping("/{courseId}/unassign")
+  public String unassignUserFromCourse(@PathVariable("courseId") Long courseId,
+      @RequestParam("userId") Long userId,
+      Principal principal,
+      HttpServletRequest request) {
+
+    courseService.removeUserCourseConnection(userId,
+        courseId,
+        principal.getName()
+    );
+    return String.format("redirect:/profile");
   }
 }
