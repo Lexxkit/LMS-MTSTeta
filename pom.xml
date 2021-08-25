@@ -99,14 +99,6 @@
       <groupId>org.springframework.boot</groupId>
     </dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-		<dependency>
-			<artifactId>lombok</artifactId>
-			<groupId>org.projectlombok</groupId>
-			<scope>provided</scope>
-			<version>1.18.20</version>
-		</dependency>
-
 
   </dependencies>
 
