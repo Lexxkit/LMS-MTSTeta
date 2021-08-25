@@ -6,6 +6,7 @@ import com.alekseenko.lms.event.OnRegistrationCompleteEvent;
 import com.alekseenko.lms.exception.UserAlreadyRegisteredException;
 import com.alekseenko.lms.service.UserService;
 import java.util.Calendar;
+import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -74,7 +75,7 @@ public class UserRegistrationController {
   public String confirmRegistration(Model model,
       WebRequest request, @RequestParam("token") String token) {
 
-    var locale = request.getLocale();
+    var locale = new Locale("ru");
 
     VerificationToken verificationToken = userService.getVerificationToken(token);
     if (verificationToken == null) {
