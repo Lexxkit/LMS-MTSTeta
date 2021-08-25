@@ -80,22 +80,30 @@ public class UserRegistrationController {
     if (verificationToken == null) {
       var message = messages.getMessage("auth.message.invalidToken", null, locale);
       model.addAttribute("message", message);
-      return "login";
+      model.addAttribute("class", "text-danger");
+      return "registration_result";
     }
 
     var user = verificationToken.getUser();
     var cal = Calendar.getInstance();
 
-    if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+    if (user.isEnabled()) {
+      model.addAttribute("message",
+          messages.getMessage("message.regAlreadyConfirmed", null, locale));
+      model.addAttribute("class", "text-success");
+      return "registration_result";
+    } else if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
       var messageValue = messages.getMessage("auth.message.expired", null, locale);
       model.addAttribute("message", messageValue);
+      model.addAttribute("class", "text-danger");
     } else {
       model.addAttribute("message", messages.getMessage("message.regSuccConfirmed", null, locale));
+      model.addAttribute("class", "text-success");
       user.setEnabled(true);
       userService.saveUser(user);
     }
 
-    return "login";
+    return "registration_result";
   }
 
 }
