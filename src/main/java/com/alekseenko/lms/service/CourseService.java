@@ -26,5 +26,5 @@ public interface CourseService {
 
   void setUserCourseConnection(Long userId, Long courseId);
 
-  void removeUserCourseConnection(Long userId, Long courseId, String username, boolean isAdmin);
+  void removeUserCourseConnection(Long userId, Long courseId, String username);
 }
