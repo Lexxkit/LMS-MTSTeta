@@ -31,8 +31,7 @@ public class Course extends BaseEntity<String> {
   @Column
   private String title;
 
-  @Column
-  @Lob
+  @Column(columnDefinition = "text")
   private String description;
 
   @Column
