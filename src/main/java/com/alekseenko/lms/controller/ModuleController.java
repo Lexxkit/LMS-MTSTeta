@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
 @RequestMapping("/module")
 public class ModuleController {
 
@@ -37,12 +36,14 @@ public class ModuleController {
     this.courseService = courseService;
   }
 
+  @Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
   @GetMapping("/new")
   public String moduleNewForm(Model model, @RequestParam("course_id") Long courseId) {
     model.addAttribute("moduleDto", new ModuleDto(courseId));
     return "module-form";
   }
 
+  @Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
   @PostMapping
   public String submitModuleForm(@Valid ModuleDto moduleDto, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
@@ -64,6 +65,7 @@ public class ModuleController {
     return "lesson-table";
   }
 
+  @Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
   @DeleteMapping("/{id}")
   public String deleteLesson(@PathVariable("id") Long id,
       @RequestParam("courseId") Long courseId) {

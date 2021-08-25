@@ -138,12 +138,12 @@ public class CourseServiceImplTest {
         final var testUser = userRepository.findUserByUsername("Test_user").get();
         courseService.setUserCourseConnection(testUser.getId(), courseService.getCourseById(1L).getId());
 
-        courseService.removeUserCourseConnection(testUser.getId(), 1L, "Test_user");
+        courseService.removeUserCourseConnection(testUser.getId(), 1L, "Test_user", false);
         final var courseWithOutUser = courseService.getCourseById(1L);
         assertThat(courseWithOutUser.getUsers()).doesNotContain(testUser);
 
         assertThatThrownBy(() -> {
-            courseService.removeUserCourseConnection(testUser.getId(), 999L, "Test_user");
+            courseService.removeUserCourseConnection(testUser.getId(), 999L, "Test_user", false);
         }).isInstanceOf(NotFoundException.class);
     }
 
@@ -159,7 +159,7 @@ public class CourseServiceImplTest {
         courseService.setUserCourseConnection(anotherUser.getId(), courseService.getCourseById(1L).getId());
 
         assertThatThrownBy(() -> {
-            courseService.removeUserCourseConnection(anotherUser.getId(), 1L, "Test_user");
+            courseService.removeUserCourseConnection(anotherUser.getId(), 1L, "Test_user", false);
         }).isInstanceOf(AccessDeniedException.class);
     }
 
@@ -176,7 +176,7 @@ public class CourseServiceImplTest {
         final var anotherUser = userRepository.findUserByUsername("Another user").get();
         courseService.setUserCourseConnection(anotherUser.getId(), courseService.getCourseById(1L).getId());
 
-        courseService.removeUserCourseConnection(anotherUser.getId(), 1L, "Test_user");
+        courseService.removeUserCourseConnection(anotherUser.getId(), 1L, "Test_user", true);
         final var courseWithOutUser = courseService.getCourseById(1L);
         assertThat(courseWithOutUser.getUsers()).doesNotContain(anotherUser);
     }

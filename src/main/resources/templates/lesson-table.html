@@ -19,7 +19,7 @@
 <!----------------------------------------------------lesson--------------------------------------------------------->
               <section class="mt-5 pt-3" th:unless="${lessons == null}">
                   <div>
-                    <a sec:authorize="hasRole('ADMIN')"  th:href="@{/lesson/new(module_id = ${moduleDto.id})}">Добавить новый урок</a>
+                    <a sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')"  th:href="@{/lesson/new(module_id = ${moduleDto.id})}">Добавить новый урок</a>
                   </div>
                   <table class="table table-striped table-success">
                     <thead>
