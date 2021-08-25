@@ -28,7 +28,8 @@
         <ul class="navbar-nav col-2 justify-content-end">
           <li class="nav-item" th:classappend="${activePage == 'profile'} ? active">
             <a class="nav-link font-weight-bold" sec:authorize="isAuthenticated()" th:href="@{/profile}">
-              <img th:src="@{/profile/avatar}" alt="User profile" width="15">
+              <img th:src="@{/profile/avatar}" alt="User profile" width="15"
+                   onerror="this.src='../img/default-user-avatar.png'">
               Профиль
             </a>
           </li>
