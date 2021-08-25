@@ -105,9 +105,9 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public void removeUserCourseConnection(Long userId, Long courseId, String username) {
+  public void removeUserCourseConnection(Long userId, Long courseId, String username, boolean isAdmin) {
 
-    if (userRepository.getById(userId).getUsername().equals(username)) {
+    if (userRepository.getById(userId).getUsername().equals(username) || isAdmin) {
       Course course = courseRepository.findById(courseId).orElseThrow(
           () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
       course.getUsers().remove(userRepository.getById(userId));

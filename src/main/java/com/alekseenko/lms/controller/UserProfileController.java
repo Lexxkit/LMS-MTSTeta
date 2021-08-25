@@ -116,7 +116,8 @@ public class UserProfileController {
 
     courseService.removeUserCourseConnection(userId,
         courseId,
-        principal.getName()
+        principal.getName(),
+        request.isUserInRole(RoleConstants.ROLE_STUDENT)
     );
     return String.format("redirect:/profile");
   }

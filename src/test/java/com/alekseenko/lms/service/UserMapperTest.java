@@ -36,8 +36,8 @@ public class UserMapperTest {
         TEST_USER = new User(1L, "Test", "", Set.of());
         var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
         SecurityContextHolder.getContext().setAuthentication(auth);
-        User testUser = new User("Test");
-        userRepository.save(testUser);
+//        User testUser = new User("Test_1");
+        userRepository.save(TEST_USER);
     }
 
     @BeforeEach
