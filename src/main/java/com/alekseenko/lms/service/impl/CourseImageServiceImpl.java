@@ -35,6 +35,9 @@ public class CourseImageServiceImpl implements CourseImageService {
   @Value("${file.storage.logo.path}")
   private String path;
 
+  @Value("${file.storage.img.path.default}")
+  private String defaultImgPath;
+
   @Autowired
   public CourseImageServiceImpl(CourseImageRepository courseImageRepository,
       CourseRepository courseRepository) {
@@ -42,19 +45,48 @@ public class CourseImageServiceImpl implements CourseImageService {
     this.courseRepository = courseRepository;
   }
 
-  @Override
-  public String getContentTypeByCourse(Long courseId) {
-    return courseImageRepository.findByCourseId(courseId)
-        .map(CourseImage::getContentType)
-        .orElseThrow(
-            () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
+  private boolean checkCourseImage(Long courseId) {
+    return courseImageRepository.existsCourseImageByCourse_Id(courseId);
+  }
+
+  public byte[] getDefaultCourseImageData() {
+    String DEFAULT_IMAGE_FILENAME = "course-default.png";
+    return DataUtil.readData(DEFAULT_IMAGE_FILENAME, defaultImgPath);
   }
 
   @Override
+  public String getContentTypeByCourse(Long courseId) {
+    String contentType;
+    if (checkCourseImage(courseId)) {
+      contentType = getCourseImagedByCourseId(courseId)
+          .map(CourseImage::getContentType)
+          .orElseThrow(() -> new NotFoundException("image mot found"));
+    } else {
+      contentType = "image/png";
+    }
+    return contentType;
+  }
+
+  private Optional<CourseImage> getCourseImagedByCourseId(Long courseId) {
+    Course course = courseRepository.findById(courseId)
+        .orElseThrow(() -> new NotFoundException("User not found"));
+    return Optional.ofNullable(course.getCourseImage());
+  }
+
   public Optional<byte[]> getCourseImageByCourse(Long courseId) {
-    return courseImageRepository.findByCourseId(courseId)
+    return getCourseImagedByCourseId(courseId)
         .map(CourseImage::getFilename)
         .map((String filename) -> DataUtil.readData(filename, path));
+  }
+
+  public Optional<byte[]> getDataImagedByCourseId(Long courseId) {
+    Optional<byte[]> data;
+    if (checkCourseImage(courseId)) {
+      data = getCourseImageByCourse(courseId);
+    } else {
+      data = Optional.ofNullable(getDefaultCourseImageData());
+    }
+    return data;
   }
 
   @Override

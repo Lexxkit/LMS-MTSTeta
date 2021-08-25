@@ -8,8 +8,6 @@ import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.ModuleService;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -154,11 +152,13 @@ public class CourseController {
 
   @GetMapping("/{id}/picture")
   @ResponseBody
-  public ResponseEntity<byte[]> courseImage(@PathVariable("id") Long courseId) {
-    String contentType = courseImageService.getContentTypeByCourse(courseId);
-    byte[] data = courseImageService.getCourseImageByCourse(courseId)
-        .orElseThrow(
-            () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
+  public ResponseEntity<byte[]> avatarImage(@PathVariable Long id) {
+    String contentType = courseImageService
+        .getContentTypeByCourse(id);
+
+    byte[] data = courseImageService.getDataImagedByCourseId(id)
+        .orElseThrow(() -> new NotFoundException("Course_image_not_found"));
+
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType(contentType))
