@@ -4,8 +4,8 @@ import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.service.UserService;
 import java.util.Locale;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
@@ -14,7 +14,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
 @Slf4j
 public class RegistrationListener implements
     ApplicationListener<OnRegistrationCompleteEvent> {
@@ -26,7 +25,15 @@ public class RegistrationListener implements
   private final JavaMailSender mailSender;
 
   @Value("${mail.host.address}")
-  private static String HOST;
+  private String HOST;
+
+  @Autowired
+  public RegistrationListener(UserService service, MessageSource messages,
+      JavaMailSender mailSender) {
+    this.service = service;
+    this.messages = messages;
+    this.mailSender = mailSender;
+  }
 
   @Override
   public void onApplicationEvent(OnRegistrationCompleteEvent event) {
