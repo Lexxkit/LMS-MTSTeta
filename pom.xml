@@ -83,10 +83,24 @@
 			<artifactId>spring-security-test</artifactId>
 			<version>5.5.1</version>
 			<scope>test</scope>
-		</dependency>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+    <dependency>
+      <artifactId>lombok</artifactId>
+      <groupId>org.projectlombok</groupId>
+      <scope>provided</scope>
+      <version>1.18.20</version>
+    </dependency>
+
+    <!--	email	-->
+    <dependency>
+      <artifactId>spring-boot-starter-mail</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
 
 
-	</dependencies>
+  </dependencies>
 
 	<build>
 		<plugins>

@@ -28,7 +28,8 @@ create table users
     social_network_link varchar(255),
     username            varchar(255)
         constraint uk_r43af9ap4edm43mmtq01oddj6
-            unique
+            unique,
+    enabled             boolean
 );
 
 -- user roles

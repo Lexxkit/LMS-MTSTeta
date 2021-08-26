@@ -2,11 +2,15 @@ package com.alekseenko.lms.service.impl;
 
 import com.alekseenko.lms.constants.RoleConstants;
 import com.alekseenko.lms.dao.RoleRepository;
+import com.alekseenko.lms.dao.TokenRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Role;
+import com.alekseenko.lms.domain.User;
+import com.alekseenko.lms.domain.VerificationToken;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.exception.AccessDeniedException;
 import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.exception.UserAlreadyRegisteredException;
 import com.alekseenko.lms.mapper.UserMapper;
 import com.alekseenko.lms.service.UserService;
 import java.util.Collections;
@@ -14,24 +18,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private final RoleRepository roleRepository;
   private final UserMapper userMapper;
   private final UserRepository userRepository;
-
-  @Autowired
-  public UserServiceImpl(RoleRepository roleRepository,
-      UserMapper userMapper,
-      UserRepository userRepository) {
-    this.roleRepository = roleRepository;
-    this.userMapper = userMapper;
-    this.userRepository = userRepository;
-  }
+  private final TokenRepository tokenRepository;
 
   @Override
   public List<UserDto> getUsers(Long id, HttpServletRequest request) {
@@ -75,8 +72,24 @@ public class UserServiceImpl implements UserService {
     return new UserDto();
   }
 
+  private boolean emailExist(String email) {
+    return userRepository.findUserByEmail(email) != null;
+  }
+
+  private boolean loginExists(String name) {
+    return userRepository.findUserByUsername(name).isPresent();
+  }
+
   @Override
-  public void saveUser(UserDto userDto) {
+  public User registerNewUserAccount(UserDto userDto) throws UserAlreadyRegisteredException {
+    if (emailExist(userDto.getEmail())) {
+      throw new UserAlreadyRegisteredException("Пользователь с этим email уже зарегистрирован",
+          "email");
+    }
+    if (loginExists(userDto.getUsername())) {
+      throw new UserAlreadyRegisteredException("Пользователь с этим username уже зарегистрирован",
+          "username");
+    }
     // New users get ROLE_STUDENT upon self registration
     if (userDto.getRoles() == null) {
       Role studentRole = roleRepository.findRoleByName(RoleConstants.ROLE_STUDENT)
@@ -84,7 +97,30 @@ public class UserServiceImpl implements UserService {
               () -> new NotFoundException(String.format("Role %s not found", userDto.getRoles())));
       userDto.setRoles(Set.of(studentRole));
     }
+    var user = userMapper.mapToUser(userDto);
+    userRepository.save(user);
+    return (user);
+  }
+
+  @Override
+  public void createVerificationToken(User user, String token) {
+    VerificationToken myToken = new VerificationToken(token, user);
+    tokenRepository.save(myToken);
+  }
+
+  @Override
+  public VerificationToken getVerificationToken(final String VerificationToken) {
+    return tokenRepository.findByToken(VerificationToken);
+  }
+
+  @Override
+  public void saveUser(UserDto userDto) {
     userRepository.save(userMapper.mapToUser(userDto));
+  }
+
+  @Override
+  public void saveUser(User user) {
+    userRepository.save(user);
   }
 
   @Override
