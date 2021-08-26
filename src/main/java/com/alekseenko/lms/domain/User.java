@@ -51,7 +51,7 @@ public class User extends BaseEntity<String> {
   @Column
   private String achievements;
 
-  @ManyToMany(mappedBy = "users")
+  @ManyToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
   private Set<Course> courses;
 
   @ManyToMany
