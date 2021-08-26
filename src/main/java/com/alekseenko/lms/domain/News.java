@@ -8,9 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "news")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class News extends BaseEntity<String> {
 
   @Id
@@ -30,54 +38,4 @@ public class News extends BaseEntity<String> {
   @ManyToOne
   private User user;
 
-  public News() {
-  }
-
-  public News(Long id, String title, String content, String tag, User user) {
-    this.id = id;
-    this.title = title;
-    this.content = content;
-    this.tag = tag;
-    this.user = user;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getContent() {
-    return content;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
-  }
-
-  public String getTag() {
-    return tag;
-  }
-
-  public void setTag(String tag) {
-    this.tag = tag;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
 }
