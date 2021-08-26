@@ -26,43 +26,43 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Transactional
 public class UserMapperTest {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserMapper userMapper;
-    @MockBean
-    RegistrationListener registrationListener;
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private UserMapper userMapper;
+  @MockBean
+  RegistrationListener registrationListener;
 
-    private User TEST_USER;
+  private User TEST_USER;
 
-    @BeforeAll
-    void setUp() {
-        TEST_USER = new User(1L, "Test", "", Set.of());
-        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        userRepository.save(TEST_USER);
-    }
+  @BeforeAll
+  void setUp() {
+    TEST_USER = new User(1L, "Test", "", Set.of());
+    var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+    userRepository.save(TEST_USER);
+  }
 
-    @BeforeEach
-    void setAuth() {
-        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
+  @BeforeEach
+  void setAuth() {
+    var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+  }
 
-    @Test
-    void shouldReturnUserDtoObject() {
-        final var testUserDto = userMapper.mapToUserDto(
-            userRepository.findUserByUsername("Test").get());
-        assertThat(testUserDto).isInstanceOf(UserDto.class);
-        assertThat(testUserDto.getUsername()).isEqualTo("Test");
-    }
+  @Test
+  void shouldReturnUserDtoObject() {
+    final var testUserDto = userMapper.mapToUserDto(
+        userRepository.findUserByUsername("Test").get());
+    assertThat(testUserDto).isInstanceOf(UserDto.class);
+    assertThat(testUserDto.getUsername()).isEqualTo("Test");
+  }
 
-    @Test
-    void shouldReturnUserObjectFromDto() {
-        final var testUserDto = new UserDto(1L, "Test_Dto", "", Set.of());
-        final var testUser = userMapper.mapToUser(testUserDto);
+  @Test
+  void shouldReturnUserObjectFromDto() {
+    final var testUserDto = new UserDto(1L, "Test_Dto", "", Set.of());
+    final var testUser = userMapper.mapToUser(testUserDto);
 
-        assertThat(testUser).isInstanceOf(User.class);
-        assertThat(testUser.getUsername()).isEqualTo("Test_Dto");
-    }
+    assertThat(testUser).isInstanceOf(User.class);
+    assertThat(testUser.getUsername()).isEqualTo("Test_Dto");
+  }
 }

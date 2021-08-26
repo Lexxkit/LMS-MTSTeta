@@ -1,7 +1,5 @@
 package com.alekseenko.lms.service;
 
-import static com.alekseenko.lms.constants.RoleConstants.ROLE_ADMIN;
-import static com.alekseenko.lms.constants.RoleConstants.ROLE_STUDENT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.alekseenko.lms.dao.CourseRepository;
@@ -32,74 +30,75 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @TestInstance(Lifecycle.PER_CLASS)
 @Transactional
 public class UserServiceImplTest {
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserService userService;
-    @MockBean
-    RegistrationListener registrationListener;
 
-    private User TEST_USER;
+  @Autowired
+  private CourseRepository courseRepository;
+  @Autowired
+  private RoleRepository roleRepository;
+  @Autowired
+  private UserMapper userMapper;
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+  @Autowired
+  private UserService userService;
+  @MockBean
+  RegistrationListener registrationListener;
 
-    @BeforeAll
-    void setUp() {
-        TEST_USER = new User(1L, "Test", "", Set.of());
-        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        Course course = new Course(1L, "Oleg", "New course", null);
-        courseRepository.save(course);
-        userRepository.save(TEST_USER);
-    }
+  private User TEST_USER;
 
-    @BeforeEach
-    void setAuth() {
-        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
+  @BeforeAll
+  void setUp() {
+    TEST_USER = new User(1L, "Test", "", Set.of());
+    var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+    Course course = new Course(1L, "Oleg", "New course", null);
+    courseRepository.save(course);
+    userRepository.save(TEST_USER);
+  }
 
-    @Test
-    void shouldFindAllUsers() {
-        final var users = userService.findAllUsers();
-        assertThat(users.size()).isEqualTo(1);
-    }
+  @BeforeEach
+  void setAuth() {
+    var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+  }
 
-    @Test
-    void shouldFindUsersNotAssignedToCourse() {
-        final var users = userService.getUsersNotAssignedToCourse(1L);
-        assertThat(users.size()).isEqualTo(1);
-        assertThat(users.get(0).getCourses()).isNull();
-    }
+  @Test
+  void shouldFindAllUsers() {
+    final var users = userService.findAllUsers();
+    assertThat(users.size()).isEqualTo(1);
+  }
 
-    @Test
-    void shouldFindUserById() {
-        final var user = userService.getUserById(1L);
-        assertThat(user.getUsername()).isEqualTo("Test");
-    }
+  @Test
+  void shouldFindUsersNotAssignedToCourse() {
+    final var users = userService.getUsersNotAssignedToCourse(1L);
+    assertThat(users.size()).isEqualTo(1);
+    assertThat(users.get(0).getCourses()).isNull();
+  }
 
-    @Test
-    void shouldFindUserByUsername() {
-        final var user = userService.getUserByUsername("Test");
-        assertThat(user.getUsername()).isEqualTo("Test");
-    }
+  @Test
+  void shouldFindUserById() {
+    final var user = userService.getUserById(1L);
+    assertThat(user.getUsername()).isEqualTo("Test");
+  }
 
-    @Test
-    void shouldReturnEmptyUserDtoObject() {
-        final var user = userService.getRegistrationTemplate();
-        assertThat(user).isInstanceOf(UserDto.class);
-        assertThat(user.getUsername()).isNull();
-    }
+  @Test
+  void shouldFindUserByUsername() {
+    final var user = userService.getUserByUsername("Test");
+    assertThat(user.getUsername()).isEqualTo("Test");
+  }
 
-    @Test
-    void shouldReturnListWithSingleUser() {
-        final var oneUserList = userService.assignSingleUserToCourse("Test");
-        assertThat(oneUserList.size()).isEqualTo(1);
-    }
+  @Test
+  void shouldReturnEmptyUserDtoObject() {
+    final var user = userService.getRegistrationTemplate();
+    assertThat(user).isInstanceOf(UserDto.class);
+    assertThat(user.getUsername()).isNull();
+  }
+
+  @Test
+  void shouldReturnListWithSingleUser() {
+    final var oneUserList = userService.assignSingleUserToCourse("Test");
+    assertThat(oneUserList.size()).isEqualTo(1);
+  }
 }

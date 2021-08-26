@@ -8,11 +8,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @SpringBootTest
 class LmsApplicationTests {
 
-	@MockBean
-	RegistrationListener registrationListener;
+  @MockBean
+  RegistrationListener registrationListener;
 
-	@Test
-	void contextLoads() {
-	}
+  @Test
+  void contextLoads() {
+  }
 
 }

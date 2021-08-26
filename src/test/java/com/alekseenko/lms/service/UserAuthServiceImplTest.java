@@ -30,47 +30,47 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @Transactional
 public class UserAuthServiceImplTest {
 
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @MockBean
-    RegistrationListener registrationListener;
+  @Autowired
+  private RoleRepository roleRepository;
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private UserDetailsService userDetailsService;
+  @MockBean
+  RegistrationListener registrationListener;
 
 
-    private User TEST_USER;
+  private User TEST_USER;
 
-    @BeforeAll
-    void setUp() {
-        TEST_USER = new User(1L, "Test", "", Set.of());
-        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        roleRepository.deleteAll();
-        Role roleAdmin = new Role("ROLE_ADMIN");
-        Role roleStudent = new Role("ROLE_STUDENT");
-        roleRepository.saveAll(List.of(roleAdmin, roleStudent));
-        User testUser = TEST_USER;
-        testUser.setRoles(Set.of(roleRepository.findRoleByName("ROLE_ADMIN").get()));
-        userRepository.save(testUser);
-    }
+  @BeforeAll
+  void setUp() {
+    TEST_USER = new User(1L, "Test", "", Set.of());
+    var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+    roleRepository.deleteAll();
+    Role roleAdmin = new Role("ROLE_ADMIN");
+    Role roleStudent = new Role("ROLE_STUDENT");
+    roleRepository.saveAll(List.of(roleAdmin, roleStudent));
+    User testUser = TEST_USER;
+    testUser.setRoles(Set.of(roleRepository.findRoleByName("ROLE_ADMIN").get()));
+    userRepository.save(testUser);
+  }
 
-    @BeforeEach
-    void setAuth() {
-        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
+  @BeforeEach
+  void setAuth() {
+    var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+  }
 
-    @Test
-    void shouldLoadUserByUserName() throws Exception {
-        final var user = userDetailsService.loadUserByUsername("Test");
-        assertThat(user.getUsername()).isEqualTo("Test");
-        assertThatThrownBy(() -> {
-                userDetailsService.loadUserByUsername("Anonimus");
-            }
-        )
-            .isInstanceOf(UsernameNotFoundException.class)
-            .hasMessage("User not found");
-    }
+  @Test
+  void shouldLoadUserByUserName() throws Exception {
+    final var user = userDetailsService.loadUserByUsername("Test");
+    assertThat(user.getUsername()).isEqualTo("Test");
+    assertThatThrownBy(() -> {
+          userDetailsService.loadUserByUsername("Anonimus");
+        }
+    )
+        .isInstanceOf(UsernameNotFoundException.class)
+        .hasMessage("User not found");
+  }
 }
