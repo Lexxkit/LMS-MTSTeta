@@ -18,7 +18,7 @@ public class ControllerAdviser {
 
   private final UserService service;
 
-  @ModelAttribute("isDisabled")
+  @ModelAttribute("isEnabled")
   public Boolean checkIfUserEnabled(Authentication auth) {
     if (auth != null && auth.isAuthenticated()) {
       return service.checkIfUserEnabled(auth.getName());
