@@ -2,7 +2,7 @@ package com.alekseenko.lms.service.impl;
 
 import com.alekseenko.lms.dao.UserRepository;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,14 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class UserAuthServiceImpl implements UserDetailsService {
 
   private final UserRepository userRepository;
-
-  @Autowired
-  public UserAuthServiceImpl(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
 
   @Transactional
   @Override

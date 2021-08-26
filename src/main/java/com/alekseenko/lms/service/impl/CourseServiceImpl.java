@@ -10,7 +10,7 @@ import com.alekseenko.lms.mapper.CourseMapper;
 import com.alekseenko.lms.service.CourseService;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,20 +19,12 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
   private final CourseRepository courseRepository;
   private final CourseMapper courseMapper;
   private final UserRepository userRepository;
-
-  @Autowired
-  public CourseServiceImpl(CourseRepository courseRepository,
-      CourseMapper courseMapper,
-      UserRepository userRepository) {
-    this.courseRepository = courseRepository;
-    this.courseMapper = courseMapper;
-    this.userRepository = userRepository;
-  }
 
   @Override
   public List<CourseDto> getAllCourses(String titlePrefix, String sortField, String sortDirection) {

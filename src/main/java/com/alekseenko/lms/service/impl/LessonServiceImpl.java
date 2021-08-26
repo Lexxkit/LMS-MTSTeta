@@ -8,20 +8,15 @@ import com.alekseenko.lms.dto.LessonDto;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.LessonService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class LessonServiceImpl implements LessonService {
 
   private final LessonRepository lessonRepository;
   private final ModuleRepository moduleRepository;
-
-  @Autowired
-  public LessonServiceImpl(LessonRepository lessonRepository, ModuleRepository moduleRepository) {
-    this.lessonRepository = lessonRepository;
-    this.moduleRepository = moduleRepository;
-  }
 
   @Override
   public LessonDto getLessonById(Long id) {

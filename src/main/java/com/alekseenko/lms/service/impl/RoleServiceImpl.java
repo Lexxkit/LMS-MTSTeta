@@ -6,18 +6,14 @@ import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.RoleService;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
   private final RoleRepository roleRepository;
-
-  @Autowired
-  public RoleServiceImpl(RoleRepository roleRepository) {
-    this.roleRepository = roleRepository;
-  }
 
   @Override
   public List<RoleDto> findAllRoles() {
