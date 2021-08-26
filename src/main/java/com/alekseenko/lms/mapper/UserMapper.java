@@ -2,19 +2,15 @@ package com.alekseenko.lms.mapper;
 
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.UserDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class UserMapper {
 
   private final PasswordEncoder passwordEncoder;
-
-  @Autowired
-  public UserMapper(PasswordEncoder passwordEncoder) {
-    this.passwordEncoder = passwordEncoder;
-  }
 
   public UserDto mapToUserDto(User user) {
     UserDto userDto = new UserDto();
