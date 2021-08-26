@@ -115,11 +115,22 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void saveUser(UserDto userDto) {
-    userRepository.save(userMapper.mapToUser(userDto));
+    var userEntity = userMapper.mapToUser(userDto);
+    var existingUser = userRepository.findById(userEntity.getId());
+    if (existingUser.isPresent()) {
+      var isEnabled = existingUser.map(User::isEnabled).orElse(false);
+      userEntity.setEnabled(isEnabled);
+    }
+    userRepository.save(userEntity);
   }
 
   @Override
   public void saveUser(User user) {
+    var existingUser = userRepository.findById(user.getId());
+    if (existingUser.isPresent()) {
+      var isEnabled = existingUser.map(User::isEnabled).orElse(false);
+      user.setEnabled(isEnabled);
+    }
     userRepository.save(user);
   }
 
@@ -139,7 +150,6 @@ public class UserServiceImpl implements UserService {
       userRepository.deleteById(id);
     }
   }
-
 
   @Override
   public Boolean checkIfUserEnabled(String username) {
