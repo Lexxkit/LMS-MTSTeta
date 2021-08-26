@@ -61,8 +61,11 @@
           </form>
         </li>
       </ul>
-
     </div>
   </nav>
+  <div class="alert alert-warning" role="alert" sec:authorize="isAuthenticated()"
+       th:if="${isDisabled == false}">
+    Аккаунт не активирован!
+  </div>
 </header>
 </html>

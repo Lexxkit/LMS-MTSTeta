@@ -34,4 +34,6 @@ public interface UserService {
   void createVerificationToken(User user, String token);
 
   VerificationToken getVerificationToken(final String VerificationToken);
+
+  Boolean checkIfUserEnabled(String username);
 }

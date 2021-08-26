@@ -139,4 +139,11 @@ public class UserServiceImpl implements UserService {
       userRepository.deleteById(id);
     }
   }
+
+
+  @Override
+  public Boolean checkIfUserEnabled(String username) {
+    var user = userRepository.findUserByUsername(username);
+    return user.map(User::isEnabled).orElse(null);
+  }
 }
