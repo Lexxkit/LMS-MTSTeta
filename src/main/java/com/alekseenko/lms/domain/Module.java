@@ -12,9 +12,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "modules")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Module extends BaseEntity<String> {
 
   @Id
@@ -35,18 +43,6 @@ public class Module extends BaseEntity<String> {
   @OrderBy("id")
   private List<Lesson> lessons;
 
-  public Module() {
-  }
-
-  public Module(Long id, String title, String description, Course course,
-      List<Lesson> lessons) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.course = course;
-    this.lessons = lessons;
-  }
-
   public Module(ModuleDto moduleDto) {
     this.id = moduleDto.getId();
     this.title = moduleDto.getTitle();
@@ -59,45 +55,5 @@ public class Module extends BaseEntity<String> {
     this.title = moduleDto.getTitle();
     this.description = moduleDto.getContent();
     this.course = course;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public Course getCourse() {
-    return course;
-  }
-
-  public void setCourse(Course course) {
-    this.course = course;
-  }
-
-  public List<Lesson> getLessons() {
-    return lessons;
-  }
-
-  public void setLessons(List<Lesson> lessons) {
-    this.lessons = lessons;
   }
 }

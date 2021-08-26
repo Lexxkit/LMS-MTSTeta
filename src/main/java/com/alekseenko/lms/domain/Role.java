@@ -1,6 +1,5 @@
 package com.alekseenko.lms.domain;
 
-import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +8,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "roles")
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = "name")
 public class Role {
 
   @Id
@@ -24,51 +31,8 @@ public class Role {
   @ManyToMany(mappedBy = "roles")
   private Set<User> users;
 
-  public Role() {
-  }
-
   public Role(String name) {
     this.name = name;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Set<User> getUsers() {
-    return users;
-  }
-
-  public void setUsers(Set<User> users) {
-    this.users = users;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof Role)) {
-      return false;
-    }
-    Role role = (Role) o;
-    return name.equals(role.name);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(name);
-  }
 }
