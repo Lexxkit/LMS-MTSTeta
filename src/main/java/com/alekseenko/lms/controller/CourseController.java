@@ -10,9 +10,7 @@ import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,27 +32,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/course")
+@AllArgsConstructor
 public class CourseController {
 
   // Constant, which defines number of elements on each page
   private final static int ITEMS_PER_PAGE = 3;
 
-  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
   private final CourseService courseService;
   private final CourseImageService courseImageService;
   private final UserService userService;
   private final ModuleService moduleService;
 
-
-  @Autowired
-  public CourseController(CourseService courseService,
-      CourseImageService courseImageService,
-      UserService userService, ModuleService moduleService) {
-    this.courseService = courseService;
-    this.courseImageService = courseImageService;
-    this.userService = userService;
-    this.moduleService = moduleService;
-  }
 
   @GetMapping
   public String courseTable(Model model,

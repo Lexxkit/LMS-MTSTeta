@@ -7,7 +7,7 @@ import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.LessonService;
 import com.alekseenko.lms.service.ModuleService;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,20 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/module")
+@AllArgsConstructor
 public class ModuleController {
 
   private final ModuleService moduleService;
   private final LessonService lessonService;
   private final CourseService courseService;
-
-
-  @Autowired
-  public ModuleController(ModuleService moduleService,
-      LessonService lessonService, CourseService courseService) {
-    this.moduleService = moduleService;
-    this.lessonService = lessonService;
-    this.courseService = courseService;
-  }
 
   @Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
   @GetMapping("/new")

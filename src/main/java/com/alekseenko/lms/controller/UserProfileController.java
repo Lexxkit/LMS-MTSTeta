@@ -12,9 +12,7 @@ import java.security.Principal;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,23 +34,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @PreAuthorize("isAuthenticated()")
 @RequestMapping("/profile")
+@AllArgsConstructor
 public class UserProfileController {
 
-  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
   private final AvatarImageService avatarImageService;
   private final CourseService courseService;
   private final RoleService roleService;
   private final UserService userService;
-
-  @Autowired
-  public UserProfileController(AvatarImageService avatarImageService,
-      CourseService courseService, RoleService roleService,
-      UserService userService) {
-    this.avatarImageService = avatarImageService;
-    this.courseService = courseService;
-    this.roleService = roleService;
-    this.userService = userService;
-  }
 
   @ModelAttribute("roles")
   public List<RoleDto> rolesAttribute() {
