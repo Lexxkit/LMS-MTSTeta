@@ -20,6 +20,7 @@
         <th scope="col">Username</th>
         <th scope="col">Role</th>
         <th scope="col">Delete</th>
+        <th scope="col">Enable</th>
       </tr>
       </thead>
       <tbody>
@@ -30,12 +31,18 @@
         </td>
         <td>
           <div th:each="role : ${user.roles}">
-          <p th:text="${role.name}">User roles</p></div>
+            <p th:text="${role.name}">User roles</p></div>
         </td>
         <td class="row">
-            <form th:method="delete" th:action="@{/admin/user/{id}(id = ${user.id})}">
-              <button class="btn btn-danger" type="submit">Delete user</button>
-            </form>
+          <form th:method="delete" th:action="@{/admin/user/{id}(id = ${user.id})}">
+            <button class="btn btn-danger" type="submit">Delete user</button>
+          </form>
+        </td>
+        <td class="row">
+          <a th:href="@{/admin/user/{id}(id = ${user.id})}" th:text="${user.enabled}"></a>
+          <!--            <form th:method="get" th:action="@{/admin/user/{id}(id = ${user.id})}">-->
+          <!--              <button class="btn btn-danger" type="submit">Delete user</button>-->
+          <!--            </form>-->
         </td>
       </tr>
       <tr th:if="${users.empty}" >

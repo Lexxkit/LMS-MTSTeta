@@ -36,4 +36,7 @@ public interface UserService {
   VerificationToken getVerificationToken(final String VerificationToken);
 
   Boolean checkIfUserEnabled(String username);
+
+  Boolean checkIfUserEnabled(Long id);
+
 }
