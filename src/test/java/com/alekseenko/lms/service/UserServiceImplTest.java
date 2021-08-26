@@ -10,6 +10,7 @@ import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Course;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.event.RegistrationListener;
 import com.alekseenko.lms.mapper.UserMapper;
 import java.util.Set;
 import javax.transaction.Transactional;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,6 +44,8 @@ public class UserServiceImplTest {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
+    @MockBean
+    RegistrationListener registrationListener;
 
     private User TEST_USER;
 
@@ -91,24 +95,6 @@ public class UserServiceImplTest {
         final var user = userService.getRegistrationTemplate();
         assertThat(user).isInstanceOf(UserDto.class);
         assertThat(user.getUsername()).isNull();
-    }
-
-    @Test
-    void shouldSaveUserToDB() {
-        final var userToSave = new User(2L, "New User", "", Set.of(roleRepository.findRoleByName(ROLE_ADMIN).get()));
-        userService.saveUser(userMapper.mapToUserDto(userToSave));
-        assertThat(userRepository.findAll().size()).isEqualTo(2);
-    }
-
-    @Test
-    void shouldSaveUserToDBAndAssignRole() {
-        final var userWithoutRole = new User("No Role");
-        userService.saveUser(userMapper.mapToUserDto(userWithoutRole));
-        assertThat(userRepository.findAll().size()).isEqualTo(2);
-
-        final var savedUser = userRepository.findUserByUsername("No Role").get();
-        assertThat(savedUser.getRoles().size()).isNotNull();
-        assertThat(roleRepository.findRoleByName(ROLE_STUDENT).get()).isIn(savedUser.getRoles());
     }
 
     @Test

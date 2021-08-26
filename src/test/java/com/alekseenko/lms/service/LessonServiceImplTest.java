@@ -11,6 +11,7 @@ import com.alekseenko.lms.domain.Lesson;
 import com.alekseenko.lms.domain.Module;
 import com.alekseenko.lms.domain.User;
 import com.alekseenko.lms.dto.LessonDto;
+import com.alekseenko.lms.event.RegistrationListener;
 import com.alekseenko.lms.exception.NotFoundException;
 import java.util.Set;
 import javax.transaction.Transactional;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -39,6 +41,9 @@ public class LessonServiceImplTest {
     private ModuleRepository moduleRepository;
     @Autowired
     private LessonService lessonService;
+    @MockBean
+    RegistrationListener registrationListener;
+
 
     private User TEST_USER;
 

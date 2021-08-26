@@ -60,7 +60,6 @@ public class CourseControllerTest {
                 .andExpect(view().name("index"));
     }
 
-    @Disabled
     @Test
     void testIndexPageWithPrefix() throws Exception {
         CourseDto course = new CourseDto(1L, "Test user", "New course", (CourseImage) null);
@@ -75,11 +74,9 @@ public class CourseControllerTest {
             .andExpect(view().name("index"));
     }
 
-    @Disabled
     @Test
     void testCoursePage() throws Exception {
         CourseDto course = new CourseDto(1L, "Test user", "New course", (CourseImage) null);
-        LessonDto lesson = new LessonDto(1L, "New course", 1L);
 
         when(courseService.getCourseById(1L)).thenReturn(course);
 
@@ -108,7 +105,6 @@ public class CourseControllerTest {
                .andExpect(redirectedUrl("/course"));
     }
 
-    @Disabled
     @Test
     void testSubmitInvalidCourseForm() throws Exception {
         mockMvc.perform(post("/course")

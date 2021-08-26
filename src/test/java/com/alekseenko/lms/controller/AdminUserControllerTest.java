@@ -4,6 +4,7 @@ import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.service.CourseService;
 import com.alekseenko.lms.service.RoleService;
 import com.alekseenko.lms.service.UserService;
+import com.alekseenko.lms.validator.TitleCaseValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,6 +29,8 @@ public class AdminUserControllerTest {
     private RoleService roleService;
     @MockBean
     private CourseService courseService;
+    @MockBean
+    private TitleCaseValidator titleCaseValidator;
     @Autowired
     private MockMvc mockMvc;
 
@@ -73,9 +76,11 @@ public class AdminUserControllerTest {
     @Test
     @WithMockUser(roles = {"ADMIN"})
     void testSubmitInvalidUserForm() throws Exception {
+        final var testUser = new UserDto(1L, "Test", "12345678", new HashSet<>());
+        testUser.setEmail("t@t.com");
         mockMvc.perform(post("/admin/user")
                 .with(csrf())
-                .flashAttr("user", new UserDto(1L, "", "", new HashSet<>())))
+                .flashAttr("user", testUser))
                 .andExpect(model().attributeHasFieldErrors("user"))
                 .andExpect(view().name("user-edit"));
     }

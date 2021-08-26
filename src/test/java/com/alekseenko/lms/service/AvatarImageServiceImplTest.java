@@ -7,6 +7,7 @@ import com.alekseenko.lms.dao.AvatarImageRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.AvatarImage;
 import com.alekseenko.lms.domain.User;
+import com.alekseenko.lms.event.RegistrationListener;
 import com.alekseenko.lms.exception.NotFoundException;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,8 @@ public class AvatarImageServiceImplTest {
     private AvatarImageService avatarImageService;
     @Autowired
     private UserRepository userRepository;
+    @MockBean
+    RegistrationListener registrationListener;
 
     @Value("${file.storage.avatar.path}")
     private String path;
@@ -50,6 +53,8 @@ public class AvatarImageServiceImplTest {
         SecurityContextHolder.getContext().setAuthentication(auth);
         User testUser = new User("Test_user");
         User testUserWithoutAvatar = new User("Another_test_user");
+        testUser.setEnabled(true);
+        testUserWithoutAvatar.setEnabled(true);
         userRepository.saveAll(List.of(testUser, testUserWithoutAvatar));
         AvatarImage avatarImage = new AvatarImage(1L, "jpeg", "Test",
             userRepository.findUserByUsername("Test_user").get());
