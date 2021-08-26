@@ -10,22 +10,15 @@ import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.ModuleService;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class ModuleServiceImpl implements ModuleService {
 
   private final ModuleRepository moduleRepository;
   private final CourseRepository courseRepository;
-
-  @Autowired
-  public ModuleServiceImpl(ModuleRepository repository,
-      CourseRepository courseRepository) {
-    this.moduleRepository = repository;
-    this.courseRepository = courseRepository;
-
-  }
 
   @Override
   public ModuleDto findById(Long id) {

@@ -19,8 +19,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import javax.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,9 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class CourseImageServiceImpl implements CourseImageService {
 
-  private static final Logger logger = LoggerFactory.getLogger(CourseImageServiceImpl.class);
   private final CourseImageRepository courseImageRepository;
   private final CourseRepository courseRepository;
+
   @Value("${file.storage.logo.path}")
   private String path;
 
