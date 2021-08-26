@@ -1,5 +1,6 @@
 package com.alekseenko.lms.configuration;
 
+import java.util.Locale;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,5 +20,10 @@ public class MvcConfiguration implements WebMvcConfigurer {
     messageSource.setBasename("classpath:messages");
     messageSource.setDefaultEncoding("UTF-8");
     return messageSource;
+  }
+
+  @Bean
+  public Locale projectLocale() {
+    return new Locale("ru");
   }
 }

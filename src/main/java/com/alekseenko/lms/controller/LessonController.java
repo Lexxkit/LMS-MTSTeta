@@ -4,7 +4,7 @@ import com.alekseenko.lms.constants.RoleConstants;
 import com.alekseenko.lms.dto.LessonDto;
 import com.alekseenko.lms.service.LessonService;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,14 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/lesson")
+@AllArgsConstructor
 public class LessonController {
 
   private final LessonService lessonService;
-
-  @Autowired
-  public LessonController(LessonService lessonService) {
-    this.lessonService = lessonService;
-  }
 
   @Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
   @GetMapping("/new")
@@ -43,7 +39,6 @@ public class LessonController {
     lessonService.saveLesson(lessonDto);
     return String.format("redirect:/module/%d", lessonDto.getModuleId());
   }
-
 
   @RequestMapping("/{id}")
   public String lessonForm(Model model, @PathVariable("id") Long id) {

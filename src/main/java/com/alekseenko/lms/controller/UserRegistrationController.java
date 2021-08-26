@@ -35,7 +35,7 @@ public class UserRegistrationController {
   private final UserService userService;
   private final ApplicationEventPublisher eventPublisher;
   private final MessageSource messages;
-  private final Locale locale = new Locale("ru");
+  private final Locale locale;
   private final RoleService roleService;
 
   @ModelAttribute("roles")

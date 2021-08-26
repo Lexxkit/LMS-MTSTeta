@@ -7,7 +7,7 @@ import com.alekseenko.lms.service.RoleService;
 import com.alekseenko.lms.service.UserService;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,19 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin/user")
+@AllArgsConstructor
 public class AdminUserController {
 
   private final CourseService courseService;
   private final RoleService roleService;
   private final UserService userService;
-
-  @Autowired
-  public AdminUserController(CourseService courseService,
-      RoleService roleService, UserService userService) {
-    this.courseService = courseService;
-    this.roleService = roleService;
-    this.userService = userService;
-  }
 
   @ModelAttribute("roles")
   public List<RoleDto> rolesAttribute() {
