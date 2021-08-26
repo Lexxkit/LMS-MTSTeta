@@ -7,8 +7,11 @@ import com.alekseenko.lms.dao.AvatarImageRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.AvatarImage;
 import com.alekseenko.lms.domain.User;
+import com.alekseenko.lms.event.RegistrationListener;
 import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.util.DataUtil;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,9 +40,14 @@ public class AvatarImageServiceImplTest {
     private AvatarImageService avatarImageService;
     @Autowired
     private UserRepository userRepository;
+    @MockBean
+    RegistrationListener registrationListener;
 
     @Value("${file.storage.avatar.path}")
     private String path;
+
+    @Value("${file.storage.img.path.default}")
+    private String defaultImgPath;
 
     private User TEST_USER;
 
@@ -50,6 +58,8 @@ public class AvatarImageServiceImplTest {
         SecurityContextHolder.getContext().setAuthentication(auth);
         User testUser = new User("Test_user");
         User testUserWithoutAvatar = new User("Another_test_user");
+        testUser.setEnabled(true);
+        testUserWithoutAvatar.setEnabled(true);
         userRepository.saveAll(List.of(testUser, testUserWithoutAvatar));
         AvatarImage avatarImage = new AvatarImage(1L, "jpeg", "Test",
             userRepository.findUserByUsername("Test_user").get());
@@ -74,16 +84,5 @@ public class AvatarImageServiceImplTest {
         assertThatThrownBy(() -> {
             avatarImageService.getContentTypeByUser("");
         }).isInstanceOf(NotFoundException.class);
-
-    }
-
-    @Test
-    void shouldSaveAvatarImage() {
-//        avatarImageService.saveAvatarImage("Test_user", "png", InputStream.nullInputStream());
-//        avatarImageService.saveAvatarImage("Another_test_user", "jpeg", InputStream.nullInputStream());
-
-        final var contentTypeForTestUser = avatarImageService.getContentTypeByUser("Test_user");
-
-        assertThat(contentTypeForTestUser).isEqualTo("jpeg");
     }
 }

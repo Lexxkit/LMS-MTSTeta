@@ -67,7 +67,7 @@ public class LessonControllerTest {
         mockMvc.perform(post("/lesson")
                 .with(csrf())
                 .flashAttr("lessonDto", new LessonDto(1L, "", "", 1L)))
-                .andExpect(model().attributeHasFieldErrors("lessonDto", "title", "content"))
+                .andExpect(model().attributeHasFieldErrors("lessonDto", "title"))
                 .andExpect(view().name("lesson-form"));
     }
 
