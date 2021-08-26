@@ -12,6 +12,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -27,6 +29,7 @@ public class VerificationToken {
 
   private String token;
 
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
   private User user;
 
