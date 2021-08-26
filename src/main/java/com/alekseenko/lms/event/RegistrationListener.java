@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
@@ -23,6 +24,9 @@ public class RegistrationListener implements
   private final MessageSource messages;
 
   private final JavaMailSender mailSender;
+
+  @Value("${mail.host.address}")
+  private static String HOST;
 
   @Override
   public void onApplicationEvent(OnRegistrationCompleteEvent event) {
@@ -45,7 +49,7 @@ public class RegistrationListener implements
     SimpleMailMessage email = new SimpleMailMessage();
     email.setTo(recipientAddress);
     email.setSubject(subject);
-    email.setText(message + "\r\n" + "http://localhost:8080" + confirmationUrl);
+    email.setText(message + "\r\n" + HOST + confirmationUrl);
     mailSender.send(email);
   }
 }

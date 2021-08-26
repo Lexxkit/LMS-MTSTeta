@@ -14,6 +14,6 @@ deploy:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=mts-teta --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=mts-teta-lms --api-key=$HEROKU_API_KEY
   only:
     - heroky-deploy
