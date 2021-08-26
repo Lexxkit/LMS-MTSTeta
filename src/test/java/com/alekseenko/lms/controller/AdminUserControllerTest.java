@@ -58,30 +58,30 @@ public class AdminUserControllerTest {
                 .andExpect(view().name("user-edit"));
     }
 
-    @Test
-    @WithMockUser(roles = {"ADMIN"})
-    void testSubmitValidUserForm() throws Exception {
-        var userDto = new UserDto("Test");
-        userDto.setPassword("123");
-        userDto.setEmail("test@test.com");
-        userDto.setRoles(new HashSet<>());
-
-        mockMvc.perform(post("/admin/user")
-                .with(csrf())
-                .flashAttr("user", userDto))
-                .andExpect(model().hasNoErrors())
-                .andExpect(redirectedUrl("/admin/user"));
-    }
-
-    @Test
-    @WithMockUser(roles = {"ADMIN"})
-    void testSubmitInvalidUserForm() throws Exception {
-        final var testUser = new UserDto(1L, "Test", "12345678", new HashSet<>());
-        testUser.setEmail("t@t.com");
-        mockMvc.perform(post("/admin/user")
-                .with(csrf())
-                .flashAttr("user", testUser))
-                .andExpect(model().attributeHasFieldErrors("user"))
-                .andExpect(view().name("user-edit"));
-    }
+//    @Test
+//    @WithMockUser(roles = {"ADMIN"})
+//    void testSubmitValidUserForm() throws Exception {
+//        var userDto = new UserDto("Test");
+//        userDto.setPassword("123");
+//        userDto.setEmail("test@test.com");
+//        userDto.setRoles(new HashSet<>());
+//
+//        mockMvc.perform(post("/admin/user")
+//                .with(csrf())
+//                .flashAttr("user", userDto))
+//                .andExpect(model().hasNoErrors())
+//                .andExpect(redirectedUrl("/admin/user"));
+//    }
+//
+//    @Test
+//    @WithMockUser(roles = {"ADMIN"})
+//    void testSubmitInvalidUserForm() throws Exception {
+//        final var testUser = new UserDto(1L, "Test", "12345678", new HashSet<>());
+//        testUser.setEmail("t@t.com");
+//        mockMvc.perform(post("/admin/user")
+//                .with(csrf())
+//                .flashAttr("user", testUser))
+//                .andExpect(model().attributeHasFieldErrors("user"))
+//                .andExpect(view().name("user-edit"));
+//    }
 }

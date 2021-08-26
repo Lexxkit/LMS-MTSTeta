@@ -56,4 +56,13 @@ public class UserMapperTest {
         assertThat(testUserDto).isInstanceOf(UserDto.class);
         assertThat(testUserDto.getUsername()).isEqualTo("Test");
     }
+
+    @Test
+    void shouldReturnUserObjectFromDto() {
+        final var testUserDto = new UserDto(1L, "Test_Dto", "", Set.of());
+        final var testUser = userMapper.mapToUser(testUserDto);
+
+        assertThat(testUser).isInstanceOf(User.class);
+        assertThat(testUser.getUsername()).isEqualTo("Test_Dto");
+    }
 }
