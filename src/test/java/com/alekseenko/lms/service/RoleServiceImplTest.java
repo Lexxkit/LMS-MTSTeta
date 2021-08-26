@@ -22,35 +22,36 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @Transactional
 public class RoleServiceImplTest {
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private RoleService roleService;
-    @MockBean
-    RegistrationListener registrationListener;
 
-    @BeforeEach
-    void setUp() {
-        if (roleRepository.findAll().size() != 2) {
-            roleRepository.deleteAll();
-            Role roleAdmin = new Role("ROLE_ADMIN");
-            Role roleStudent = new Role("ROLE_STUDENT");
-            roleRepository.saveAll(List.of(roleAdmin, roleStudent));
-        }
-    }
+  @Autowired
+  private RoleRepository roleRepository;
+  @Autowired
+  private RoleService roleService;
+  @MockBean
+  RegistrationListener registrationListener;
 
-    @Test
-    void shouldReturnAllRoles() {
-        final var roles = roleService.findAllRoles();
-        assertThat(roles.size()).isEqualTo(2);
-        assertThat(roles.get(0).getName()).isIn(List.of(ROLE_ADMIN, ROLE_STUDENT));
+  @BeforeEach
+  void setUp() {
+    if (roleRepository.findAll().size() != 2) {
+      roleRepository.deleteAll();
+      Role roleAdmin = new Role("ROLE_ADMIN");
+      Role roleStudent = new Role("ROLE_STUDENT");
+      roleRepository.saveAll(List.of(roleAdmin, roleStudent));
     }
+  }
 
-    @Test
-    void shouldReturnRoleByName() {
-        final var roleAdmin = roleService.getRoleByName(ROLE_ADMIN);
-        final var roleStudent = roleService.getRoleByName(ROLE_STUDENT);
-        assertThat(roleAdmin.getName()).isEqualTo("ROLE_ADMIN");
-        assertThat(roleStudent.getName()).isEqualTo("ROLE_STUDENT");
-    }
+  @Test
+  void shouldReturnAllRoles() {
+    final var roles = roleService.findAllRoles();
+    assertThat(roles.size()).isEqualTo(2);
+    assertThat(roles.get(0).getName()).isIn(List.of(ROLE_ADMIN, ROLE_STUDENT));
+  }
+
+  @Test
+  void shouldReturnRoleByName() {
+    final var roleAdmin = roleService.getRoleByName(ROLE_ADMIN);
+    final var roleStudent = roleService.getRoleByName(ROLE_STUDENT);
+    assertThat(roleAdmin.getName()).isEqualTo("ROLE_ADMIN");
+    assertThat(roleStudent.getName()).isEqualTo("ROLE_STUDENT");
+  }
 }

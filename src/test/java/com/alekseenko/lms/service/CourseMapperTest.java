@@ -27,42 +27,43 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
 public class CourseMapperTest {
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    CourseMapper courseMapper;
-    @MockBean
-    RegistrationListener registrationListener;
 
-    private User TEST_USER;
+  @Autowired
+  private CourseRepository courseRepository;
+  @Autowired
+  CourseMapper courseMapper;
+  @MockBean
+  RegistrationListener registrationListener;
 
-    @BeforeAll
-    void setUp() {
-        TEST_USER = new User(1L, "Test", "", Set.of());
-        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        Course testCourseWithoutUser = new Course(1L, "Author", "Title", null);
-        Course testCourseWithUser = new Course(2L, "Author", "Title", null);
-        courseRepository.saveAll(List.of(testCourseWithoutUser, testCourseWithUser));
-    }
+  private User TEST_USER;
 
-    @BeforeEach
-    void setAuth() {
-        var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
+  @BeforeAll
+  void setUp() {
+    TEST_USER = new User(1L, "Test", "", Set.of());
+    var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+    Course testCourseWithoutUser = new Course(1L, "Author", "Title", null);
+    Course testCourseWithUser = new Course(2L, "Author", "Title", null);
+    courseRepository.saveAll(List.of(testCourseWithoutUser, testCourseWithUser));
+  }
 
-    @Test
-    void shouldReturnCourseDtoObject() {
-        final var testCourseDtoWithoutUser = courseMapper.mapToCourseDtoWithoutUser(
-            courseRepository.getById(1L));
-        final var testCourseDtoWithoutImage = courseMapper.mapToCourseDtoWithoutUser(
-            courseRepository.getById(1L));
+  @BeforeEach
+  void setAuth() {
+    var auth = new UsernamePasswordAuthenticationToken(TEST_USER, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+  }
 
-        assertThat(testCourseDtoWithoutUser).isInstanceOf(CourseDto.class);
-        assertThat(testCourseDtoWithoutUser.getUsers()).isNull();
+  @Test
+  void shouldReturnCourseDtoObject() {
+    final var testCourseDtoWithoutUser = courseMapper.mapToCourseDtoWithoutUser(
+        courseRepository.getById(1L));
+    final var testCourseDtoWithoutImage = courseMapper.mapToCourseDtoWithoutUser(
+        courseRepository.getById(1L));
 
-        assertThat(testCourseDtoWithoutImage).isInstanceOf(CourseDto.class);
-        assertThat(testCourseDtoWithoutUser.getCourseImage()).isNull();
-    }
+    assertThat(testCourseDtoWithoutUser).isInstanceOf(CourseDto.class);
+    assertThat(testCourseDtoWithoutUser.getUsers()).isNull();
+
+    assertThat(testCourseDtoWithoutImage).isInstanceOf(CourseDto.class);
+    assertThat(testCourseDtoWithoutUser.getCourseImage()).isNull();
+  }
 }
