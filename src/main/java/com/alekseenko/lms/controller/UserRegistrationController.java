@@ -1,11 +1,14 @@
 package com.alekseenko.lms.controller;
 
 import com.alekseenko.lms.domain.VerificationToken;
+import com.alekseenko.lms.dto.RoleDto;
 import com.alekseenko.lms.dto.UserDto;
 import com.alekseenko.lms.event.OnRegistrationCompleteEvent;
 import com.alekseenko.lms.exception.UserAlreadyRegisteredException;
+import com.alekseenko.lms.service.RoleService;
 import com.alekseenko.lms.service.UserService;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -22,7 +25,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.WebRequest;
 
 @Controller
 @RequestMapping("/user")
@@ -33,12 +35,21 @@ public class UserRegistrationController {
   private final UserService userService;
   private final ApplicationEventPublisher eventPublisher;
   private final MessageSource messages;
+  private final Locale locale = new Locale("ru");
+  private final RoleService roleService;
+
+  @ModelAttribute("roles")
+  public List<RoleDto> rolesAttribute() {
+    return roleService.findAllRoles();
+  }
 
   @PostMapping("")
   public String registerUser(@Valid @ModelAttribute("user") UserDto user,
+      BindingResult bindingResult,
       HttpServletRequest request,
-      BindingResult bindingResult, Authentication authentication) {
+      Authentication authentication) {
     if (bindingResult.hasErrors()) {
+      log.info("Invalid user submitted");
       return "user-create";
     }
 
@@ -46,15 +57,14 @@ public class UserRegistrationController {
       var newUserAccount = userService.registerNewUserAccount(user);
       String appUrl = request.getContextPath();
       eventPublisher.publishEvent(new OnRegistrationCompleteEvent(newUserAccount,
-          request.getLocale(), appUrl));
+          locale, appUrl));
     } catch (UserAlreadyRegisteredException e) {
       bindingResult.rejectValue(e.getField(), "error.user", e.getMessage());
       return "user-create";
     } catch (RuntimeException ex) {
       log.error(ex.getMessage());
       bindingResult.rejectValue("email", "error.user",
-          "Не получилось выслать письмо подтверждения на указанный email," +
-              " свяжитесь с администратором для активации Вашего аккаунта!");
+          messages.getMessage("message.fail.emailFailed", null, locale));
       return "user-create";
     }
     if (authentication != null && authentication.getAuthorities().stream().anyMatch(r ->
@@ -70,12 +80,9 @@ public class UserRegistrationController {
     return "user-create";
   }
 
-
   @GetMapping("/registrationConfirm")
   public String confirmRegistration(Model model,
-      WebRequest request, @RequestParam("token") String token) {
-
-    var locale = new Locale("ru");
+      @RequestParam("token") String token) {
 
     VerificationToken verificationToken = userService.getVerificationToken(token);
     if (verificationToken == null) {
@@ -94,16 +101,16 @@ public class UserRegistrationController {
       model.addAttribute("class", "text-success");
       return "registration_result";
     } else if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-      var messageValue = messages.getMessage("auth.message.expired", null, locale);
-      model.addAttribute("message", messageValue);
+      model.addAttribute("message",
+          messages.getMessage("auth.message.expired", null, locale));
       model.addAttribute("class", "text-danger");
     } else {
-      model.addAttribute("message", messages.getMessage("message.regSuccConfirmed", null, locale));
+      model.addAttribute("message",
+          messages.getMessage("message.regSuccConfirmed", null, locale));
       model.addAttribute("class", "text-success");
       user.setEnabled(true);
       userService.saveUser(user);
     }
-
     return "registration_result";
   }
 
