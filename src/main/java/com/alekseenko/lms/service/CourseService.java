@@ -2,14 +2,17 @@ package com.alekseenko.lms.service;
 
 import com.alekseenko.lms.dto.CourseDto;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface CourseService {
 
-  List<CourseDto> getAllCourses(String titlePrefix);
+  List<CourseDto> getAllCourses(String titlePrefix, String sortField, String sortDirection);
 
   CourseDto getCourseTemplate();
 
-  List<CourseDto> getAllCourses();
+  List<CourseDto> getAllCourses(String sortField, String sortDirection);
+
+  Page<CourseDto> findPaginated(int pageNumber, int pageSize, String titlePrefix);
 
   CourseDto getCourseById(Long id);
 
@@ -19,7 +22,7 @@ public interface CourseService {
 
   void deleteCourse(Long id);
 
-  List<CourseDto> getCoursesByTitleWithPrefix(String prefix);
+  Page<CourseDto> getCoursesByTitleWithPrefix(String prefix);
 
   void setUserCourseConnection(Long userId, Long courseId);
 

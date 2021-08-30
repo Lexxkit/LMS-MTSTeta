@@ -10,4 +10,10 @@ public interface AvatarImageService {
   Optional<byte[]> getAvatarImageByUser(String username);
 
   void saveAvatarImage(String username, MultipartFile avatar);
+
+  boolean checkAvatarImage(Long userId);
+
+  Optional<String> getContentTypeAvatarByUser(String username);
+
+  Optional<byte[]> getDataAvatar(String username);
 }

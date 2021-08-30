@@ -28,7 +28,8 @@ create table users
     social_network_link varchar(255),
     username            varchar(255)
         constraint uk_r43af9ap4edm43mmtq01oddj6
-            unique
+            unique,
+    enabled             boolean
 );
 
 -- user roles
@@ -43,3 +44,19 @@ create table users_roles
     constraint users_roles_pkey
         primary key (users_id, roles_id)
 );
+
+-- courses
+create table courses (
+       id  bigserial not null,
+        created_at timestamp,
+        created_by varchar(255),
+        updated_at timestamp,
+        updated_by varchar(255),
+        author varchar(255),
+        avg_rating float8,
+        description text,
+        duration_weeks int4,
+        tag varchar(255),
+        title varchar(255),
+        primary key (id)
+    )

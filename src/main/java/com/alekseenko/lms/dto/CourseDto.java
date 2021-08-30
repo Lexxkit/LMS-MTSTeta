@@ -1,12 +1,23 @@
 package com.alekseenko.lms.dto;
 
 import com.alekseenko.lms.domain.CourseImage;
-import com.alekseenko.lms.domain.Lesson;
+import com.alekseenko.lms.domain.CourseRating;
+import com.alekseenko.lms.domain.Module;
 import com.alekseenko.lms.domain.User;
+import com.alekseenko.lms.validator.type.TitleCase;
+import com.alekseenko.lms.validator.type.TitleType;
 import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class CourseDto {
 
   private Long id;
@@ -15,16 +26,26 @@ public class CourseDto {
   private String author;
 
   @NotBlank(message = "Course title has to be filled")
+  @TitleCase(type = TitleType.ANY)
   private String title;
 
-  private List<Lesson> lessons;
+  private String description;
+
+  private Integer durationWeeks;
+
+  private String tag;
+
+  private Double avgRating;
+
+  private List<Module> modules;
 
   private Set<User> users;
 
   private CourseImage courseImage;
 
-  public CourseDto() {
-  }
+  private Set<CourseRating> courseRatings;
+
+  private String createdAt;
 
   public CourseDto(Long id, String author, String title, CourseImage courseImage) {
     this.id = id;
@@ -40,51 +61,4 @@ public class CourseDto {
     this.users = users;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getAuthor() {
-    return author;
-  }
-
-  public void setAuthor(String author) {
-    this.author = author;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public List<Lesson> getLessons() {
-    return lessons;
-  }
-
-  public void setLessons(List<Lesson> lessons) {
-    this.lessons = lessons;
-  }
-
-  public Set<User> getUsers() {
-    return users;
-  }
-
-  public void setUsers(Set<User> users) {
-    this.users = users;
-  }
-
-  public CourseImage getCourseImage() {
-    return courseImage;
-  }
-
-  public void setCourseImage(CourseImage courseImage) {
-    this.courseImage = courseImage;
-  }
 }

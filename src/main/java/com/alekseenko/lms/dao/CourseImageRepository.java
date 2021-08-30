@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface CourseImageRepository extends JpaRepository<CourseImage, Long> {
 
   Optional<CourseImage> findByCourseId(Long courseId);
+
+  boolean existsCourseImageByCourse_Id(Long courseId);
 }

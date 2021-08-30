@@ -10,4 +10,6 @@ public interface CourseImageService {
   Optional<byte[]> getCourseImageByCourse(Long courseId);
 
   void saveCourseImage(Long courseId, MultipartFile courseImage);
+
+  Optional<byte[]> getDataImagedByCourseId(Long courseId);
 }

@@ -1,21 +1,28 @@
 package com.alekseenko.lms.dto;
 
+import com.alekseenko.lms.validator.type.TitleCase;
+import com.alekseenko.lms.validator.type.TitleType;
 import javax.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class LessonDto {
 
   private Long id;
 
   @NotBlank(message = "Title shouldn't be empty")
+  @TitleCase(type = TitleType.ANY)
   private String title;
 
-  @NotBlank(message = "Text shouldn't be empty")
   private String content;
 
   private Long moduleId;
-
-  public LessonDto() {
-  }
 
   public LessonDto(Long moduleId) {
     this.moduleId = moduleId;
@@ -27,43 +34,4 @@ public class LessonDto {
     this.moduleId = moduleId;
   }
 
-  public LessonDto(Long id, String title, String content, Long moduleId) {
-    this.id = id;
-    this.title = title;
-    this.content = content;
-    this.moduleId = moduleId;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getContent() {
-    return content;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
-  }
-
-  public Long getModuleId() {
-    return moduleId;
-  }
-
-  public void setModuleId(Long moduleId) {
-    this.moduleId = moduleId;
-  }
 }
-

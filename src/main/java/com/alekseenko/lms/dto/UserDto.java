@@ -1,26 +1,60 @@
 package com.alekseenko.lms.dto;
 
 import com.alekseenko.lms.domain.Course;
+import com.alekseenko.lms.domain.CourseRating;
+import com.alekseenko.lms.domain.News;
 import com.alekseenko.lms.domain.Role;
+import com.alekseenko.lms.validator.type.TitleCase;
+import com.alekseenko.lms.validator.type.TitleType;
 import java.util.Set;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class UserDto {
 
   private Long id;
 
-  @NotBlank(message = "Username shouldn't be empty")
+  @NotBlank(message = "Логин не должен быть пустым")
+  @TitleCase(type = TitleType.LOGIN, message = "Поле Логин должно содержать только латиницу и/или спец.символы")
   private String username;
 
-  @NotBlank(message = "User password shouldn't be empty")
+  @Size(min = 8, message = "Пароль должен быть не менее 8 символов")
+  @TitleCase(type = TitleType.PASSWORD, message = "Некорректный формат пароля")
+  @NotBlank(message = "Пароль не должен быть пустым")
   private String password;
+
+  private String firstName;
+
+  private String lastName;
+
+  @Email
+  @TitleCase(type = TitleType.EMAIL, message = "Некорректный формат email")
+  @NotBlank(message = "Email не должен быть пустым")
+  private String email;
+
+  @TitleCase(type = TitleType.PHONE, message = "Некорректный формат телефона")
+  private String phone;
+
+  private String socialNetworkLink;
+
+  private String achievements;
 
   private Set<Course> courses;
 
   private Set<Role> roles;
 
-  public UserDto() {
-  }
+  private Set<News> news;
+
+  private Set<CourseRating> courseRatings;
 
   public UserDto(String username) {
     this.username = username;
@@ -30,46 +64,6 @@ public class UserDto {
     this.id = id;
     this.username = username;
     this.password = password;
-    this.roles = roles;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Set<Course> getCourses() {
-    return courses;
-  }
-
-  public void setCourses(Set<Course> courses) {
-    this.courses = courses;
-  }
-
-  public Set<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Set<Role> roles) {
     this.roles = roles;
   }
 

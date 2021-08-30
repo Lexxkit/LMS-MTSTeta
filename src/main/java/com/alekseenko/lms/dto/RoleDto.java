@@ -2,7 +2,13 @@ package com.alekseenko.lms.dto;
 
 import com.alekseenko.lms.domain.User;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@AllArgsConstructor
+@Getter
+@Setter
 public class RoleDto {
 
   private Long id;
@@ -15,33 +21,4 @@ public class RoleDto {
     this.name = name;
   }
 
-  public RoleDto(Long id, String name, Set<User> users) {
-    this.id = id;
-    this.name = name;
-    this.users = users;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Set<User> getUsers() {
-    return users;
-  }
-
-  public void setUsers(Set<User> users) {
-    this.users = users;
-  }
 }

@@ -8,6 +8,7 @@
 
   <section>
     <h1 class="h1 text-center mx-auto mt-4 py-5"><strong>All users</strong></h1>
+    <h4 class="text-center"><a th:href="@{/admin/user/course}">Switch to All Courses</a></h4>
   </section>
 
   <section class="mt-2 pt-1">
@@ -18,6 +19,7 @@
         <th scope="col">id</th>
         <th scope="col">Username</th>
         <th scope="col">Role</th>
+        <th scope="col">Delete</th>
       </tr>
       </thead>
       <tbody>
@@ -28,7 +30,13 @@
         </td>
         <td>
           <div th:each="role : ${user.roles}">
-          <p th:text="${role.name}">User roles</p></div></td>
+          <p th:text="${role.name}">User roles</p></div>
+        </td>
+        <td class="row">
+            <form th:method="delete" th:action="@{/admin/user/{id}(id = ${user.id})}">
+              <button class="btn btn-danger" type="submit">Delete user</button>
+            </form>
+        </td>
       </tr>
       <tr th:if="${users.empty}" >
         <td colspan="4">No users to display</td>

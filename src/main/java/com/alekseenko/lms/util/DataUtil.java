@@ -10,19 +10,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 public class DataUtil {
 
-  private static final Logger logger = LoggerFactory.getLogger(DataUtil.class);
 
   public static byte[] readData(String filename, String path) {
     try {
       return Files.readAllBytes(Path.of(path, filename));
     } catch (IOException ex) {
-      logger.error("Can't read file {}", filename, ex);
+      log.error("Can't read file {}", filename, ex);
       throw new IllegalStateException(ex);
     }
   }
@@ -32,7 +31,7 @@ public class DataUtil {
         .newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
       is.transferTo(os);
     } catch (Exception ex) {
-      logger.error("Can't write to file {}", filename, ex);
+      log.error("Can't write to file {}", filename, ex);
       throw new IllegalStateException(ex);
     }
   }
@@ -42,7 +41,7 @@ public class DataUtil {
     try {
       is = inputImage.getInputStream();
     } catch (IOException e) {
-      logger.info("Read file error", e);
+      log.info("Read file error", e);
       throw new InternalServerException("Internal Server Error");
     }
     return is;
@@ -54,7 +53,7 @@ public class DataUtil {
   }
 
   public static void printFileProperties(MultipartFile inputImage) {
-    logger.info("File name {}, file content type {}, file size {}",
+    log.info("File name {}, file content type {}, file size {}",
         inputImage.getOriginalFilename(),
         inputImage.getContentType(), inputImage.getSize());
   }

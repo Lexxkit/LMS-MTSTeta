@@ -13,5 +13,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
   @Query("select new com.alekseenko.lms.dto.LessonDto(l.id, l.title, l.module.id) " +
       "from Lesson l where l.module.id = :id")
-  List<LessonDto> findAllForLessonIdWithoutText(@Param("id") Long id);
+  List<LessonDto> findAllLessonDtoByModuleId(@Param("id") Long id);
 }

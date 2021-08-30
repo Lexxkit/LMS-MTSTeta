@@ -2,11 +2,15 @@ package com.alekseenko.lms.service.impl;
 
 import com.alekseenko.lms.constants.RoleConstants;
 import com.alekseenko.lms.dao.RoleRepository;
+import com.alekseenko.lms.dao.TokenRepository;
 import com.alekseenko.lms.dao.UserRepository;
 import com.alekseenko.lms.domain.Role;
 import com.alekseenko.lms.domain.User;
+import com.alekseenko.lms.domain.VerificationToken;
 import com.alekseenko.lms.dto.UserDto;
+import com.alekseenko.lms.exception.AccessDeniedException;
 import com.alekseenko.lms.exception.NotFoundException;
+import com.alekseenko.lms.exception.UserAlreadyRegisteredException;
 import com.alekseenko.lms.mapper.UserMapper;
 import com.alekseenko.lms.service.UserService;
 import java.util.Collections;
@@ -14,33 +18,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private final RoleRepository roleRepository;
   private final UserMapper userMapper;
   private final UserRepository userRepository;
-  private final PasswordEncoder passwordEncoder;
-
-  @Autowired
-  public UserServiceImpl(RoleRepository roleRepository,
-      UserMapper userMapper,
-      UserRepository userRepository,
-      PasswordEncoder passwordEncoder) {
-    this.roleRepository = roleRepository;
-    this.userMapper = userMapper;
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-  }
+  private final TokenRepository tokenRepository;
 
   @Override
   public List<UserDto> getUsers(Long id, HttpServletRequest request) {
     if (request.isUserInRole(RoleConstants.ROLE_ADMIN)) {
-     return getUsersNotAssignedToCourse(id);
+      return getUsersNotAssignedToCourse(id);
     } else {
       return assignSingleUserToCourse(request.getRemoteUser());
     }
@@ -79,20 +72,66 @@ public class UserServiceImpl implements UserService {
     return new UserDto();
   }
 
+  private boolean emailExist(String email) {
+    return userRepository.findUserByEmail(email) != null;
+  }
+
+  private boolean loginExists(String name) {
+    return userRepository.findUserByUsername(name).isPresent();
+  }
+
   @Override
-  public void saveUser(UserDto userDto) {
-    // New users get ROLE_STUDENT upon registration
+  public User registerNewUserAccount(UserDto userDto) throws UserAlreadyRegisteredException {
+    if (emailExist(userDto.getEmail())) {
+      throw new UserAlreadyRegisteredException("Пользователь с этим email уже зарегистрирован",
+          "email");
+    }
+    if (loginExists(userDto.getUsername())) {
+      throw new UserAlreadyRegisteredException("Пользователь с этим username уже зарегистрирован",
+          "username");
+    }
+    // New users get ROLE_STUDENT upon self registration
     if (userDto.getRoles() == null) {
       Role studentRole = roleRepository.findRoleByName(RoleConstants.ROLE_STUDENT)
           .orElseThrow(
               () -> new NotFoundException(String.format("Role %s not found", userDto.getRoles())));
       userDto.setRoles(Set.of(studentRole));
     }
-    userRepository.save(new User(userDto.getId(),
-        userDto.getUsername(),
-        passwordEncoder.encode(userDto.getPassword()),
-        userDto.getRoles()
-    ));
+    var user = userMapper.mapToUser(userDto);
+    userRepository.save(user);
+    return (user);
+  }
+
+  @Override
+  public void createVerificationToken(User user, String token) {
+    VerificationToken myToken = new VerificationToken(token, user);
+    tokenRepository.save(myToken);
+  }
+
+  @Override
+  public VerificationToken getVerificationToken(final String VerificationToken) {
+    return tokenRepository.findByToken(VerificationToken);
+  }
+
+  @Override
+  public void saveUser(UserDto userDto) {
+    var userEntity = userMapper.mapToUser(userDto);
+    var existingUser = userRepository.findById(userEntity.getId());
+    if (existingUser.isPresent()) {
+      var isEnabled = existingUser.map(User::isEnabled).orElse(false);
+      userEntity.setEnabled(isEnabled);
+    }
+    userRepository.save(userEntity);
+  }
+
+  @Override
+  public void saveUser(User user) {
+    var existingUser = userRepository.findById(user.getId());
+    if (existingUser.isPresent()) {
+      var isEnabled = existingUser.map(User::isEnabled).orElse(false);
+      user.setEnabled(isEnabled);
+    }
+    userRepository.save(user);
   }
 
   @Override
@@ -101,5 +140,20 @@ public class UserServiceImpl implements UserService {
         .map(userMapper::mapToUserDto)
         .orElseThrow(() -> new NotFoundException(String.format("User %s not found", username)));
     return Collections.singletonList(userDto);
+  }
+
+  @Override
+  public void deleteUser(Long id, String username) {
+    if (userRepository.getById(id).getUsername().equals(username)) {
+      throw new AccessDeniedException("You can't delete yourself");
+    } else {
+      userRepository.deleteById(id);
+    }
+  }
+
+  @Override
+  public Boolean checkIfUserEnabled(String username) {
+    var user = userRepository.findUserByUsername(username);
+    return user.map(User::isEnabled).orElse(null);
   }
 }

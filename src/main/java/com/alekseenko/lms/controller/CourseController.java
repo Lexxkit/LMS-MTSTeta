@@ -5,18 +5,18 @@ import com.alekseenko.lms.dto.CourseDto;
 import com.alekseenko.lms.exception.NotFoundException;
 import com.alekseenko.lms.service.CourseImageService;
 import com.alekseenko.lms.service.CourseService;
-import com.alekseenko.lms.service.LessonService;
+import com.alekseenko.lms.service.ModuleService;
 import com.alekseenko.lms.service.UserService;
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,30 +32,36 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/course")
+@AllArgsConstructor
 public class CourseController {
 
-  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
+  // Constant, which defines number of elements on each page
+  private final static int ITEMS_PER_PAGE = 3;
+
   private final CourseService courseService;
   private final CourseImageService courseImageService;
-  private final LessonService lessonService;
   private final UserService userService;
+  private final ModuleService moduleService;
 
-  @Autowired
-  public CourseController(CourseService courseService,
-      CourseImageService courseImageService,
-      LessonService lessonService,
-      UserService userService) {
-    this.courseService = courseService;
-    this.courseImageService = courseImageService;
-    this.lessonService = lessonService;
-    this.userService = userService;
-  }
 
   @GetMapping
   public String courseTable(Model model,
       @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
-    model.addAttribute("activePage", "courses");
-    model.addAttribute("courses", courseService.getAllCourses(titlePrefix));
+    return viewPaginated(model, 1, titlePrefix);
+  }
+
+  @GetMapping("/page/{pageNumber}")
+  public String viewPaginated(Model model,
+      @PathVariable ("pageNumber") int pageNumber,
+      @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
+
+    Page<CourseDto> page = courseService.findPaginated(pageNumber, ITEMS_PER_PAGE, titlePrefix);
+
+    model.addAttribute("currentPage", pageNumber);
+    model.addAttribute("totalPages", page.getTotalPages());
+    model.addAttribute("totalItems", page.getTotalElements());
+    model.addAttribute("courses", page.getContent());
+
     return "index";
   }
 
@@ -70,13 +76,17 @@ public class CourseController {
   }
 
   @RequestMapping("/{id}")
-  public String courseForm(Model model, @PathVariable("id") Long id) {
+  public String courseForm(Model model, @PathVariable("id") Long id,
+      Authentication auth, HttpServletRequest request) {
     CourseDto currentCourse = courseService.getCourseById(id);
-
     model.addAttribute("activePage", "courses");
+
+    if (auth == null || !auth.isAuthenticated() || request.isUserInRole(RoleConstants.ROLE_STUDENT)) {
+      model.addAttribute("isReadOnly", "true");
+    }
+
+    model.addAttribute("modules", moduleService.findAllByCourse(currentCourse));
     model.addAttribute("course", currentCourse);
-    model
-        .addAttribute("lessons", lessonService.getAllForLessonIdWithoutText(currentCourse.getId()));
     model.addAttribute("users", currentCourse.getUsers());
     return "course-form";
   }
@@ -117,11 +127,12 @@ public class CourseController {
     courseService.removeUserCourseConnection(userId,
         courseId,
         principal.getName(),
-        request.isUserInRole(RoleConstants.ROLE_ADMIN));
+        request.isUserInRole(RoleConstants.ROLE_ADMIN) || request.isUserInRole(RoleConstants.ROLE_OWNER)
+    );
     return String.format("redirect:/course/%d", courseId);
   }
 
-  @Secured(RoleConstants.ROLE_ADMIN)
+  @Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
   @GetMapping("/new")
   public String courseForm(Model model) {
     model.addAttribute("course", courseService.getCourseTemplate());
@@ -130,22 +141,24 @@ public class CourseController {
 
   @GetMapping("/{id}/picture")
   @ResponseBody
-  public ResponseEntity<byte[]> courseImage(@PathVariable("id") Long courseId) {
-    String contentType = courseImageService.getContentTypeByCourse(courseId);
-    byte[] data = courseImageService.getCourseImageByCourse(courseId)
-        .orElseThrow(
-            () -> new NotFoundException(String.format("Course with id#%d not found", courseId)));
+  public ResponseEntity<byte[]> avatarImage(@PathVariable Long id) {
+    String contentType = courseImageService
+        .getContentTypeByCourse(id);
+
+    byte[] data = courseImageService.getDataImagedByCourseId(id)
+        .orElseThrow(() -> new NotFoundException("Course_image_not_found"));
+
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType(contentType))
         .body(data);
   }
 
-  @Secured(RoleConstants.ROLE_ADMIN)
+  @Secured({RoleConstants.ROLE_OWNER, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_TUTOR})
   @PostMapping("/{id}/picture")
   public String updateCourseImage(@PathVariable("id") Long courseId,
       @RequestParam("courseImage") MultipartFile courseImage) {
-      courseImageService.saveCourseImage(courseId, courseImage);
+    courseImageService.saveCourseImage(courseId, courseImage);
     return String.format("redirect:/course/%d", courseId);
   }
 }
