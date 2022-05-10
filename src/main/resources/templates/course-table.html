@@ -8,7 +8,7 @@
 <header th:replace="fragments/header :: header"></header>
 <main class="container mt-3">
   <section>
-    <h1 class="h1 text-center mx-auto mt-4 py-5"><strong>Курсы</strong></h1>
+    <h1 class="h1 text-center mx-auto mt-4 py-5"><strong>Courses</strong></h1>
     <div class="row">
       <div class="col-12 col-md-8 col-lg-6 offset-lg-3 offset-md-2">
         <form class="form-inline mb-3" enctype="multipart/form-data">
@@ -29,8 +29,7 @@
 
   <section>
     <div>
-      <a sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" th:href="@{/course/new}">Добавить
-        новый курс</a>
+      <a sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" th:href="@{/course/new}">Add new course</a>
     </div>
   </section>
 
@@ -42,40 +41,38 @@
           <a th:href="@{'/admin/user/course' + '?sortField=id&sortDir=' + ${reverseSortDir}}">id</a>
         </th>
         <th scope="col">
-          <a th:href="@{'/admin/user/course' + '?sortField=title&sortDir=' + ${reverseSortDir}}">Название</a>
+          <a th:href="@{'/admin/user/course' + '?sortField=title&sortDir=' + ${reverseSortDir}}">Title</a>
         </th>
         <th scope="col">
-          <a th:href="@{'/admin/user/course' + '?sortField=author&sortDir=' + ${reverseSortDir}}">Автор</a>
+          <a th:href="@{'/admin/user/course' + '?sortField=author&sortDir=' + ${reverseSortDir}}">Author</a>
         </th>
         <th scope="col">
-          <a th:href="@{'/admin/user/course' + '?sortField=createdAt&sortDir=' + ${reverseSortDir}}">Дата
-            создания</a>
+          <a th:href="@{'/admin/user/course' + '?sortField=createdAt&sortDir=' + ${reverseSortDir}}">Date of creation</a>
         </th>
-        <th scope="col">Назначить/удалить</th>
+        <th scope="col">Assign/Delete</th>
       </tr>
       </thead>
       <tbody>
       <tr th:unless="${courses.empty}" th:each="course : ${courses}">
         <th scope="row" th:text="${course.id}">1</th>
         <td>
-          <a th:href="@{/course/{id}(id = ${course.id})}" th:text="${course.title}">Название
-            курса</a>
+          <a th:href="@{/course/{id}(id = ${course.id})}" th:text="${course.title}">Course title</a>
         </td>
-        <td th:text="${course.author}">Автор курса</td>
-        <td th:text="${course.createdAt}">Date created</td>
+        <td th:text="${course.author}">Course Author</td>
+        <td th:text="${course.createdAt}">Date of creation</td>
         <td class="row">
           <div class="col-6 previous">
             <form sec:authorize="isAuthenticated()"
                   th:action="@{/course/{id}/assign(id = ${course.id})}"
                   th:method="get">
-              <button class="btn btn-success" type="submit">Назначить пользователя</button>
+              <button class="btn btn-success" type="submit">Assign user</button>
             </form>
           </div>
           <div class="col-6 next">
             <form sec:authorize="hasAnyRole('OWNER', 'ADMIN')"
                   th:action="@{/course/{id}(id = ${course.id})}"
                   th:method="delete">
-              <button class="btn btn-danger" type="submit">Удалить курс</button>
+              <button class="btn btn-danger" type="submit">Delete course</button>
             </form>
           </div>
         </td>
@@ -90,7 +87,7 @@
   <div th:if="${totalPages > 1}">
     <div class="row-sm-10">
       <div class="col-sm-2">
-        Всего курсов: [[${totalItems}]]
+        Total courses: [[${totalItems}]]
       </div>
       <div class="col-sm-2">
             <span th:each="i: ${#numbers.sequence(1, totalPages)}">

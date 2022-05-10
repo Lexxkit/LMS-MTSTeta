@@ -6,8 +6,8 @@
 <header th:replace="fragments/header :: header"></header>
 
 <div class="text-center" style="margin-top: 10%">
-  <h1>Что-то пошло не так :( </h1>
-  <h3>Вы будете автоматически перенаправлены на <a th:href="@{/course}">главную страницу</a></h3>
+  <h1>Something went wrong :( </h1>
+  <h3>You will be automatically redirected to the <a th:href="@{/course}">home page</a></h3>
 </div>
 <script>
   setTimeout(() => window.location.href = "/course", 3000);

@@ -14,32 +14,32 @@
           <div class="card-body px-4 pb-4">
             <!-- Tab -->
             <section class="tab-pane fade show active">
-              <h1 class="h1 mb-3 font-weight-normal text-center">Добавление и удаление урока</h1>
+              <h1 class="h1 mb-3 font-weight-normal text-center">Add or Remove a Lesson</h1>
 
 <!----------------------------------------------------lesson--------------------------------------------------------->
               <section class="mt-5 pt-3" th:unless="${lessons == null}">
                   <div>
-                    <a sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')"  th:href="@{/lesson/new(module_id = ${moduleDto.id})}">Добавить новый урок</a>
+                    <a sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')"  th:href="@{/lesson/new(module_id = ${moduleDto.id})}">Add a new lesson</a>
                   </div>
                   <table class="table table-striped table-success">
                     <thead>
                       <tr>
                         <th scope="col">id</th>
-                        <th scope="col">Название</th>
-                        <th scope="col">Действие</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr th:unless="${lessons.empty}" th:each="lesson : ${lessons}">
                         <th scope="row" th:text="${lesson.id}">1</th>
                         <td>
-                          <a th:text="${lesson.title}" th:href="@{/lesson/{id}(id = ${lesson.id})}">Lesson name</a>
+                          <a th:text="${lesson.title}" th:href="@{/lesson/{id}(id = ${lesson.id})}">Lesson title</a>
                         </td>
                         <td>
                           <div class="form-group col-2 col-md-10 pl-0">
                             <form th:method="delete" th:action="@{/lesson/{id}(id = ${lesson.id})}">
                               <input type="hidden" name="courseId" id="courseId" th:value="${course.id}">
-                              <button sec:authorize="hasRole('ADMIN')" class="btn btn-danger" type="submit">Удалить</button>
+                              <button sec:authorize="hasRole('ADMIN')" class="btn btn-danger" type="submit">Delete</button>
                             </form>
                           </div>
                         </td>
@@ -52,24 +52,24 @@
                 </section>
 
                 <section class="mt-5 pt-3" th:unless="${users == null}">
-                  <p>Пользователи связанные с курсом</p>
+                  <p>Users related to the course</p>
                   <table class="table table-striped table-success">
                     <thead>
                       <tr>
                         <th scope="col">id</th>
-                        <th scope="col">Имя пользователя</th>
-                        <th scope="col">Действие</th>
+                        <th scope="col">User name</th>
+                        <th scope="col">Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr th:unless="${users.empty}" th:each="user : ${users}">
                         <th scope="row" th:text="${user.id}">1</th>
-                        <td th:text="${user.username}">Имя пользователя</td>
+                        <td th:text="${user.username}">User name</td>
                         <td>
                           <div class="form-group col-2 col-md-10 pl-0">
                             <form th:method="delete" th:action="@{/course/{courseId}/unassign(courseId = ${course.id})}">
                               <input type="hidden" name="userId" id="userId" th:value="${user.id}">
-                              <button class="btn btn-warning" type="submit">Снять с курса</button>
+                              <button class="btn btn-warning" type="submit">Dropout from the course</button>
                             </form>
                           </div>
                         </td>

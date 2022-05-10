@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/head :: head"></head>
 
@@ -9,13 +9,13 @@
   <main class="container mt-3 pb-5">
     <div class="col-12 col-lg-8 offset-2 offset-lg-12">
       <div class="text-center mt-5 b-1">
-        <h1 class="h1 mb-3 font-weight-normal">Назначить курс пользователю</h1>
+        <h1 class="h1 mb-3 font-weight-normal">Assign course to the user</h1>
       </div>
       <form class="form-signin pt-5" th:method="post" th:action="@{/course/{courseId}/assign(courseId = ${courseId})}"
             th:unless="${users.empty}">
 
         <div class="mt-5 form-label-group">
-          <label class="mb-2" for="userId">Выберите пользователя:</label>
+          <label class="mb-2" for="userId">Select user:</label>
           <select class="custom-select mr-sm-2" id="userId" name="userId">
             <option th:each="user : ${users}"
                     th:value="${user.id}"
@@ -26,11 +26,11 @@
         </div>
 
         <div class="form-group mt-2">
-          <input type="submit" class="btn btn-success float-right" value="Назначить">
+          <input type="submit" class="btn btn-success float-right" value="Assign">
         </div>
       </form>
       <div class="text-center mt-5 b-1" th:if="${users.empty}">
-        <p>Все доступные для этого курса пользователи уже назначены!</p>
+        <p>All available users for this course have already been assigned!</p>
       </div>
     </div>
   </main>

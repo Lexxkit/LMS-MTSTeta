@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/head :: head"></head>
@@ -12,7 +12,7 @@
     <div class="col-12 offset-lg-12">
 
       <div class="text-center mt-3 b-1">
-        <h1 class="h3 mb-3 font-weight-normal">Привет, <span sec:authentication="principal.username"></span>!</h1>
+        <h1 class="h3 mb-3 font-weight-normal">Hello, <span sec:authentication="principal.username"></span>!</h1>
       </div>
 
       <div class="text-center mt-2">
@@ -20,12 +20,12 @@
 
         <form th:method="post" th:action="@{/profile/avatar}" enctype="multipart/form-data">
           <div>
-            <div class="text-center mt-2"><label for="avatar">Выберите картинку для загрузки</label></div>
+            <div class="text-center mt-2"><label for="avatar">Select a picture to upload</label></div>
             <input id="avatar" name="avatar" type="file"/>
           </div>
           <div>
             <div class="form-group">
-              <input type="submit" class="btn btn-success" value="Обновить аватар">
+              <input type="submit" class="btn btn-success" value="Update the avatar">
             </div>
           </div>
         </form>
@@ -125,40 +125,40 @@
             </div>
 
             <div class="form-group">
-              <input type="submit" class="btn btn-success" value="Обновить данные">
+              <input type="submit" class="btn btn-success" value="Update data">
             </div>
           </form>
         </div>
 
         <div class="col">
           <section class="mt-3">
-            <h2 class="h2 font-weight-normal text-center mb-5">Ваши курсы:</h2>
+            <h2 class="h2 font-weight-normal text-center mb-5">Your courses:</h2>
             <div class="mt-1 form-label-group text-center" th:unless="${courses.empty}" th:each="course : ${courses}">
               <div class="row">
                 <div class="col-8">
-                  <p> <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Название курса</a></p>
+                  <p> <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Course title</a></p>
                 </div>
                 <div class="col-4">
                   <form th:method="delete" th:action="@{/profile/{courseId}/unassign(courseId = ${course.id})}">
                     <input type="hidden" name="userId" id="userId" th:value="${user.id}">
-                    <button class="btn btn-warning" type="submit">Снять с курса</button>
+                    <button class="btn btn-warning" type="submit">Dropout from the course</button>
                   </form>
                 </div>
               </div>
             </div>
             <div class="text-center" th:if="${courses.empty}">
-              <p>У вас нет действующих курсов.</p>
+              <p>You have no current courses.</p>
             </div>
             <div class="text-center mt-2">
-              <a th:href="@{/course}">Хотите записаться на новый курс?</a>
+              <a th:href="@{/course}">Want to sign up for a new course?</a>
             </div>
           </section>
         </div>
         <div class="col">
           <section class="mt-3">
-            <h2 class="h2 font-weight-normal text-center mb-5">Статистика:</h2>
-            <p class="text-center">Активных курсов: [[${courses.size()}]]</p>
-            <p class="text-center">Завершено курсов 0 из [[${courses.size()}]]</p>
+            <h2 class="h2 font-weight-normal text-center mb-5">Statistics:</h2>
+            <p class="text-center">Current courses: [[${courses.size()}]]</p>
+            <p class="text-center">Completed courses 0 from [[${courses.size()}]]</p>
         </div>
       </div>
     </div>

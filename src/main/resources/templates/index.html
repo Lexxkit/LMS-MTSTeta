@@ -8,7 +8,7 @@
   <header th:replace="fragments/header :: header"></header>
   <main class="container mt-3">
     <section>
-      <h1 class="h1 text-center mx-auto mt-4 py-5"><strong>Курсы</strong></h1>
+      <h1 class="h1 text-center mx-auto mt-4 py-5"><strong>Courses</strong></h1>
       <div class="row">
         <div class="col-12 col-md-8 col-lg-6 offset-lg-3 offset-md-2">
           <form class="form-inline mb-3" enctype="multipart/form-data">
@@ -27,12 +27,12 @@
 
     <section>
       <div class="text-center">
-        <a class="btn btn-primary" sec:authorize="!isAuthenticated()" th:href="@{/user/registration}">Регистрация нового пользователя</a>
+        <a class="btn btn-primary" sec:authorize="!isAuthenticated()" th:href="@{/user/registration}">New User registration</a>
       </div>
     </section>
 
     <section class="mt-3 pt-3" >
-      <h2 class="h2 font-weight-normal text-center mb-5">Действующие курсы</h2>
+      <h2 class="h2 font-weight-normal text-center mb-5">Current courses</h2>
 
         <div th:unless="${courses.empty}" th:each="course : ${courses}">
           <div class="container mt-3">
@@ -43,9 +43,9 @@
                   <img class="mx-auto d-block" th:src="@{/course/{id}/picture(id = ${course.id})}" width="80" height="80" alt="">
                   <div class="card-body">
                     <p class="card-text mb-2">
-                      <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Название курса</a>
+                      <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Course title</a>
                     </p>
-                    <p class="card-text" th:text="${course.author}">Начни свое изучение фронтеда</p>
+                    <p class="card-text" th:text="${course.author}">Start your frontend journey</p>
                     <div class="row">
 <!--                      <div class="col-6 previous">-->
 <!--                        <p>Rating: </p>-->
@@ -53,7 +53,7 @@
 <!--                      </div>-->
                       <div class="col-6 next">
                         <p>Date: </p>
-                        <p class="card-text" th:text="${course.createdAt}">Дата создания</p>
+                        <p class="card-text" th:text="${course.createdAt}">Date of creation</p>
                       </div>
                     </div>
                   </div>
@@ -75,7 +75,7 @@
       <div th:if="${totalPages > 1}">
         <div class="row-sm-10">
           <div class="col-sm-2">
-            Всего курсов: [[${totalItems}]]
+            Total courses: [[${totalItems}]]
           </div>
           <div class="col-sm-2">
             <span th:each="i: ${#numbers.sequence(1, totalPages)}">

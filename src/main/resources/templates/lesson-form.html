@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:insert="fragments/head :: head"></head>
@@ -14,7 +14,7 @@
           <div class="card-body px-4 pb-4">
             <!-- Tab -->
             <section class="tab-pane fade show active">
-              <h1 class="h1 mb-3 font-weight-normal text-center">Создать или отредактировать урок</h1>
+              <h1 class="h1 mb-3 font-weight-normal text-center">Create or Edit a Lesson</h1>
 
               <form th:object="${lessonDto}" method="post" th:action="@{/lesson}">
                 <input type="hidden" th:field="*{id}">
@@ -34,7 +34,7 @@
                   <div class="col-12">
                     <div class="form-group pb-2">
                       <label class="mb-2 text-dark" for="lessonContent">Lesson content</label>
-                      <textarea class="form-control" rows="20" id="lessonContent" th:field="*{content}">Здесь должен быть текст урока.
+                      <textarea class="form-control" rows="20" id="lessonContent" th:field="*{content}">Lesson's content should be here.
                       </textarea>
                       <small class="validation-error text-danger" th:if="${#fields.hasErrors('content')}"
                              th:errors="*{content}">
@@ -44,7 +44,7 @@
                   </div>
                 </div>
                 <div sec:authorize="hasAnyRole('OWNER', 'ADMIN', 'TUTOR')" class="form-group">
-                  <input type="submit" class="btn btn-success float-right" value="Сохранить">
+                  <input type="submit" class="btn btn-success float-right" value="Save">
                 </div>
 
               </form>

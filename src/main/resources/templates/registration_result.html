@@ -7,8 +7,7 @@
 <div class="text-center" style="margin-top: 10%">
   <h1 th:classappend="${class}" th:text="${message}">Error Message</h1>
 
-  <h3 class="mt-10">Вы будете автоматически перенаправлены на <a th:href="@{/course}">главную
-    страницу</a></h3>
+  <h3 class="mt-10">You will be automatically redirected to the <a th:href="@{/course}">main page</a></h3>
 </div>
 <script>
   setTimeout(() => window.location.href = "/course", 3000);
